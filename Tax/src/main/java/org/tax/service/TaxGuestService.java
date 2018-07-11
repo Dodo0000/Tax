@@ -11,7 +11,9 @@ import org.tax.model.TaxUser;
  * @date 2018-7-7
  */
 /**
- * 感觉少了接口getQuestionDetail(String questionId)
+ * 少了接口getQuestionDetail(String questionId)进入question详情页面的 还有应该加上page分页信息
+ * 少了接口search(String keyword, String type, int page) 
+ * 
  * */
 public interface TaxGuestService {
 

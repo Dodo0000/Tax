@@ -77,6 +77,37 @@ public class LuceneUtilTest {
 	}
 	
 	@Test
+	public void testSearch2() {
+		List<TaxQuestion> questionList=null;
+		try {
+			/**基本调用*/
+			//questionList = LuceneUtil.search("lucene", "3;26", 1, 2);
+			//questionList = LuceneUtil.search("lucene", "3;26", 2, 2);
+			//questionList = LuceneUtil.search("lucene", "3;26", 1, 100);//pageIdx合法 pageSize过大时没有问题的
+			//questionList = LuceneUtil.search("lucene", "3;26", 2, 2);//pageIdx不合法就有问题了
+			//questionList = LuceneUtil.search("lucenee", "26", 1, 2);
+			//questionList = LuceneUtil.search("lucenee", null, 1, 2);
+			/**keyword为null 或者为 全空格 或者是 空串 返回null什么都没有查到返回一个空的列表*/
+			//questionList = LuceneUtil.search("", "3;26", 1, 2);
+			//questionList = LuceneUtil.search("  ", "3;26", 1, 2);
+			//questionList = LuceneUtil.search(null, "3;26", 1, 2);
+			/**keyword中全是stopword也是啥都没查到*/
+			//questionList = LuceneUtil.search(";,##", "3;26", 1, 2);
+			for (TaxQuestion question : questionList) {
+				System.out.println("**********");
+				System.out.println("id: "+question.getId());
+				System.out.println("title: "+question.getTitle());
+				System.out.println("content: "+question.getContent());
+				System.out.println("type: "+question.getType());
+				System.out.println("**********");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
 	public void testDeleteIndex(){
 		TaxQuestion q1 = new TaxQuestion();
 		q1.setId(1);

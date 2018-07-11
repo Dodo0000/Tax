@@ -18,6 +18,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.tax.VO.LoginInfo;
 import org.tax.VO.PageInfo;
 import org.tax.VO.QuestionBrief;
+import org.tax.VO.QuestionLive;
 import org.tax.VO.ShareExpertDetail;
 import org.tax.constant.CookieConst;
 import org.tax.constant.Message;
@@ -43,6 +44,7 @@ import org.tax.model.TaxUserKey;
 import org.tax.result.Result;
 import org.tax.service.TaxGuestService;
 import org.tax.util.JSONUtil;
+import org.tax.util.LuceneUtil;
 
 import com.alibaba.fastjson.JSON;
 
@@ -132,11 +134,27 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		}
 	}
 
-	/** 这里有个问题搜索栏搜索为什么会传入proId="1;2;3" */
+	/**
+	 * 这里有个问题搜索栏搜索为什么会传入types="1;2;3" 这里的具体问题还需细化，和分页时传入page这里先这么测试一下 这里暂时是给出所有的
+	 * */
 	@Override
-	public String search(String keyword, String types) {
+	public String search(String keyword, String type) {
 		// 每个页的搜索栏，根据关键字搜索问题
-		return null;
+		Result result = new Result();
+		try {
+			List<TaxQuestion> questionList = LuceneUtil.search(keyword, type,
+					Integer.MAX_VALUE);
+			List<QuestionBrief> questionBriefList = getQuestionBriefList(questionList);
+			// 设置result
+			result.setResult(questionBriefList);
+			return JSON.toJSONString(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		result.setMessage(Message.INVALID_PARAMS);
+		result.setStatus(StatusCode.INVALID_PARAMS);
+		return JSON.toJSONString(result);
 	}
 
 	/**
@@ -199,66 +217,62 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		List<TaxQuestion> questionList = mapperFactory.getTaxQuestionMapper()
 				.selectByExample(exampleOfQuestion);
 		// 根据请求页面的问题列表，包装成问题简介列表，然后放到pageBean中
-		List<QuestionBrief> questionBriefList = new ArrayList<QuestionBrief>();
-		for (TaxQuestion question : questionList) {
-			QuestionBrief qb = new QuestionBrief();
-			qb.setId(question.getId());// id
-			qb.setTitle(question.getTitle());// 标题
-			qb.setClick(question.getClick());// 浏览
-			qb.setFavourite(question.getFavourite());// 收藏
-			String[] questionTypeNameList = getQuestionTypeNameList(question
-					.getType());
-			StringBuilder questionBriefTypeSB = new StringBuilder();
-			for (int i = 0; i < questionTypeNameList.length; i++) {
-				if (i == questionTypeNameList.length - 1)
-					questionBriefTypeSB.append(questionTypeNameList[i]);
-				else
-					questionBriefTypeSB.append(questionTypeNameList[i]).append(
-							SeperatorConst.QUESTION_BRIEF_TYPE_SEPERATOR);
-			}
-			qb.setType(questionBriefTypeSB.toString());// 种类
-			qb.setPublishDate(question.getPublishDate());// 发布日期
-			/** 从answer表中查询时该qid的总数 */
-			TaxAnswerExample exampleOfAnswer = new TaxAnswerExample();
-			/** question id 有点小问题应该为Integer */
-//			exampleOfAnswer.createCriteria().andQuestionIdEqualTo(question.getId());
-//			Long totalAnswerNumOfQuestion=mapperFactory.getTaxAnswerMapper().countByExample(exampleOfAnswer);
-//			qb.setTotalAnswerNum(totalAnswerNumOfQuestion);
-		}
+		List<QuestionBrief> questionBriefList = getQuestionBriefList(questionList);
+		// 设置pageInfo
+		pageInfo.setList(questionBriefList);
 		// 设置result
-		result.setResult(questionBriefList);
+		result.setResult(pageInfo);
 		return JSON.toJSONString(result);
 	}
 
-	private String[] getQuestionTypeNameList(String questionTypeStr) {
-		/** 这里直接返回种类列表的"1;2;3;5"->"名称1;名称2;名称3;名称5" */
-		String[] questionTypeIdStrList = questionTypeStr
-				.split(SeperatorConst.QUESTION_TYPE_SEPERATOR);
-		String[] questionTypeNameList = new String[questionTypeIdStrList.length];
-		for (int i = 0; i < questionTypeIdStrList.length; i++) {
-			try {
-				Integer typeId = Integer.parseInt(questionTypeIdStrList[i]);
-				TaxProExample exampleOfPro = new TaxProExample();
-				exampleOfPro.createCriteria().andIdEqualTo(typeId);
-				List<TaxPro> proList = mapperFactory.getTaxProMapper()
-						.selectByExample(exampleOfPro);
-				// id唯一
-				questionTypeNameList[i] = proList.get(0).getName();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return questionTypeNameList;
-	}
-
-	/** 答题专区 用户动态 */
+	/** 答题专区 用户动态 类似调用getByCondition("latest")即可完成 封装成QuestionLive返回即可 */
 	@Override
 	public String getQuestions(String type, int page) {
-		// 由checkbox中根据类型和页码给出问题列表
-		return null;
+		// 答题专区用户动态
+		Result result = new Result();
+		TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
+		exampleOfQuestion.setOrderByClause("publish_date DESC");
+		// 封装PageBean
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setCurrentPage((long) page);
+		pageInfo.setCurrentCount(PageConst.NUM_PER_PAGE);
+		// 要计算一下
+		long totalCount = mapperFactory.getTaxQuestionMapper().countByExample(
+				exampleOfQuestion);
+		long totalPage = totalCount / PageConst.NUM_PER_PAGE
+				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
+		pageInfo.setTotalPage(totalPage);
+		pageInfo.setTotalCount(totalCount);
+		// 若请求的页面不合法，抛出异常
+		if (page < 1 || page > totalPage) {
+			try {
+				throw new Exception("UNKNOWN ERROR: invalid query page");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			result.setMessage(Message.INVALID_PARAMS);
+			result.setStatus(StatusCode.INVALID_PARAMS);
+			return JSON.toJSONString(result);
+		}
+		// 设置查询sql的limitClause
+		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
+		Long limit = pageInfo.getCurrentCount();
+		StringBuilder limitClauseSB = new StringBuilder();
+		limitClauseSB.append(offset).append(",").append(limit);
+		exampleOfQuestion.setLimitClause(limitClauseSB.toString());
+		// 先获取请求页面对应的问题列表
+		List<TaxQuestion> questionList = mapperFactory.getTaxQuestionMapper()
+				.selectByExample(exampleOfQuestion);
+		List<QuestionLive> questionLiveList = getQuestionLiveList(questionList);
+		// 设置pageInfo
+		pageInfo.setList(questionLiveList);
+		// 设置result
+		result.setResult(pageInfo);
+		return JSON.toJSONString(result);
 	}
-	
-	/**经验分享*/
+
+	/** 经验分享 */
 	@Override
 	public String getShares(int page) {
 		Result result = new Result();
@@ -289,27 +303,39 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		// 根据分页信息获取经验分享列表(默认 先按照点击降序 再按照收藏降序)
 		List<TaxShare> shareList = null;
 		exampleOfShare.setOrderByClause("click DESC, likes DESC");
-		shareList = mapperFactory.getTaxShareMapper().selectByExample(exampleOfShare);
-		//构造ShareExpertDetail List
-		List<ShareExpertDetail> shareExpertDetailList=new ArrayList<ShareExpertDetail>();
-		for(TaxShare share:shareList){
-			ShareExpertDetail shareExpertDetail=new ShareExpertDetail();
-			//根据share中的authorId去TaxUser表找出authorName对象
-			TaxUserKey userKey=new TaxUserKey();
+		// 设置查询sql的limitClause
+		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
+		Long limit = pageInfo.getCurrentCount();
+		StringBuilder limitClauseSB = new StringBuilder();
+		limitClauseSB.append(offset).append(",").append(limit);
+		exampleOfShare.setLimitClause(limitClauseSB.toString());
+		shareList = mapperFactory.getTaxShareMapper().selectByExample(
+				exampleOfShare);
+		// 构造ShareExpertDetail List
+		List<ShareExpertDetail> shareExpertDetailList = new ArrayList<ShareExpertDetail>();
+		for (TaxShare share : shareList) {
+			ShareExpertDetail shareExpertDetail = new ShareExpertDetail();
+			// 根据share中的authorId去TaxUser表找出authorName对象
+			TaxUserKey userKey = new TaxUserKey();
 			userKey.setId(share.getAuthorId());
-			TaxUser author=mapperFactory.getTaxUserMapper().selectByPrimaryKey(userKey);
+			TaxUser author = mapperFactory.getTaxUserMapper()
+					.selectByPrimaryKey(userKey);
 			shareExpertDetail.setAuthorName(author.getUsername());
-			//根据share中的authorId找出question对象
+			// 根据share中的authorId找出question对象
 			shareExpertDetail.setTitle(share.getTitle());
 			shareExpertDetail.setClick(share.getClick());
 			shareExpertDetail.setFavourite(share.getFavourite());
+			// 加入队列
+			shareExpertDetailList.add(shareExpertDetail);
 		}
+		// 设置pageInfo
+		pageInfo.setList(shareExpertDetailList);
 		// 设置result
-		result.setResult(shareExpertDetailList);
+		result.setResult(pageInfo);
 		return JSON.toJSONString(result);
 	}
-	
-	/**专业精读*/
+
+	/** 专业精读 */
 	@Override
 	public String getArticlesOfExperts(int page) {
 		Result result = new Result();
@@ -340,24 +366,113 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		// 根据分页信息获取专家经验分享列表(默认 先按照点击降序 再按照收藏降序)
 		List<TaxExpert> expertList = null;
 		exampleOfExpert.setOrderByClause("click DESC, likes DESC");
-		expertList = mapperFactory.getTaxExpertMapper().selectByExample(exampleOfExpert);
-		//构造ShareExpertDetail List
-		List<ShareExpertDetail> shareExpertDetailList=new ArrayList<ShareExpertDetail>();
-		for(TaxExpert expert:expertList){
-			ShareExpertDetail shareExpertDetail=new ShareExpertDetail();
-			//根据share中的authorId去TaxUser表找出authorName对象
-			TaxUserKey userKey=new TaxUserKey();
+		// 设置查询sql的limitClause
+		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
+		Long limit = pageInfo.getCurrentCount();
+		StringBuilder limitClauseSB = new StringBuilder();
+		limitClauseSB.append(offset).append(",").append(limit);
+		exampleOfExpert.setLimitClause(limitClauseSB.toString());
+		expertList = mapperFactory.getTaxExpertMapper().selectByExample(
+				exampleOfExpert);
+		// 构造ShareExpertDetail List
+		List<ShareExpertDetail> shareExpertDetailList = new ArrayList<ShareExpertDetail>();
+		for (TaxExpert expert : expertList) {
+			ShareExpertDetail shareExpertDetail = new ShareExpertDetail();
+			// 根据share中的authorId去TaxUser表找出authorName对象
+			TaxUserKey userKey = new TaxUserKey();
 			userKey.setId(expert.getAuthorId());
-			TaxUser author=mapperFactory.getTaxUserMapper().selectByPrimaryKey(userKey);
+			TaxUser author = mapperFactory.getTaxUserMapper()
+					.selectByPrimaryKey(userKey);
 			shareExpertDetail.setAuthorName(author.getUsername());
-			//根据share中的authorId找出question对象
+			// 根据share中的authorId找出question对象
 			shareExpertDetail.setTitle(expert.getTitle());
 			shareExpertDetail.setClick(expert.getClick());
 			shareExpertDetail.setFavourite(expert.getFavourite());
+			// 加入队列
+			shareExpertDetailList.add(shareExpertDetail);
 		}
+		// 设置pageInfo
+		pageInfo.setList(shareExpertDetailList);
 		// 设置result
-		result.setResult(shareExpertDetailList);
+		result.setResult(pageInfo);
 		return JSON.toJSONString(result);
+	}
+
+	private List<QuestionBrief> getQuestionBriefList(
+			List<TaxQuestion> questionList) {
+		List<QuestionBrief> questionBriefList = new ArrayList<QuestionBrief>();
+		for (TaxQuestion question : questionList) {
+			QuestionBrief qb = new QuestionBrief();
+			qb.setId(question.getId());// id
+			qb.setTitle(question.getTitle());// 标题
+			qb.setClick(question.getClick());// 浏览
+			qb.setFavourite(question.getFavourite());// 收藏
+			String[] questionTypeNameList = getQuestionTypeNameList(question
+					.getType());
+			StringBuilder questionBriefTypeSB = new StringBuilder();
+			for (int i = 0; i < questionTypeNameList.length; i++) {
+				if (i == questionTypeNameList.length - 1)
+					questionBriefTypeSB.append(questionTypeNameList[i]);
+				else
+					questionBriefTypeSB.append(questionTypeNameList[i]).append(
+							SeperatorConst.QUESTION_BRIEF_TYPE_SEPERATOR);
+			}
+			qb.setType(questionBriefTypeSB.toString());// 种类
+			qb.setPublishDate(question.getPublishDate());// 发布日期
+			/** 从answer表中查询时该qid的总数 */
+			TaxAnswerExample exampleOfAnswer = new TaxAnswerExample();
+			/** question id 有点小问题应该为Integer */
+			exampleOfAnswer.createCriteria().andQuestionIdEqualTo(
+					question.getId());
+			Long totalAnswerNumOfQuestion = mapperFactory.getTaxAnswerMapper()
+					.countByExample(exampleOfAnswer);
+			qb.setTotalAnswerNum(totalAnswerNumOfQuestion);
+			// 加入队列
+			questionBriefList.add(qb);
+		}
+		return questionBriefList;
+	}
+
+	private String[] getQuestionTypeNameList(String questionTypeStr) {
+		/** 这里直接返回种类列表的"1;2;3;5"->"名称1;名称2;名称3;名称5" */
+		String[] questionTypeIdStrList = questionTypeStr
+				.split(SeperatorConst.QUESTION_TYPE_SEPERATOR);
+		String[] questionTypeNameList = new String[questionTypeIdStrList.length];
+		for (int i = 0; i < questionTypeIdStrList.length; i++) {
+			try {
+				Integer typeId = Integer.parseInt(questionTypeIdStrList[i]);
+				TaxProExample exampleOfPro = new TaxProExample();
+				exampleOfPro.createCriteria().andIdEqualTo(typeId);
+				List<TaxPro> proList = mapperFactory.getTaxProMapper()
+						.selectByExample(exampleOfPro);
+				// id唯一
+				questionTypeNameList[i] = proList.get(0).getName();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return questionTypeNameList;
+	}
+
+	private List<QuestionLive> getQuestionLiveList(
+			List<TaxQuestion> questionList) {
+		List<QuestionLive> questionLiveList = new ArrayList<QuestionLive>();
+		for (TaxQuestion question : questionList) {
+			QuestionLive questionLive = new QuestionLive();
+			questionLive.setId(question.getId());
+			questionLive.setTitle(question.getTitle());
+			questionLive.setPublishDate(question.getPublishDate());
+			questionLive.setAuthorId(question.getAuthorId());
+			// 根据authorId查出authorName
+			TaxUserKey userKey = new TaxUserKey();
+			userKey.setId(question.getAuthorId());
+			TaxUser author = mapperFactory.getTaxUserMapper()
+					.selectByPrimaryKey(userKey);
+			questionLive.setAuthorName(author.getUsername());
+			// 加入队列
+			questionLiveList.add(questionLive);
+		}
+		return questionLiveList;
 	}
 
 }

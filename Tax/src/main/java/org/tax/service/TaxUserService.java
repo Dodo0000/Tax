@@ -14,15 +14,23 @@ import org.tax.model.TaxUser;
  * @author wyhong
  * @date 2018-7-7
  */
+/**还需要加上 
+ * 发私信
+ * 邀请回答
+ * 退出
+ * */
 public interface TaxUserService {
 	
 	String updateInfo(TaxUser user);
 	
-	String modifyPassword(PasswordModification info);
+	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
+	String modifyPassword(PasswordModification info, HttpServletRequest request);
 	
-	String publishQuestion(TaxQuestion question);
+	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
+	String publishQuestion(TaxQuestion question, HttpServletRequest request);
 	
-	String publishAnswer(TaxAnswer answer);
+	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
+	String publishAnswer(TaxAnswer answer, HttpServletRequest request);
 	
 	String confirmSolution(int questionId);
 	

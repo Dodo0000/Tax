@@ -11,4 +11,5 @@ public interface Message {
 	public static final String PERMISSION_DENIED = "permission denied";
 	public static final String PLEASE_LOGIN = "please login";
 	public static final String DUPLICATE_USERNAME = "choose another username please";
+	public static final String UPDATE_FALIUER = "update faliuer";
 }
