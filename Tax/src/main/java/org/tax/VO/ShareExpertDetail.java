@@ -10,7 +10,10 @@ import org.tax.model.TaxQuestion;
  */
 @Data
 public class ShareExpertDetail {
-	
-	private TaxQuestion question;
+	/**这里不是返回一个Question吧*/
+	//private TaxQuestion question;
 	private String authorName;
+	private String title;
+	private Integer click;
+	private Integer favourite;
 }

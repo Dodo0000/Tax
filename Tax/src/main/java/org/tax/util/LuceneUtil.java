@@ -51,8 +51,8 @@ public class LuceneUtil {
 			IndexWriter idxWriter = new IndexWriter(idxDir, iwConfig);
 			Document document = new Document();
 			// 问题id
-			String questionId = question.getId();
-			Field questionIdField = new TextField("questionId", questionId,
+			Integer questionId = question.getId();
+			Field questionIdField = new TextField("questionId", questionId.toString(),
 					Store.YES);
 			// 问题标题
 			String questionTitle = question.getTitle();
@@ -90,7 +90,7 @@ public class LuceneUtil {
 					analyzer);
 			IndexWriter idxWriter = new IndexWriter(idxDir, iwConfig);
 			//由于questionId唯一，只要根据id删除对应的doc即可
-			idxWriter.deleteDocuments(new Term("questionId", question.getId()));
+			idxWriter.deleteDocuments(new Term("questionId", question.getId().toString()));
 			if(idxWriter!=null)
 				idxWriter.close();
 		} catch (IOException e) {
@@ -108,11 +108,11 @@ public class LuceneUtil {
 					analyzer);
 			IndexWriter idxWriter = new IndexWriter(idxDir, iwConfig);
 			Document document = new Document();
-            document.add(new TextField("questionId", question.getId(), Store.YES));
+            document.add(new TextField("questionId", question.getId().toString(), Store.YES));
             document.add(new TextField("questionTitle", question.getTitle(), Store.YES));
             document.add(new TextField("questionContent", question.getContent(), Store.YES));
             document.add(new TextField("questionType", question.getType(), Store.YES));
-            Term deleteTerm=new Term("questionId", question.getId());
+            Term deleteTerm=new Term("questionId", question.getId().toString());
 //            //先根据id删除对应的question的doc
 //            Term deleteTerm=new Term("questionId", question.getId());
 //            idxWriter.deleteDocuments(deleteTerm);
@@ -176,7 +176,8 @@ public class LuceneUtil {
 				Document document = idxSearcher.doc(doc);
 				TaxQuestion question = new TaxQuestion();
 				// 设置问题id
-				String questionId = document.get("questionId");
+				String questionIdStr = document.get("questionId");
+				Integer questionId = Integer.parseInt(questionIdStr);
 				question.setId(questionId);
 				// 设置问题标题
 				String questionTitle = document.get("questionTitle");

@@ -11,37 +11,37 @@ public class LuceneUtilTest {
 	public void testCreateIndex() {
 		// 构造测试的question对象
 		TaxQuestion q1 = new TaxQuestion();
-		q1.setId("1");
+		q1.setId(1);
 		q1.setTitle("aaa_lucene");
 		q1.setContent("i love lucene");
 		q1.setType("1;2;3;512;1212");
 		LuceneUtil.creatIndex(q1);
 		TaxQuestion q2 = new TaxQuestion();
-		q2.setId("2");
+		q2.setId(2);
 		q2.setTitle("bbb_lucene");
 		q2.setContent("i hate lucene");
 		q2.setType("1;2;3;4;5");
 		LuceneUtil.creatIndex(q2);
 		TaxQuestion q3 = new TaxQuestion();
-		q3.setId("3");
+		q3.setId(3);
 		q3.setTitle("ccc_lucene");
 		q3.setContent("");
 		q3.setType("1;2;3;12;22;26");
 		LuceneUtil.creatIndex(q3);
 		TaxQuestion q4 = new TaxQuestion();
-		q4.setId("4");
+		q4.setId(4);
 		q4.setTitle("ddd_lucene");
 		q4.setContent("");
 		q4.setType("121212;222222");
 		LuceneUtil.creatIndex(q4);
 		TaxQuestion q5 = new TaxQuestion();
-		q5.setId("5");
+		q5.setId(5);
 		q5.setTitle("eee_lucenee");
 		q5.setContent("");
 		q5.setType("11;12;26");
 		LuceneUtil.creatIndex(q5);
 		TaxQuestion q6 = new TaxQuestion();
-		q6.setId("6");
+		q6.setId(6);
 		q6.setTitle("");
 		q6.setContent("fff_lucenee");
 		q6.setType("31;12221");
@@ -79,13 +79,13 @@ public class LuceneUtilTest {
 	@Test
 	public void testDeleteIndex(){
 		TaxQuestion q1 = new TaxQuestion();
-		q1.setId("1");
+		q1.setId(1);
 		q1.setTitle("aaa_lucene");
 		q1.setContent("i love lucene");
 		q1.setType("1;2;3;512;1212");
 		LuceneUtil.deleteIndex(q1);
 		TaxQuestion q6 = new TaxQuestion();
-		q6.setId("6");
+		q6.setId(6);
 		q6.setTitle("");
 		q6.setContent("fff_lucenee");
 		q6.setType("31;12221");
@@ -112,7 +112,7 @@ public class LuceneUtilTest {
 	@Test
 	public void testUpdateIndex(){
 		TaxQuestion q1 = new TaxQuestion();
-		q1.setId("1");
+		q1.setId(1);
 		q1.setTitle("");
 		q1.setContent("我是一个在中国的大学生，来自于山东大学");
 		q1.setType("1;2;3;512;1212");

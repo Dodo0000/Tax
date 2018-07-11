@@ -10,6 +10,9 @@ import org.tax.model.TaxUser;
  * @author wyhong
  * @date 2018-7-7
  */
+/**
+ * 感觉少了接口getQuestionDetail(String questionId)
+ * */
 public interface TaxGuestService {
 
 	String register(TaxUser user);
@@ -20,6 +23,7 @@ public interface TaxGuestService {
 	
 	String getByCondition(String type, int page);//type=latest|hot|reward
 	
+	/**return QuestionDetail json*/
 	String getQuestions(String type, int page);
 	
 	String getShares(int page);
