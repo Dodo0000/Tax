@@ -25,8 +25,8 @@ public interface TaxGuestService {
 	
 	String getByCondition(String type, int page);//type=latest|hot|reward
 	
-	/**return QuestionDetail json*/
-	String getQuestions(String type, int page);
+	/**动态专区*/
+	String getQuestions(int page);
 	
 	String getShares(int page);
 	

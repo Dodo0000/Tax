@@ -34,6 +34,7 @@ import org.tax.model.TaxExpert;
 import org.tax.model.TaxExpertExample;
 import org.tax.model.TaxPro;
 import org.tax.model.TaxProExample;
+import org.tax.model.TaxProKey;
 import org.tax.model.TaxQuestion;
 import org.tax.model.TaxQuestionExample;
 import org.tax.model.TaxShare;
@@ -100,6 +101,11 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		/**
 		 * 未添加功能： 验证码
 		 * */
+		if(loginInfo==null || loginInfo.getUsername()==null || loginInfo.getPassword()==null){
+			result.setMessage(Message.INVALID_PARAMS);
+			result.setStatus(StatusCode.INVALID_PARAMS);
+			return JSON.toJSONString(result);
+		}
 		/**
 		 * 判断用户名和密码是否正确(用户名是唯一的)
 		 * */
@@ -163,6 +169,11 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 	@Override
 	public String getByCondition(String type, int page) {
 		Result result = new Result();
+		if(type==null || page<=0){
+			result.setMessage(Message.INVALID_PARAMS);
+			result.setStatus(StatusCode.INVALID_PARAMS);
+			return JSON.toJSONString(result);
+		}
 		// 最新、热门、悬赏然后排序（降序）显示即可
 		// type=latest|hot|reward
 		TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
@@ -174,12 +185,6 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		} else if (type.equalsIgnoreCase("reward")) {
 			exampleOfQuestion.setOrderByClause("prize DESC");
 		} else {
-			try {
-				throw new Exception("UNKNOWN ERROR: invalid query type");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
@@ -206,6 +211,9 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
+		}
+		else if((page==totalPage) && (totalCount%PageConst.NUM_PER_PAGE!=0)){
+			pageInfo.setCurrentCount((long) totalCount%PageConst.NUM_PER_PAGE);
 		}
 		// 设置查询sql的limitClause
 		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
@@ -227,11 +235,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 
 	/** 答题专区 用户动态 类似调用getByCondition("latest")即可完成 封装成QuestionLive返回即可 */
 	@Override
-	public String getQuestions(String type, int page) {
+	public String getQuestions(int page) {
 		// 答题专区用户动态
 		Result result = new Result();
 		TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
-		exampleOfQuestion.setOrderByClause("publish_date DESC");
+		//由新到旧排序 再按点击排序 再按照收藏排序
+		exampleOfQuestion.setOrderByClause("publish_date DESC, click DESC, favourite DESC");
 		// 封装PageBean
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setCurrentPage((long) page);
@@ -245,15 +254,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		pageInfo.setTotalCount(totalCount);
 		// 若请求的页面不合法，抛出异常
 		if (page < 1 || page > totalPage) {
-			try {
-				throw new Exception("UNKNOWN ERROR: invalid query page");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
+		}
+		else if((page==totalPage) && (totalCount%PageConst.NUM_PER_PAGE!=0)){
+			pageInfo.setCurrentCount((long) totalCount%PageConst.NUM_PER_PAGE);
 		}
 		// 设置查询sql的limitClause
 		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
@@ -290,19 +296,16 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		pageInfo.setTotalCount(totalCount);
 		// 若请求的页面不合法，抛出异常
 		if (page < 1 || page > totalPage) {
-			try {
-				throw new Exception("UNKNOWN ERROR: invalid query page");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
 		}
-		// 根据分页信息获取经验分享列表(默认 先按照点击降序 再按照收藏降序)
+		else if((page==totalPage) && (totalCount%PageConst.NUM_PER_PAGE!=0)){
+			pageInfo.setCurrentCount((long) totalCount%PageConst.NUM_PER_PAGE);
+		}
+		// 根据分页信息获取经验分享列表(默认 先按照点击降序 再按照收藏降序 再按照时间)
 		List<TaxShare> shareList = null;
-		exampleOfShare.setOrderByClause("click DESC, likes DESC");
+		exampleOfShare.setOrderByClause("click DESC, favourite DESC, publish_date DESC");
 		// 设置查询sql的limitClause
 		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
 		Long limit = pageInfo.getCurrentCount();
@@ -325,6 +328,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			shareExpertDetail.setTitle(share.getTitle());
 			shareExpertDetail.setClick(share.getClick());
 			shareExpertDetail.setFavourite(share.getFavourite());
+			shareExpertDetail.setPublishDate(share.getPublishDate());
 			// 加入队列
 			shareExpertDetailList.add(shareExpertDetail);
 		}
@@ -353,19 +357,16 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		pageInfo.setTotalCount(totalCount);
 		// 若请求的页面不合法，抛出异常
 		if (page < 1 || page > totalPage) {
-			try {
-				throw new Exception("UNKNOWN ERROR: invalid query page");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
 		}
+		else if((page==totalPage) && (totalCount%PageConst.NUM_PER_PAGE!=0)){
+			pageInfo.setCurrentCount((long) totalCount%PageConst.NUM_PER_PAGE);
+		}
 		// 根据分页信息获取专家经验分享列表(默认 先按照点击降序 再按照收藏降序)
 		List<TaxExpert> expertList = null;
-		exampleOfExpert.setOrderByClause("click DESC, likes DESC");
+		exampleOfExpert.setOrderByClause("click DESC, favourite DESC, publish_date DESC");
 		// 设置查询sql的limitClause
 		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
 		Long limit = pageInfo.getCurrentCount();
@@ -407,6 +408,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			qb.setTitle(question.getTitle());// 标题
 			qb.setClick(question.getClick());// 浏览
 			qb.setFavourite(question.getFavourite());// 收藏
+			//分类名称
 			String[] questionTypeNameList = getQuestionTypeNameList(question
 					.getType());
 			StringBuilder questionBriefTypeSB = new StringBuilder();
@@ -441,12 +443,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		for (int i = 0; i < questionTypeIdStrList.length; i++) {
 			try {
 				Integer typeId = Integer.parseInt(questionTypeIdStrList[i]);
-				TaxProExample exampleOfPro = new TaxProExample();
-				exampleOfPro.createCriteria().andIdEqualTo(typeId);
-				List<TaxPro> proList = mapperFactory.getTaxProMapper()
-						.selectByExample(exampleOfPro);
+				TaxProKey proKey = new TaxProKey();
+				proKey.setId(typeId);
+				TaxPro pro = mapperFactory.getTaxProMapper()
+						.selectByPrimaryKey(proKey);
 				// id唯一
-				questionTypeNameList[i] = proList.get(0).getName();
+				questionTypeNameList[i] = pro.getName();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

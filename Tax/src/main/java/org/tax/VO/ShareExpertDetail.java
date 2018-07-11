@@ -1,5 +1,7 @@
 package org.tax.VO;
 
+import java.util.Date;
+
 import lombok.Data;
 
 import org.tax.model.TaxQuestion;
@@ -16,4 +18,5 @@ public class ShareExpertDetail {
 	private String title;
 	private Integer click;
 	private Integer favourite;
+	private Date publishDate;
 }
