@@ -69,10 +69,25 @@ public class TaxUserServiceImpl implements TaxUserService {
 		Result result = new Result();
 		//检查是否用户在登陆状态(由拦截器搞)
 		//检查新旧密码是否一致
-		if(info.getPassword()==null || info.getNewPassword()==null){
+		if(info==null || info.getPassword()==null || info.getNewPassword()==null){
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
+			return JSON.toJSONString(result);
 		}
+		
+		/***************************************************************/
+		//测试时候才打开
+//		TaxUserKey dubiUserKey = new TaxUserKey();
+//		dubiUserKey.setId("a9da429220a64a12a34264cd971acdf7");
+//		TaxUser dubi = mapperFactory.getTaxUserMapper().selectByPrimaryKey(dubiUserKey);
+//		TaxUser user = dubi;
+//		PasswordModification passwordInfo = new PasswordModification();
+//		passwordInfo.setPassword(dubi.getPassword());
+//		passwordInfo.setNewPassword("newpassowrd");
+//		info = passwordInfo;
+//		passwordInfo.setNewPassword("");//非法修改
+		/***************************************************************/
+		
 		//从Session取出用户,确定旧密码是否正确
 		TaxUser user = (TaxUser)request.getSession().getAttribute(SessionConst.USER);
 		if(!user.getPassword().equals(info.getPassword())){
@@ -147,13 +162,13 @@ public class TaxUserServiceImpl implements TaxUserService {
 		List<TaxQuestion> questionList = mapperFactory.getTaxQuestionMapper().selectByExample(exampleOfQuestion);
 		if(questionList.size()<=0){
 			result.setMessage(Message.INVALID_PARAMS);
-			result.setMessage(StatusCode.INVALID_PARAMS);
+			result.setStatus(StatusCode.INVALID_PARAMS);
 		}
 		else{
 			TaxQuestion question = questionList.get(0);
 			//确认解答
 			question.setStatus(1);
-			int flag=mapperFactory.getTaxQuestionMapper().insert(question);
+			int flag=mapperFactory.getTaxQuestionMapper().updateByPrimaryKey(question);
 			if(flag<=0){
 				result.setMessage(Message.INVALID_PARAMS);
 				result.setStatus(StatusCode.INVALID_PARAMS);
@@ -170,13 +185,13 @@ public class TaxUserServiceImpl implements TaxUserService {
 		List<TaxQuestion> questionList = mapperFactory.getTaxQuestionMapper().selectByExample(exampleOfQuestion);
 		if(questionList.size()<=0){
 			result.setMessage(Message.INVALID_PARAMS);
-			result.setMessage(StatusCode.INVALID_PARAMS);
+			result.setStatus(StatusCode.INVALID_PARAMS);
 		}
 		else{
 			TaxQuestion question = questionList.get(0);
 			//更新收藏数
 			question.setFavourite(question.getFavourite()+1);
-			int flag=mapperFactory.getTaxQuestionMapper().insert(question);
+			int flag=mapperFactory.getTaxQuestionMapper().updateByPrimaryKey(question);
 			if(flag<=0){
 				result.setMessage(Message.INVALID_PARAMS);
 				result.setStatus(StatusCode.INVALID_PARAMS);

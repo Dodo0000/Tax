@@ -36,10 +36,11 @@ public class GuestServiceSimpleTest {
 		TaxUser u1 = new TaxUser();
 		u1.setId(UUIDUtil.genUUID());
 		//u1.setUsername("dubi");
-		u1.setUsername("dubi_another");
+		//u1.setUsername("dubi_another");
+		u1.setUsername("dubi_another_2");
 		u1.setEmail("349612430@qq.com");
 		u1.setTelephone("18022267373");
-		u1.setPassword("password");
+		u1.setPassword("");//测试不合法用户密码
 		u1.setLastVisit(new Date());
 		u1.setImage("default img");
 		String resultJsonStr = guestService.register(u1);

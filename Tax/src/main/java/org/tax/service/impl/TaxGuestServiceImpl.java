@@ -45,6 +45,7 @@ import org.tax.model.TaxUserExample;
 import org.tax.model.TaxUserKey;
 import org.tax.result.Result;
 import org.tax.service.TaxGuestService;
+import org.tax.util.FormatUtil;
 import org.tax.util.JSONUtil;
 import org.tax.util.LuceneUtil;
 
@@ -67,7 +68,8 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 	public String register(TaxUser user) {
 		Result result = new Result();
 		/**
-		 * 未加验证码 未加用户密码格式验证
+		 * 未加验证码 
+		 * 未加验证:用户邮箱格式
 		 * */
 		if (user.getUsername() == null) {
 			// 用户名为空s
@@ -82,6 +84,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			// 用户名已存在
 			result.setMessage(Message.DUPLICATE_USERNAME);
 			result.setStatus(StatusCode.DUPLICATE_USERNAME);
+			return JSON.toJSONString(result);
+		}
+		else if(!FormatUtil.rexCheckPassword(user.getPassword())){
+			//密码不符合格式
+			result.setMessage(Message.PASSWORD_INVALID_FORMAT);
+			result.setStatus(StatusCode.PASSWORD_INVALID_FORMAT);
 			return JSON.toJSONString(result);
 		}
 		try {

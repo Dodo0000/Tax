@@ -12,4 +12,5 @@ public class StatusCode {
 	public static final String PLEASE_LOGIN = "401";
 	public static final String DUPLICATE_USERNAME = "400";
 	public static final String UPDATE_FALIUER = "400";
+	public static final String PASSWORD_INVALID_FORMAT = "400";
 }
