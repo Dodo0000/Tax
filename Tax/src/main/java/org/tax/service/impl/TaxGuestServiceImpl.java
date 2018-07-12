@@ -3,18 +3,19 @@ package org.tax.service.impl;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.oval.ConstraintViolation;
+import net.sf.oval.Validator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.tax.VO.LoginInfo;
 import org.tax.VO.PageInfo;
 import org.tax.VO.QuestionBrief;
@@ -26,14 +27,11 @@ import org.tax.constant.PageConst;
 import org.tax.constant.SeperatorConst;
 import org.tax.constant.SessionConst;
 import org.tax.constant.StatusCode;
-import org.tax.dao.BaseDao;
 import org.tax.factory.MapperFactory;
-import org.tax.model.TaxAnswer;
 import org.tax.model.TaxAnswerExample;
 import org.tax.model.TaxExpert;
 import org.tax.model.TaxExpertExample;
 import org.tax.model.TaxPro;
-import org.tax.model.TaxProExample;
 import org.tax.model.TaxProKey;
 import org.tax.model.TaxQuestion;
 import org.tax.model.TaxQuestionExample;
@@ -45,9 +43,10 @@ import org.tax.model.TaxUserExample;
 import org.tax.model.TaxUserKey;
 import org.tax.result.Result;
 import org.tax.service.TaxGuestService;
-import org.tax.util.FormatUtil;
-import org.tax.util.JSONUtil;
+import org.tax.session.MySession;
+import org.tax.session.SessionControl;
 import org.tax.util.LuceneUtil;
+import org.tax.util.UUIDUtil;
 
 import com.alibaba.fastjson.JSON;
 
@@ -71,12 +70,28 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		 * 未加验证码 
 		 * 未加验证:用户邮箱格式
 		 * */
-		if (user.getUsername() == null) {
-			// 用户名为空s
-			result.setMessage(Message.INVALID_USERNAME_OR_PASSWORD);
-			result.setStatus(StatusCode.INVALID_USERNAME_OR_PASSWORD);
+		//validation part
+		Validator validator = new Validator();
+		List<ConstraintViolation> list = validator.validate(user);
+		if(list.size() > 0) {
+			result.setStatus(StatusCode.INVALID_PARAMS);
+			result.setMessage(Message.INVALID_PARAMS);
+			List<String> errors = new ArrayList<String>();
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				ConstraintViolation constraintViolation = (ConstraintViolation) iterator
+						.next();
+				errors.add(constraintViolation.getMessage());
+			}
+			result.setResult(errors);
 			return JSON.toJSONString(result);
 		}
+//		if (user.getUsername() == null) {
+//			// 用户名为空s
+//			result.setMessage(Message.INVALID_USERNAME_OR_PASSWORD);
+//			result.setStatus(StatusCode.INVALID_USERNAME_OR_PASSWORD);
+//			return JSON.toJSONString(result);
+//		}
+		//make sure the username hasn't been used yet
 		TaxUserExample exampleOfUser = new TaxUserExample();
 		exampleOfUser.createCriteria().andUsernameEqualTo(user.getUsername());
 		if (mapperFactory.getTaxUserMapper().selectByExample(exampleOfUser)
@@ -86,17 +101,20 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			result.setStatus(StatusCode.DUPLICATE_USERNAME);
 			return JSON.toJSONString(result);
 		}
-		else if(!FormatUtil.rexCheckPassword(user.getPassword())){
-			//密码不符合格式
-			result.setMessage(Message.PASSWORD_INVALID_FORMAT);
-			result.setStatus(StatusCode.PASSWORD_INVALID_FORMAT);
-			return JSON.toJSONString(result);
-		}
+//		else if(!FormatUtil.rexCheckPassword(user.getPassword())){
+//			//密码不符合格式
+//			result.setMessage(Message.PASSWORD_INVALID_FORMAT);
+//			result.setStatus(StatusCode.PASSWORD_INVALID_FORMAT);
+//			return JSON.toJSONString(result);
+//		}
 		try {
 			// 添加注册时间字段(不知道是否需要)
+			user.setId(UUIDUtil.genUUID());
+			user.setLastVisit(new Date());
 			mapperFactory.getTaxUserMapper().insert(user);
 		} catch (Exception e) {
 			e.printStackTrace();
+			//invaild params 有歧义
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 		}
@@ -134,17 +152,31 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			user.setLastVisit(new Date());
 			/** 标志是否记住密码 */
 			boolean flag = false;
+			//2018/7/12 wyhong
+			//id;username;password
+			Cookie newCookie = new Cookie(CookieConst.USER,
+					URLEncoder.encode(user.getId()+";"
+							+loginInfo.getUsername() + ";"
+							+ loginInfo.getPassword()));
+			newCookie.setPath(CookieConst.PATH);
+			// 默认cookie 30min后失效
+			int maxAge = 60 * 30;
 			if (flag) {
 				// 设置cookie 一个月后失效
-				Cookie newCookie = new Cookie(CookieConst.USER,
-						URLEncoder.encode(loginInfo.getUsername() + ";"
-								+ loginInfo.getPassword()));
-				newCookie.setPath(CookieConst.PATH);
-				newCookie.setMaxAge(30 * 24 * 60 * 60);
-				response.addCookie(newCookie);
+				maxAge = 30 * 24 * 60 * 60;
 			}
+			newCookie.setMaxAge(maxAge);
+			newCookie.setPath(CookieConst.PATH);
+			response.addCookie(newCookie);
 			// get 跨域session
-			request.getSession().setAttribute(SessionConst.USER, user);
+			//2018/7/12 wyhong
+			MySession session = new MySession(UUIDUtil.genUUID());
+			SessionControl.getInstance().addSession(user.getId(), session);
+			session.setAttribute(SessionConst.USER, user);
+			LOGGER.debug("*****************sessionId in login section:"+session.getId()+";userId:"+user.getId());
+			//test getting a session
+			LOGGER.debug("session num:"+SessionControl.getInstance().getNumOnline());
+			LOGGER.debug("get session:"+SessionControl.getInstance().getSession(user.getId()).getId());
 			return JSON.toJSONString(result);
 		}
 	}

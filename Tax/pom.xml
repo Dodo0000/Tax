@@ -209,6 +209,11 @@
             <version>2012_u6</version>  
         </dependency>  
 		<!-- 引入Lucene 结束-->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.3</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

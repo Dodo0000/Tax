@@ -34,8 +34,8 @@ public interface TaxUserService {
 	
 	String confirmSolution(int questionId);
 	
-	String collect(int questionId);
+	String collect(int questionId, HttpServletRequest request);
 	
-	String modifyAvatar(HttpServletRequest request, MultipartRequest multipartRequest);
+	String modifyAvatar(String userId, MultipartRequest multipartRequest);
 	
 }
