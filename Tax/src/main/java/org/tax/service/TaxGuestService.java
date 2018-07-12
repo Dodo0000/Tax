@@ -21,7 +21,7 @@ public interface TaxGuestService {
 	
 	String login(LoginInfo loginInfo, HttpServletRequest request, HttpServletResponse response);
 	
-	String search(String keyword, String proId);
+	String search(String keyword, String proId, int page);
 	
 	String getByCondition(String type, int page);//type=latest|hot|reward
 	

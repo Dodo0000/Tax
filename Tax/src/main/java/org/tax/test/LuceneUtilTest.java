@@ -81,7 +81,7 @@ public class LuceneUtilTest {
 		List<TaxQuestion> questionList=null;
 		try {
 			/**基本调用*/
-			//questionList = LuceneUtil.search("lucene", "3;26", 1, 2);
+			questionList = LuceneUtil.search("lucene", "3;26", 1, 2);
 			//questionList = LuceneUtil.search("lucene", "3;26", 2, 2);
 			//questionList = LuceneUtil.search("lucene", "3;26", 1, 100);//pageIdx合法 pageSize过大时没有问题的
 			//questionList = LuceneUtil.search("lucene", "3;26", 2, 2);//pageIdx不合法就有问题了

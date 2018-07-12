@@ -37,6 +37,7 @@ import org.tax.model.TaxProExample;
 import org.tax.model.TaxProKey;
 import org.tax.model.TaxQuestion;
 import org.tax.model.TaxQuestionExample;
+import org.tax.model.TaxQuestionKey;
 import org.tax.model.TaxShare;
 import org.tax.model.TaxShareExample;
 import org.tax.model.TaxUser;
@@ -141,22 +142,44 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 	}
 
 	/**
-	 * 这里有个问题搜索栏搜索为什么会传入types="1;2;3" 这里的具体问题还需细化，和分页时传入page这里先这么测试一下 这里暂时是给出所有的
+	 * 这里假定索引库与数据库是能保持一致的
+	 * 这里若page<=0 或者 page>totalPage LuceneUtil会抛出异常
+	 * 捕获后返回invalid params异常
 	 * */
 	@Override
-	public String search(String keyword, String type) {
+	public String search(String keyword, String type, int page) {
 		// 每个页的搜索栏，根据关键字搜索问题
 		Result result = new Result();
-		try {
-			List<TaxQuestion> questionList = LuceneUtil.search(keyword, type,
-					Integer.MAX_VALUE);
-			List<QuestionBrief> questionBriefList = getQuestionBriefList(questionList);
-			// 设置result
-			result.setResult(questionBriefList);
-			return JSON.toJSONString(result);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(keyword!=null && type!=null){
+			try {
+				List<TaxQuestion> questionLuceneList = LuceneUtil.search(keyword, type,
+						page, PageConst.NUM_PER_PAGE);
+				List<TaxQuestion> questionList = new ArrayList<TaxQuestion>();
+				for(TaxQuestion questionLucene:questionLuceneList){
+					TaxQuestionKey questionKey = new TaxQuestionKey();
+					TaxQuestion question = mapperFactory.getTaxQuestionMapper().selectByPrimaryKey(questionKey);
+					questionList.add(question);
+				}
+				List<QuestionBrief> questionBriefList = getQuestionBriefList(questionLuceneList);
+				//设置PageInfo
+				PageInfo pageInfo = new PageInfo();
+				pageInfo.setCurrentPage(page);
+				pageInfo.setCurrentCount(questionBriefList.size());
+				// 要计算一下
+				TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
+				long totalCount = mapperFactory.getTaxQuestionMapper().countByExample(
+						exampleOfQuestion);
+				long totalPage = totalCount / PageConst.NUM_PER_PAGE
+						+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
+				// 设置pageInfo
+				pageInfo.setList(questionBriefList);
+				// 设置result
+				result.setResult(pageInfo);
+				return JSON.toJSONString(result);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		result.setMessage(Message.INVALID_PARAMS);
 		result.setStatus(StatusCode.INVALID_PARAMS);
