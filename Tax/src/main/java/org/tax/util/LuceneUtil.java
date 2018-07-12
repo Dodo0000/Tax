@@ -40,14 +40,16 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 /** 有一个基本假设是，这里的question都是合法的实体 id不为空s */
 public class LuceneUtil {
 	// 存放索引库的位置
-	private static String INDEX_LIB_PATH = "E:\\temp\\tax\\lucene\\index";
+	private static String INDEX_LIB_PATH = "D:\\temp\\tax\\lucene\\index";
+	//private static String INDEX_LIB_PATH = "E:\\temp\\tax\\lucene\\index";
 	//private static String INDEX_LIB_PATH = "D:\\temp\\tax\\lucene\\index_db";
 	// 索引库关联的源数据的位置
-	private static String SEARCH_SRC_PATH = "E:\\temp\\tax\\lucene\\searchsource";
+	private static String SEARCH_SRC_PATH = "D:\\temp\\tax\\lucene\\searchsource";
 
 	public static void initIndexLib() {
 		// 测试时候根据db插入好的数据初始化索引库
-		String TEST_INDEX_LIB_PATH = "E:\\temp\\tax\\lucene\\index_db";
+		String TEST_INDEX_LIB_PATH = "D:\\temp\\tax\\lucene\\index";
+		//String TEST_INDEX_LIB_PATH = "E:\\temp\\tax\\lucene\\index";
 		String URL = "jdbc:mysql://localhost:3306/tax";
 		String USERNAME = "root";
 		String PASSWORD = "root";

@@ -46,12 +46,23 @@ public class TaxUserServiceImpl implements TaxUserService {
 	private MapperFactory mapperFactory;
 	
 	@Override
-	public String updateInfo(TaxUser user) {
+	public String updateInfo(TaxUser user, HttpServletRequest request) {
 		Result result = new Result();
 		//检查是否用户在登陆状态(由拦截器搞)
+		TaxUser originalUser = getUserFromRequest(request);
+		//根据包装跟新数据的user更新originalUser
+		if(user.getEmail()==null || user.getTelephone()==null){
+			result.setMessage(Message.INVALID_PARAMS);
+			result.setStatus(StatusCode.INVALID_PARAMS);
+			return JSON.toJSONString(result);
+		}
+		//更新三个字段email telephone proList
+		originalUser.setEmail(user.getEmail());
+		originalUser.setTelephone(user.getTelephone());
+		originalUser.setProList(user.getProList());
 		//检查用户名 密码是否正确
 		TaxUserExample exampleOfUser = new TaxUserExample();
-		exampleOfUser.createCriteria().andUsernameEqualTo(user.getUsername()).andPasswordEqualTo(user.getPassword());
+		exampleOfUser.createCriteria().andUsernameEqualTo(originalUser.getUsername()).andPasswordEqualTo(originalUser.getPassword());
 		List<TaxUser> selectUser = mapperFactory.getTaxUserMapper().selectByExample(exampleOfUser);
 		if(selectUser==null || selectUser.size()==0){
 			result.setMessage(Message.INVALID_PARAMS);
@@ -59,7 +70,7 @@ public class TaxUserServiceImpl implements TaxUserService {
 			return JSON.toJSONString(result);
 		}
 		//修改信息
-		int flag=mapperFactory.getTaxUserMapper().updateByExampleSelective(user, exampleOfUser);
+		int flag=mapperFactory.getTaxUserMapper().updateByExampleSelective(originalUser, exampleOfUser);
 		if(flag<=0){
 			result.setMessage(Message.UPDATE_FALIUER);
 			result.setStatus(StatusCode.UPDATE_FALIUER);
@@ -105,10 +116,6 @@ public class TaxUserServiceImpl implements TaxUserService {
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 		}
-		else if(!FormatUtil.rexCheckPassword(info.getNewPassword())){
-			result.setMessage(Message.INVALID_PARAMS);
-			result.setStatus(StatusCode.INVALID_PARAMS);
-		}
 		else{
 			//更新密码
 			user.setPassword(info.getNewPassword());
@@ -140,6 +147,7 @@ public class TaxUserServiceImpl implements TaxUserService {
 		return JSON.toJSONString(result);
 	}
 	
+	/**可以考虑整理到util中*/
 	private TaxUser getUserFromRequest(HttpServletRequest request) {
 		String userId = null;
 		Cookie[] cookies = request.getCookies();
@@ -162,16 +170,20 @@ public class TaxUserServiceImpl implements TaxUserService {
 	/**以后修改为从鸿哥的Factory获取Session
 	 * 更改需要：
 	 * 细化检验各个字段
+	 * 还应该从url中传入一个questionId
 	 * */
 	@Override
-	public String publishAnswer(TaxAnswer answer, HttpServletRequest request) {
+	public String publishAnswer(int questionId, TaxAnswer answer, HttpServletRequest request) {
 		Result result = new Result();
 		//Question id 自增那么不需要管直接插入即可
 		//设置问题的authorId
 //		TaxUser author = (TaxUser) request.getSession().getAttribute(SessionConst.USER);
 		//2018/7/12:wyhong
 		TaxUser author = getUserFromRequest(request);
+		//设置答案作者id
 		answer.setAuthorId(author.getId());
+		//设置问题id
+		answer.setQuestionId(questionId);
 		//设置问题的publishDate
 		answer.setPublishDate(new Date());
 		//存放问题
@@ -184,10 +196,13 @@ public class TaxUserServiceImpl implements TaxUserService {
 	}
 	
 	@Override
-	public String confirmSolution(int questionId) {
+	public String confirmSolution(int questionId, HttpServletRequest request) {
 		Result result = new Result();
+		//确保当前登陆user是请求正确的questionId
 		TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
-		exampleOfQuestion.createCriteria().andIdEqualTo(questionId);
+		//匹配当前登陆用户id 问题id
+		TaxUser user = getUserFromRequest(request);
+		exampleOfQuestion.createCriteria().andAuthorIdEqualTo(user.getId()).andIdEqualTo(questionId);
 		List<TaxQuestion> questionList = mapperFactory.getTaxQuestionMapper().selectByExample(exampleOfQuestion);
 		if(questionList.size()<=0){
 			result.setMessage(Message.INVALID_PARAMS);

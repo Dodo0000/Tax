@@ -33,8 +33,8 @@ public class TaxUserAction {
 	
 	@RequestMapping(value="/update",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody
-	public String updateInfo(TaxUser user) {
-		return taxUserService.updateInfo(user);
+	public String updateInfo(TaxUser user, HttpServletRequest request) {
+		return taxUserService.updateInfo(user, request);
 	}
 	
 	@RequestMapping(value="/password",method=RequestMethod.POST,produces=JSON)
@@ -49,16 +49,22 @@ public class TaxUserAction {
 		return taxUserService.publishQuestion(question, request);
 	}
 	
-	@RequestMapping(value="/answer",method=RequestMethod.POST,produces=JSON)
+//	@RequestMapping(value="/answer",method=RequestMethod.POST,produces=JSON)
+//	@ResponseBody
+//	public String publishAnswer(TaxAnswer answer, HttpServletRequest request) {
+//		return taxUserService.publishAnswer(answer, request);
+//	}
+	/**这里修正了一下 确保问题的确认是真正登陆且问题发布者才能更改*/
+	@RequestMapping(value="/question/{questionId}/answer",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody
-	public String publishAnswer(TaxAnswer answer, HttpServletRequest request) {
-		return taxUserService.publishAnswer(answer, request);
+	public String publishAnswer(@PathVariable("questionId") int questionId, TaxAnswer answer, HttpServletRequest request) {
+		return taxUserService.publishAnswer(questionId, answer, request);
 	}
 	
 	@RequestMapping(value="/confirm/{questionId}",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody
-	public String confirmSolution(@PathVariable("questionId") int questionId) {
-		return taxUserService.confirmSolution(questionId);
+	public String confirmSolution(@PathVariable("questionId") int questionId, HttpServletRequest request) {
+		return taxUserService.confirmSolution(questionId, request);
 	}
 	
 	@RequestMapping(value="/collect/{questionId}",method=RequestMethod.POST,produces=JSON)

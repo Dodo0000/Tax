@@ -46,23 +46,23 @@ public class UserServiceSimpleTest {
 		mapperFactory = (MapperFactory) context.getBean("mapperFactory");
 	}
 	
-	@Test
-	public void testUpdateInfo(){
-		TaxUserKey dubiUserKey = new TaxUserKey();
-		dubiUserKey.setId("a9da429220a64a12a34264cd971acdf7");
-		TaxUser dubi = mapperFactory.getTaxUserMapper().selectByPrimaryKey(dubiUserKey);	
-		dubi.setImage("another img");
-		dubi.setProList("9;99;999");
-		String resultJsonStr = userService.updateInfo(dubi);
-		System.out.println(resultJsonStr);
-	}
+//	@Test
+//	public void testUpdateInfo(){
+//		TaxUserKey dubiUserKey = new TaxUserKey();
+//		dubiUserKey.setId("a9da429220a64a12a34264cd971acdf7");
+//		TaxUser dubi = mapperFactory.getTaxUserMapper().selectByPrimaryKey(dubiUserKey);	
+//		dubi.setImage("another img");
+//		dubi.setProList("9;99;999");
+//		String resultJsonStr = userService.updateInfo(dubi);
+//		System.out.println(resultJsonStr);
+//	}
 	
-	@Test
-	public void testConfirmSolution(){
-		//String resultJsonStr = userService.confirmSolution(4);//有效
-		String resultJsonStr = userService.confirmSolution(100);//无效qid
-		System.out.println(resultJsonStr);
-	}
+//	@Test
+//	public void testConfirmSolution(){
+//		//String resultJsonStr = userService.confirmSolution(4);//有效
+//		String resultJsonStr = userService.confirmSolution(100);//无效qid
+//		System.out.println(resultJsonStr);
+//	}
 	
 	@Test
 	public void testCollect(){

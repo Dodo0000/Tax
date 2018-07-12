@@ -76,9 +76,9 @@ public class GuestServiceSimpleTest {
 		//String resultJsonStr = guestService.search("江泽民", null, 1);
 		//String resultJsonStr = guestService.search("江泽民", "4;100", 1);
 		//String resultJsonStr = guestService.search("江泽民", "3;100", 100);
-		String resultJsonStr = guestService.search("江泽民", "3;100", 0);
+		//String resultJsonStr = guestService.search("江泽民", "3;100", 0);
 		/**有效类*/
-		//String resultJsonStr = guestService.search("江泽民", "3;100", 1);
+		String resultJsonStr = guestService.search("江泽民", "3;6", 1);
 		
 		System.out.println(resultJsonStr);
 	}

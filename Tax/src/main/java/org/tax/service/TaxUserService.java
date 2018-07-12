@@ -21,7 +21,7 @@ import org.tax.model.TaxUser;
  * */
 public interface TaxUserService {
 	
-	String updateInfo(TaxUser user);
+	String updateInfo(TaxUser user, HttpServletRequest request);
 	
 	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
 	String modifyPassword(PasswordModification info, HttpServletRequest request);
@@ -30,9 +30,10 @@ public interface TaxUserService {
 	String publishQuestion(TaxQuestion question, HttpServletRequest request);
 	
 	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
-	String publishAnswer(TaxAnswer answer, HttpServletRequest request);
+	String publishAnswer(int questionId, TaxAnswer answer, HttpServletRequest request);
 	
-	String confirmSolution(int questionId);
+	//这里要防止还要检验该问题id是否是正确的用户确认
+	String confirmSolution(int questionId, HttpServletRequest request);
 	
 	String collect(int questionId, HttpServletRequest request);
 	

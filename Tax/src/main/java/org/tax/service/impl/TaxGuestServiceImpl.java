@@ -185,6 +185,8 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 	 * 这里假定索引库与数据库是能保持一致的
 	 * 这里若page<=0 或者 page>totalPage LuceneUtil会抛出异常
 	 * 捕获后返回invalid params异常
+	 * 注意：
+	 * 这里传入的keyword可能有中文
 	 * */
 	@Override
 	public String search(String keyword, String type, int page) {
@@ -192,6 +194,9 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		Result result = new Result();
 		if(keyword!=null && type!=null){
 			try {
+				//keyword转成utf-8 type转成utf-8
+				keyword = new String(keyword.getBytes("iso8859-1"),"UTF-8");
+				type = new String(type.getBytes("iso8859-1"),"UTF-8");
 				List<TaxQuestion> questionLuceneList = LuceneUtil.search(keyword, type,
 						page, PageConst.NUM_PER_PAGE);
 				List<TaxQuestion> questionList = new ArrayList<TaxQuestion>();
