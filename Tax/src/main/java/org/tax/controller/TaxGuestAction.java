@@ -3,6 +3,8 @@ package org.tax.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import org.tax.VO.LoginInfo;
 import org.tax.constant.MediaType;
 import org.tax.model.TaxUser;
 import org.tax.service.TaxGuestService;
+import org.tax.service.impl.TaxGuestServiceImpl;
+import org.tax.session.SessionControl;
 
 /**
  * @author wyhong
@@ -25,48 +29,54 @@ import org.tax.service.TaxGuestService;
 @RequestMapping("/api/v1/guest")
 public class TaxGuestAction {
 	
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(TaxGuestAction.class);
 	final String JSON = MediaType.JSON;
-	
+
 	@Autowired
 	TaxGuestService taxGuestService;
-	
-	@RequestMapping(value="/register",method=RequestMethod.POST,produces=JSON)
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = JSON)
 	@ResponseBody
 	public String register(TaxUser user) {
 		return taxGuestService.register(user);
 	}
-	
-	@RequestMapping(value="/login",method=RequestMethod.POST,produces=JSON)
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = JSON)
 	@ResponseBody
-	public String login(LoginInfo loginInfo, HttpServletRequest request, HttpServletResponse response) {
+	public String login(LoginInfo loginInfo, HttpServletRequest request,
+			HttpServletResponse response) {
 		return taxGuestService.login(loginInfo, request, response);
 	}
-	
-	@RequestMapping(value="/search/{keyword}/{proId}/{page}",method={RequestMethod.GET,RequestMethod.POST},produces=JSON)
+
+	@RequestMapping(value = "/search/{keyword}/{proId}/{page}", method = {
+			RequestMethod.GET, RequestMethod.POST }, produces = JSON)
 	@ResponseBody
-	public String search(@PathVariable("keyword") String keyword,@PathVariable("proId") String proId,@PathVariable("page") int page) {
+	public String search(@PathVariable("keyword") String keyword,
+			@PathVariable("proId") String proId, @PathVariable("page") int page) {
 		return taxGuestService.search(keyword, proId, page);
 	}
-	
-	@RequestMapping(value="/question/{type}/{page}",method=RequestMethod.GET,produces=JSON)
+
+	@RequestMapping(value = "/question/{type}/{page}", method = RequestMethod.GET, produces = JSON)
 	@ResponseBody
-	public String getByCondition(@PathVariable("type") String type, @PathVariable("page") int page) {
+	public String getByCondition(@PathVariable("type") String type,
+			@PathVariable("page") int page) {
 		return taxGuestService.getByCondition(type, page);
 	}
-	
-	@RequestMapping(value="/question/{page}",method=RequestMethod.GET,produces=JSON)
+
+	@RequestMapping(value = "/question/{page}", method = RequestMethod.GET, produces = JSON)
 	@ResponseBody
 	public String getQuestions(@PathVariable("page") int page) {
 		return taxGuestService.getQuestions(page);
 	}
-	
-	@RequestMapping(value="/share/{page}",method=RequestMethod.GET,produces=JSON)
+
+	@RequestMapping(value = "/share/{page}", method = RequestMethod.GET, produces = JSON)
 	@ResponseBody
 	public String getShares(@PathVariable("page") int page) {
 		return taxGuestService.getShares(page);
 	}
-	
-	@RequestMapping(value="/expert/{page}",method=RequestMethod.GET,produces=JSON)
+
+	@RequestMapping(value = "/expert/{page}", method = RequestMethod.GET, produces = JSON)
 	@ResponseBody
 	public String method(@PathVariable("page") int page) {
 		return taxGuestService.getArticlesOfExperts(page);

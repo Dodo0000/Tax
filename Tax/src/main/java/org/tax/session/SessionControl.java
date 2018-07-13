@@ -25,6 +25,7 @@ public class SessionControl {
 	
 	private static SessionControl sessionControl = new SessionControl();
 	
+	//单例
 	private SessionControl(){};
 	
 	public static SessionControl getInstance(){

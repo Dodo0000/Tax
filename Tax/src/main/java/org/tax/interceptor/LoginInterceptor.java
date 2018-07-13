@@ -26,7 +26,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 	public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1,
 			Object arg2, ModelAndView arg3) throws Exception {
 	}
-
+	
+	/**改成与session有关，处理跨域*/
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object arg2) throws Exception {
