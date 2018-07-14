@@ -10,12 +10,12 @@
 	<meta http-equiv="description" content="Simple">
 	<!--  360浏览器专用 -->
 	<meta name="renderer" content="ie-stand" />
-	<link rel="shortcut icon" href="/resources/image/icon/favicon.gif" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="/resources/css/login.css">
-    <script type="text/javascript" src="/resources/easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="/resources/js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="/resources/zeroModal/zeroModal.css">
+	<link rel="shortcut icon" href="http://localhost:8080/Tax/resources/image/icon/favicon.gif" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/login.css">
+    <script type="text/javascript" src="http://localhost:8080/Tax/resources/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/Tax/resources/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/Tax/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="http://localhost:8080/Tax/resources/zeroModal/zeroModal.css">
     <script type="text/javascript">
 	  	//ajax不缓存
 	    jQuery.ajaxSetup({cache:false});
@@ -49,7 +49,7 @@
 		});
 		//返回首页
 		function goBack(){
-			window.location.href="/index";
+			window.location.href="http://localhost:8080/Tax/index";
 		}
 	</script>
 	<style type="text/css">
@@ -78,8 +78,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="width=device-width" name="viewport">
 <script type="text/javascript"
-	src="/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
-<link rel="stylesheet" href="/resources/zeroModal/zeroModal.css">
+	src="http://localhost:8080/Tax/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="http://localhost:8080/Tax/resources/zeroModal/zeroModal.css">
 <title>Insert title here</title>
 <style type="text/css">
 
@@ -99,7 +99,7 @@ body {
 .header .logo {
 	width: 614px;
 	height: 42px;
-	background: url(/resources/image/home/logo.png) no-repeat;
+	background: url(http://localhost:8080/Tax/resources/image/home/logo.png) no-repeat;
 	position: relative;
 	background-size: 100% 100%;
 	margin: 30px 30px;
@@ -227,7 +227,7 @@ body {
 	.header .logo {
 		width: 720px;
 		height: 34px;
-		background: url(/resources/image/header/520.png) no-repeat;
+		background: url(http://localhost:8080/Tax/resources/image/header/520.png) no-repeat;
 		position: relative;
 		background-size: 100% 100%;
 		margin: 35px 30px;
@@ -243,7 +243,7 @@ body {
 	.header .logo {
 	   width: 720px;
 		height: 34px;
-		background: url(/resources/image/header/520.png) no-repeat;
+		background: url(http://localhost:8080/Tax/resources/image/header/520.png) no-repeat;
 		position: relative;
 		background-size: 100% 100%;
 		margin: 35px 30px;
@@ -259,7 +259,7 @@ body {
 	.header .logo {
 		width: 640px;
 		height: 32px;
-		background: url(/resources/image/header/490.png) no-repeat;
+		background: url(http://localhost:8080/Tax/resources/image/header/490.png) no-repeat;
 		position: relative;
 		background-size: 100% 100%;
 		margin: 35px 30px;
@@ -275,7 +275,7 @@ body {
 	.header .logo {
 		width: 480px;
 		height: 24px;
-		background: url(/resources/image/header/380.png) no-repeat;
+		background: url(http://localhost:8080/Tax/resources/image/header/380.png) no-repeat;
 		position: relative;
 		background-size: 100% 100%;
 		margin: 40px 35px;
@@ -296,16 +296,16 @@ body {
 		<div class="logo"></div>
 		<div class="nav">
 			<ul id="tabs_nav" style="display:flex;justify-content:space-around;">
-				<li id="oneplus"><a href="/index" id="one">首页</a><span class="underline"></span></li>
-				<li id="twoplus"><a href="/questions" id="two">咨询</a></li>
-				<li id="threeplus"><a href="/posts?type=0" id="three">经验分享</a></li>
-				<li id="fourplus"><a href="/posts?type=1" id="four">专业解读</a></li>
-				<li id="fiveplus"><a href="/usersZone" id="five">用户专区</a></li>
-				<form action="/question/search">
+				<li id="oneplus"><a href="http://localhost:8080/Tax/index" id="one">首页</a><span class="underline"></span></li>
+				<li id="twoplus"><a href="http://localhost:8080/Tax/questions" id="two">咨询</a></li>
+				<li id="threeplus"><a href="http://localhost:8080/Tax/posts?type=0" id="three">经验分享</a></li>
+				<li id="fourplus"><a href="http://localhost:8080/Tax/posts?type=1" id="four">专业解读</a></li>
+				<li id="fiveplus"><a href="http://localhost:8080/Tax/usersZone" id="five">用户专区</a></li>
+				<form action="http://localhost:8080/Tax/question/search">
 					<li class="herader_search">
 						<div class="s_wrap">
-						    <a href="/questions/search">
-						   	 <img alt="" src="/resources/image/icon/fdj.png" class="magnifying">
+						    <a href="http://localhost:8080/Tax/questions/search">
+						   	 <img alt="" src="http://localhost:8080/Tax/resources/image/icon/fdj.png" class="magnifying">
 						    </a>
 							<input type="text" id="head_srarch" name="title" class="ssearch" value="搜索问题…"/>
 						</div>
@@ -321,16 +321,16 @@ body {
 				
 					
 						<!--  未登录状态 -->
-						<a href="/login" style="padding: 0 50px;">
-							<img src="/resources/image/header/u198.png" class="person">
+						<a href="http://localhost:8080/Tax/login" style="padding: 0 50px;">
+							<img src="http://localhost:8080/Tax/resources/image/header/u198.png" class="person">
 						</a>
 						<div style="position: absolute; left: 20px; line-height: 0px;">
 							<div style="line-height: 13px;">
-								<a href="/login">登录</a>
+								<a href="http://localhost:8080/Tax/login">登录</a>
 							</div>
 							<div style="line-height: 13px;">&nbsp;/&nbsp;</div>
 							<div style="text-align: left; line-height: 13px;">
-								<a href="/register">注册</a>
+								<a href="http://localhost:8080/Tax/register">注册</a>
 							</div>
 						</div>
 					
@@ -386,7 +386,7 @@ body {
 	<!--content start-->
 	<div class="content">
 		<div class="content_main">
-			<form class="content_login" id="loginForm" action="/j_spring_security_check" method="post" onsubmit="return login();">
+			<form class="content_login" id="loginForm" action="http://localhost:8080/Tax/j_spring_security_check" method="post" onsubmit="return login();">
 				<ul class="login_opacity">
 					<li>
 						<span style="font-size: 20px;">登录系统</span>
@@ -414,7 +414,7 @@ body {
 					</li>
 					<li>
 						<button id="submit_btn" type="button" onclick="save()">登录</button>
-						<div><a href="/register" style="color: #1B55A9;" id="register">立即注册<img src="/resources/image/login/z_c.png" alt=""></a></div>
+						<div><a href="http://localhost:8080/Tax/register" style="color: #1B55A9;" id="register">立即注册<img src="http://localhost:8080/Tax/resources/image/login/z_c.png" alt=""></a></div>
 					</li> 
 				</ul>
 			</form>
@@ -538,17 +538,17 @@ body {
 	}
 	.liuan_footers_content ul:nth-child(1) li:nth-child(1){
 		float:left;
-		background:url(/resources/image/home/footer_notice.png) left 30px center  no-repeat;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_notice.png) left 30px center  no-repeat;
 		background-size: 25% 61%;
 	}
 	.liuan_footers_content ul:nth-child(1) li:nth-child(2){
 		float:left;
-		background:url(/resources/image/home/footer_proposal.png) left 28px center no-repeat;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_proposal.png) left 28px center no-repeat;
 		background-size: 25% 61%;
 	}
 	.liuan_footers_content ul:nth-child(1) li:nth-child(3){
 		float:left;
-		background:url(/resources/image/home/footer_contact.png) left 28px center  no-repeat;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_contact.png) left 28px center  no-repeat;
 		background-size: 25% 61%;
 	}
 	.luan_use{
@@ -560,9 +560,9 @@ body {
 		<div class="liuan_footers_content">
 			<ul class="luan_use">
 				
-				<li><a href="/useKnows/useKnow"  target="_blank">使用须知</a></li>
-				<li><a href="/useKnows/useHelp" target="_blank">网站帮助</a></li>
-				<li><a href="/login/contactUs" target="_blank">联系我们</a></li>
+				<li><a href="http://localhost:8080/Tax/useKnows/useKnow"  target="_blank">使用须知</a></li>
+				<li><a href="http://localhost:8080/Tax/useKnows/useHelp" target="_blank">网站帮助</a></li>
+				<li><a href="http://localhost:8080/Tax/login/contactUs" target="_blank">联系我们</a></li>
 			</ul>
 			<ul>
 				
@@ -591,7 +591,7 @@ body {
 	   /*  returnValue{"code":22,"msg":"验证码类短信1小时内同一手机号发送次数不能超过3次","detail":"验证码类短信1小时内同一手机号发送次数不能超过3次"} */
 	    $.ajax({
 	    	   type: "GET",
-	    	   url: "/getVerification",
+	    	   url: "http://localhost:8080/Tax/getVerification",
 	    	   data:"userTelephone="+tel,
 	    	   async: false,
 	    	   success: function(msg){
@@ -699,7 +699,7 @@ body {
 				return true;
 			}
 			if(verifyCode != null) {
-				 $.post('/verifyCode?aa=asddsd', {
+				 $.post('http://localhost:8080/Tax/verifyCode?aa=asddsd', {
 					verifyCode: $('#verifyCode').val()
 				}, function(data) {
 					console.log(data);
@@ -777,7 +777,7 @@ body {
 			if($("userPassword").val()==$("userPasswordTwo").val()){
 				  $.ajax({
 			    	   type: "POST",
-			    	   url: "/updatePassword",
+			    	   url: "http://localhost:8080/Tax/updatePassword",
 			    	   data:"userTelephone="+tel,
 			    	   async: false,
 			    	   success: function(msg){

@@ -1,6 +1,7 @@
 package org.tax.service.impl;
 
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -391,12 +392,16 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			userKey.setId(share.getAuthorId());
 			TaxUser author = mapperFactory.getTaxUserMapper()
 					.selectByPrimaryKey(userKey);
+			shareExpertDetail.setShareExpertId(share.getId());
 			shareExpertDetail.setAuthorName(author.getUsername());
 			// 根据share中的authorId找出question对象
 			shareExpertDetail.setTitle(share.getTitle());
 			shareExpertDetail.setClick(share.getClick());
 			shareExpertDetail.setFavourite(share.getFavourite());
-			shareExpertDetail.setPublishDate(share.getPublishDate());
+			//格式化日期
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String publishDateStr = formatter.format(share.getPublishDate()); 
+			shareExpertDetail.setPublishDateStr(publishDateStr);
 			// 加入队列
 			shareExpertDetailList.add(shareExpertDetail);
 		}
@@ -452,11 +457,16 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			userKey.setId(expert.getAuthorId());
 			TaxUser author = mapperFactory.getTaxUserMapper()
 					.selectByPrimaryKey(userKey);
+			shareExpertDetail.setShareExpertId(expert.getId());
 			shareExpertDetail.setAuthorName(author.getUsername());
 			// 根据share中的authorId找出question对象
 			shareExpertDetail.setTitle(expert.getTitle());
 			shareExpertDetail.setClick(expert.getClick());
 			shareExpertDetail.setFavourite(expert.getFavourite());
+			//格式化日期
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String publishDateStr = formatter.format(expert.getPublishDate()); 
+			shareExpertDetail.setPublishDateStr(publishDateStr);
 			// 加入队列
 			shareExpertDetailList.add(shareExpertDetail);
 		}

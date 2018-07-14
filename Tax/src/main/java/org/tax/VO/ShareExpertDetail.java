@@ -14,9 +14,10 @@ import org.tax.model.TaxQuestion;
 public class ShareExpertDetail {
 	/**这里不是返回一个Question吧*/
 	//private TaxQuestion question;
+	private Integer shareExpertId;
 	private String authorName;
 	private String title;
 	private Integer click;
 	private Integer favourite;
-	private Date publishDate;
+	private String publishDateStr;
 }

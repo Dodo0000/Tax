@@ -34,6 +34,9 @@
 <div id="container">
  
 
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,7 +63,7 @@ body {
 .header .logo {
 	width: 614px;
 	height: 42px;
-	background: url(/resources/image/home/logo.png) no-repeat;
+	background: url(http://localhost:8080/Tax/resources/image/home/logo.png) no-repeat;
 	position: relative;
 	background-size: 100% 100%;
 	margin: 30px 30px;
@@ -257,15 +260,18 @@ body {
 		<div class="logo"></div>
 		<div class="nav">
 			<ul id="tabs_nav" style="display:flex;justify-content:space-around;">
-				<li id="oneplus"><a href="/index" id="one">首页</a><span class="underline"></span></li>
-				<li id="twoplus"><a href="/questions" id="two">咨询</a></li>
-				<li id="threeplus"><a href="/posts?type=0" id="three">经验分享</a></li>
-				<li id="fourplus"><a href="/posts?type=1" id="four">专业解读</a></li>
-				<li id="fiveplus"><a href="/usersZone" id="five">用户专区</a></li>
-				<form action="/question/search">
+				<li id="oneplus"><a href="http://localhost:8080/Tax/index" id="one">首页</a><span class="underline"></span></li>
+				<li id="twoplus"><a href="http://localhost:8080/Tax/questions" id="two">咨询</a></li>
+				<!-- 分享测试页 -->
+				<!-- <li id="threeplus"><a href="http://localhost:8080/Tax/posts?type=0" id="three">经验分享</a></li> -->
+				<li id="threeplus"><a href="http://localhost:8080/Tax/posts_type=0.html" id="three">经验分享</a></li>
+				<!-- <li id="threeplus"><a href="http://localhost:8080/Tax/test/testGetShares.jsp" id="three">经验分享</a></li> -->
+				<li id="fourplus"><a href="http://localhost:8080/Tax/posts?type=1" id="four">专业解读</a></li>
+				<li id="fiveplus"><a href="http://localhost:8080/Tax/usersZone" id="five">用户专区</a></li>
+				<form action="http://localhost:8080/Tax/question/search">
 					<li class="herader_search" style="visibility: hidden;">
 						<div class="s_wrap">
-						    <a href="/questions/search">
+						    <a href="http://localhost:8080/Tax/questions/search">
 						   	 <img alt="" src="http://localhost:8080/Tax/resources/image/icon/fdj.png" class="magnifying">
 						    </a>
 							<input type="text" id="head_srarch" name="title" class="ssearch" value="搜索问题…"/>
@@ -282,16 +288,16 @@ body {
 				
 					
 						<!--  未登录状态 -->
-						<a href="/login" style="padding: 0 50px;">
+						<a href="http://localhost:8080/Tax/login" style="padding: 0 50px;">
 							<img src="http://localhost:8080/Tax/resources/image/header/u198.png" class="person">
 						</a>
 						<div style="position: absolute; left: 20px; line-height: 0px;">
 							<div style="line-height: 13px;">
-								<a href="/login">登录</a>
+								<a href="http://localhost:8080/Tax/login">登录</a>
 							</div>
 							<div style="line-height: 13px;">&nbsp;/&nbsp;</div>
 							<div style="text-align: left; line-height: 13px;">
-								<a href="/register">注册</a>
+								<a href="http://localhost:8080/Tax/register">注册</a>
 							</div>
 						</div>
 					
@@ -347,10 +353,10 @@ body {
 <!-- 首页轮播图	-->
    <div class="banner">
 	   <div class="indexSearch">
-			<a href="/questions/search">
+			<a href="http://localhost:8080/Tax/questions/search">
 				<img alt="" src="http://localhost:8080/Tax/resources/image/icon/fdj.png" class="fangdajing">
 			</a>
-			<form action="/questions/search">
+			<form action="http://localhost:8080/Tax/questions/search">
 				<input type="text" id="head_srarch" name="title" class="sousuo" value="搜索问题…"/>
 			</form>
 		</div>
@@ -368,7 +374,7 @@ body {
 			<img alt="" src="http://localhost:8080/Tax/resources/image/icon/right.png" style="width:65px;">
 		</div>
 		<div class="customer_service">
-			<a href="/user/customer"   target="_blank"   class="luan_kefu">
+			<a href="http://localhost:8080/Tax/user/customer"   target="_blank"   class="luan_kefu">
 				<img alt="" src="http://localhost:8080/Tax/resources/image/customer.png" style="width:100%;cursor:pointer;" />
 			</a>
 		</div>
@@ -454,9 +460,9 @@ body {
 		<div class="liuan_footers_content">
 			<ul class="luan_use">
 				
-				<li><a href="/useKnows/useKnow"  target="_blank">使用须知</a></li>
-				<li><a href="/useKnows/useHelp" target="_blank">网站帮助</a></li>
-				<li><a href="/login/contactUs" target="_blank">联系我们</a></li>
+				<li><a href="http://localhost:8080/Tax/useKnows/useKnow"  target="_blank">使用须知</a></li>
+				<li><a href="http://localhost:8080/Tax/useKnows/useHelp" target="_blank">网站帮助</a></li>
+				<li><a href="http://localhost:8080/Tax/login/contactUs" target="_blank">联系我们</a></li>
 			</ul>
 			<ul>
 				
