@@ -217,6 +217,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 						exampleOfQuestion);
 				long totalPage = totalCount / PageConst.NUM_PER_PAGE
 						+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
+				/**若totalCount==0 结果返回*/
+				if(totalCount==0){
+					result.setMessage(Message.Empty_Query_Result);
+					result.setStatus(StatusCode.Empty_Query_Result);
+					return JSON.toJSONString(result);
+				}
 				// 设置pageInfo
 				pageInfo.setList(questionBriefList);
 				// 设置result
@@ -269,6 +275,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setTotalCount(totalCount);
+		/**若totalCount==0 结果返回*/
+		if(totalCount==0){
+			result.setMessage(Message.Empty_Query_Result);
+			result.setStatus(StatusCode.Empty_Query_Result);
+			return JSON.toJSONString(result);
+		}
 		// 若请求的页面不合法，抛出异常
 		if (page < 1 || page > totalPage) {
 			try {
@@ -321,6 +333,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setTotalCount(totalCount);
+		/**若totalCount==0 结果返回*/
+		if(totalCount==0){
+			result.setMessage(Message.Empty_Query_Result);
+			result.setStatus(StatusCode.Empty_Query_Result);
+			return JSON.toJSONString(result);
+		}
 		// 若请求的页面不合法，抛出异常
 		if (page < 1 || page > totalPage) {
 			result.setMessage(Message.INVALID_PARAMS);
@@ -363,6 +381,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setTotalCount(totalCount);
+		/**若totalCount==0 结果返回*/
+		if(totalCount==0){
+			result.setMessage(Message.Empty_Query_Result);
+			result.setStatus(StatusCode.Empty_Query_Result);
+			return JSON.toJSONString(result);
+		}
 		// 若请求的页面不合法，抛出异常
 		if (page < 1 || page > totalPage) {
 			result.setMessage(Message.INVALID_PARAMS);
@@ -428,6 +452,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setTotalCount(totalCount);
+		/**若totalCount==0 结果返回*/
+		if(totalCount==0){
+			result.setMessage(Message.Empty_Query_Result);
+			result.setStatus(StatusCode.Empty_Query_Result);
+			return JSON.toJSONString(result);
+		}
 		// 若请求的页面不合法，抛出异常
 		if (page < 1 || page > totalPage) {
 			result.setMessage(Message.INVALID_PARAMS);
@@ -498,7 +528,9 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 							SeperatorConst.QUESTION_BRIEF_TYPE_SEPERATOR);
 			}
 			qb.setType(questionBriefTypeSB.toString());// 种类
-			qb.setPublishDate(question.getPublishDate());// 发布日期
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String publishDateStr = formatter.format(question.getPublishDate()); 
+			qb.setPublishDateStr(publishDateStr);// 发布日期
 			/** 从answer表中查询时该qid的总数 */
 			TaxAnswerExample exampleOfAnswer = new TaxAnswerExample();
 			/** question id 有点小问题应该为Integer */

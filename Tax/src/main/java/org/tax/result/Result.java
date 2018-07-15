@@ -10,7 +10,7 @@ import lombok.Data;
 public class Result {
 
 	private String status = "200";
-	private String message = "SUCCESS";
+	private String message = "success";
 	private Object result = null;
 
 }

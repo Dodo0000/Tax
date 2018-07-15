@@ -467,6 +467,7 @@ body {
 	</div>
 </div>
 
+<!-- 分页提交表单 -->
 <form style="display: none" id="postsForm" method="GET"
 	action="http://localhost:8080/Tax/posts">
 	<input value="1" name="page" type="hidden"> <input value="10"
@@ -477,6 +478,7 @@ body {
 <!-- 填充经验分享内容-->
 <script>
 		$(function() {
+			alert(location);
 			initShares();
 		});
 		/**填充购物车*/
@@ -640,7 +642,7 @@ body {
 
 
 
-
+<!-- 判断用户是否已经登陆 -->
 <script type="text/javascript">
 				function starPost() {
 					zeroModal.alert("请先登录用户");

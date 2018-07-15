@@ -472,22 +472,25 @@ body {
 				  		
 				    			
 				    			
-				    			
+				    				<!-- 通过写js控制下面 -->
 				    				<li><a class="active" style="font-size:20px;">最新咨询</a></li>
 				    				<li><a style="font-size:16px;" href="http://localhost:8080/Tax/questions?type=hot">热门咨询</a></li>
 				    				<li><a style="font-size:16px;" href="http://localhost:8080/Tax/questions?type=reward">悬赏咨询</a></li>
 				    			
 				    		
 				  	</ul>
-				  	
+				  	<!-- 分页用户获取数据 -->
 				  	<form id="quesForm" action="http://localhost:8080/Tax/questions" style="display:none">
-				  		<input name="type" type="hidden" value="latest"/>
+				  		<input name="type" value="latest" type="hidden"/>
 						<input name="page" value="1" type="hidden"/>
 				  	</form>
 				  	
 			  		<div class="tab_con">
 				  		<!-- latest start -->
-				    		<div id="latestQuesContainer">
+				  			<!-- 如果搜索结果为空打印这个  针对emptyQueryResult情况-->
+							<p class="emptyQueryResult" hidden="hidden"></p>
+							<!-- latest start -->
+				    		<div id="latestQuesContainer" hidden="hidden">
 					    		<div>
 					    			
 						    			
@@ -500,32 +503,38 @@ body {
 				    			<div id="quesContent" class="quesContent">
 					    			<div class="gary">
 									<div class="pink"></div>
-								</div>
+									</div>
 				    				
-									<ul style="border-bottom:1px dashed #ccc;height: 70px;">
+									<ul style="border-bottom:1px dashed #ccc;height: 70px;" hidden="hidden">
+										<!-- 填充title li_0-->
 										<li>
 											<a href="http://localhost:8080/Tax/questions/ques_1513737987706/details"> 想了解个人所得税流程</a>
 										</li>
+										<!-- 填充publishDateStr li_1 -->
 										<li>
 											<span>2017-12-20</span>
 										</li>
-										
+										<!-- 填充click li_2-->
 										<li>
 											<span>浏览：</span>
 											<span>333</span>
 										</li>
+										<!-- 填充totalAnswerNum li_3 -->
 										<li>
 											<span>回答：</span>
 											<span>9</span>
 										</li>
+										<!-- 填充favourite li_4-->
 										<li style="width:110px;">
 											<span>收藏：</span>
 											<span class="starCount">6</span>
 										</li>
+										<!-- 填充type -->
 										<li>
 											<span>分类：</span>
 											<span>发票系统故障及操作指导,发票领购</span>
 										</li>
+										<!-- li_6 -->
 										<li data-target-id="ques_1513737987706" data-target="question" onclick="starQuestion();" style="width:73px;float:right;cursor:pointer;">
 											<span>收藏</span>
 										</li>
@@ -793,6 +802,7 @@ body {
 									</ul>
 								
 							</div>
+							<!-- 分页要操作的div -->
 				    		<div id="quesPaging" class="box"></div>
 			    		</div>
 			    		<!-- latest end -->
@@ -919,7 +929,7 @@ body {
 			</script>
 		
 	
-
+	<!-- 改这里的分页 -->
 	<script type="text/javascript">
 	//分页
     /* 最新咨询 */
@@ -934,6 +944,7 @@ body {
         slideSpeed: 600, 							// 缓动速度。单位毫秒
         jump: true, 								// 是否支持跳转
         initLoad: false,
+        /**根据callback*/
         callback: function(page) { 					// 回调函数
      	   	$("#quesForm").children(":input[name='page']").val(page);
     			$("#quesForm").submit();

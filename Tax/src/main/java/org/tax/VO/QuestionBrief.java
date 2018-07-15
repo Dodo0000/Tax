@@ -11,6 +11,6 @@ public class QuestionBrief {
 	private Integer click;//浏览
 	private Integer favourite;//收藏
 	private Long totalAnswerNum;//总回答数
-	private String type;
-	private Date publishDate;
+	private String type;//种类字符串
+	private String publishDateStr;
 }

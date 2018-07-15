@@ -13,4 +13,5 @@ public interface Message {
 	public static final String DUPLICATE_USERNAME = "choose another username please";
 	public static final String UPDATE_FALIUER = "update faliuer";
 	public static final String PASSWORD_INVALID_FORMAT = "password invalid format";
+	public static final String Empty_Query_Result = "empty query result";
 }
