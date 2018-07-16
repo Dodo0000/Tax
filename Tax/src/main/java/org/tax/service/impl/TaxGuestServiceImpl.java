@@ -73,7 +73,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 	@Override
 	public String register(TaxUser user) {
 		LOGGER.debug("********register section:");
-		LOGGER.debug("********input user:"+user.getUsername());
+		LOGGER.debug("********input userName:"+user.getUsername());
 		Result result = new Result();
 		/**
 		 * 未加验证码 未加验证:用户邮箱格式

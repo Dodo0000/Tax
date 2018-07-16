@@ -29,8 +29,9 @@ public class TaxUser extends TaxUserKey {
      *
      * @mbg.generated Sat Jul 07 16:56:15 CST 2018
      */
-	@MaxLength(32)
-	@MinLength(32)
+	/**之后前端加入加密后就ok再加回来*/
+	//@MaxLength(32)
+	//@MinLength(32)
 	@NotBlank
     private String password;
 

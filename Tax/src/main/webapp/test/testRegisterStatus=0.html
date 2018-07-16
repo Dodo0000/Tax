@@ -380,8 +380,9 @@ body {
 				<!-- form表单提交注册信息 form start -->
 				<!-- 要把form表单中的字段的name修改成TaxUser对应的-->
 				<!-- 尝试去掉 enctype="multipart/form-data" -->
+				<!-- 密码字段还是需要传md5以后加一个md5插件 -->
 				<form id="addUser" action="http://localhost:8080/Tax/api/v1/guest/register" method="post"
-					enctype="multipart/form-data" onsubmit="return checkUser();">
+					 onsubmit="return checkUser();">
 					<input type="hidden" name="type" value="0">
 					<table style="margin: 0 auto;">
 						<tr>
@@ -614,6 +615,7 @@ body {
 				dataJson = eval(data);
 				console.log(dataJson);
 				alert(data);
+				/**其实这里返回success仅仅是表单数据是对的*/
 				if (dataJson['message'] == 'success') {
 					alert("注册成功！请登录！");/**这句话打印的不对不太对*/
 					$("#verifyCode").data('ok', '1');
