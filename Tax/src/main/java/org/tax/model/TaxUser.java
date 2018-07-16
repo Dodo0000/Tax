@@ -17,7 +17,7 @@ public class TaxUser extends TaxUserKey {
      *
      * @mbg.generated Sat Jul 07 16:56:15 CST 2018
      */
-	@MaxLength(10)
+	@MaxLength(20)
 	@MinLength(3)
 	@NotBlank
     private String username;

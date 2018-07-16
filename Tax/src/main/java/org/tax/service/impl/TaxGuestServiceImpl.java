@@ -1,5 +1,7 @@
 package org.tax.service.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +31,7 @@ import org.tax.constant.PageConst;
 import org.tax.constant.SeperatorConst;
 import org.tax.constant.SessionConst;
 import org.tax.constant.StatusCode;
+import org.tax.constant.ValidationConst;
 import org.tax.factory.MapperFactory;
 import org.tax.model.TaxAnswerExample;
 import org.tax.model.TaxExpert;
@@ -48,6 +52,7 @@ import org.tax.session.MySession;
 import org.tax.session.SessionControl;
 import org.tax.util.LuceneUtil;
 import org.tax.util.UUIDUtil;
+import org.tax.util.ValidationCodeUtil;
 
 import com.alibaba.fastjson.JSON;
 
@@ -63,18 +68,20 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 
 	@Autowired
 	private MapperFactory mapperFactory;
-
+	
+	/**注册没有包装上表单上的数据user*/
 	@Override
 	public String register(TaxUser user) {
+		LOGGER.debug("********register section:");
+		LOGGER.debug("********input user:"+user.getUsername());
 		Result result = new Result();
 		/**
-		 * 未加验证码 
-		 * 未加验证:用户邮箱格式
+		 * 未加验证码 未加验证:用户邮箱格式
 		 * */
-		//validation part
+		// validation part
 		Validator validator = new Validator();
 		List<ConstraintViolation> list = validator.validate(user);
-		if(list.size() > 0) {
+		if (list.size() > 0) {
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			result.setMessage(Message.INVALID_PARAMS);
 			List<String> errors = new ArrayList<String>();
@@ -86,13 +93,13 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			result.setResult(errors);
 			return JSON.toJSONString(result);
 		}
-//		if (user.getUsername() == null) {
-//			// 用户名为空s
-//			result.setMessage(Message.INVALID_USERNAME_OR_PASSWORD);
-//			result.setStatus(StatusCode.INVALID_USERNAME_OR_PASSWORD);
-//			return JSON.toJSONString(result);
-//		}
-		//make sure the username hasn't been used yet
+		// if (user.getUsername() == null) {
+		// // 用户名为空s
+		// result.setMessage(Message.INVALID_USERNAME_OR_PASSWORD);
+		// result.setStatus(StatusCode.INVALID_USERNAME_OR_PASSWORD);
+		// return JSON.toJSONString(result);
+		// }
+		// make sure the username hasn't been used yet
 		TaxUserExample exampleOfUser = new TaxUserExample();
 		exampleOfUser.createCriteria().andUsernameEqualTo(user.getUsername());
 		if (mapperFactory.getTaxUserMapper().selectByExample(exampleOfUser)
@@ -102,12 +109,12 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			result.setStatus(StatusCode.DUPLICATE_USERNAME);
 			return JSON.toJSONString(result);
 		}
-//		else if(!FormatUtil.rexCheckPassword(user.getPassword())){
-//			//密码不符合格式
-//			result.setMessage(Message.PASSWORD_INVALID_FORMAT);
-//			result.setStatus(StatusCode.PASSWORD_INVALID_FORMAT);
-//			return JSON.toJSONString(result);
-//		}
+		// else if(!FormatUtil.rexCheckPassword(user.getPassword())){
+		// //密码不符合格式
+		// result.setMessage(Message.PASSWORD_INVALID_FORMAT);
+		// result.setStatus(StatusCode.PASSWORD_INVALID_FORMAT);
+		// return JSON.toJSONString(result);
+		// }
 		try {
 			// 添加注册时间字段(不知道是否需要)
 			user.setId(UUIDUtil.genUUID());
@@ -115,7 +122,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			mapperFactory.getTaxUserMapper().insert(user);
 		} catch (Exception e) {
 			e.printStackTrace();
-			//invaild params 有歧义
+			// invaild params 有歧义
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 		}
@@ -123,13 +130,130 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 	}
 
 	@Override
+	public String checkUsername(TaxUser user) {
+		Result result = new Result();
+		TaxUserExample exampleOfUser = new TaxUserExample();
+		exampleOfUser.createCriteria().andUsernameEqualTo(user.getUsername());
+		List<TaxUser> users = mapperFactory.getTaxUserMapper().selectByExample(
+				exampleOfUser);
+		if (users != null && users.size() > 0) {
+			result.setMessage(Message.DUPLICATE_USERNAME);
+			result.setStatus(StatusCode.DUPLICATE_USERNAME);
+		}
+		return JSON.toJSONString(result);
+	}
+
+	/** 每一次调用都以覆盖的形式更新客户端和服务端的token */
+	@Override
+	public void generateValidationCode(HttpServletRequest request,
+			HttpServletResponse response) {
+		// 用于获取产生的验证码的图片的流
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		String validationCodeStr = ValidationCodeUtil.drawImg(output);
+		/** 以后验证码可以不考虑存session可以考虑 现在用自己维护的session存在没有处理过期 以后可以采用redis */
+		LOGGER.debug("*****************debug in generateValidationCode section: ");
+		/* 1.先看客户端中是否cookie中是否有token, 若有则要去掉session以及cookie中的令牌，由服务端重新整理*/
+		Cookie[] cookies = request.getCookies();
+		Cookie cookieOfValidationCodeToken = null;
+		for (Cookie cookie : cookies) {
+			if(cookie.getName().equals(CookieConst.VALIDATION_CODE_TOKEN)){
+				cookieOfValidationCodeToken=cookie;
+				break;
+			}
+		}
+		if(cookieOfValidationCodeToken!=null){
+			LOGGER.debug("*****************old token in cookie: "+cookieOfValidationCodeToken.getValue());
+			//使得服务端旧的token失效
+			String oldToken = cookieOfValidationCodeToken.getValue();
+			MySession oldSession = SessionControl.getInstance().getSession(oldToken);
+			if(oldSession!=null){
+				SessionControl.getInstance().rmSession(oldToken);
+				LOGGER.debug("*****************old token in session to be deleted: "+cookieOfValidationCodeToken.getValue());
+			}
+			//使得客户端旧的cookie失效
+			cookieOfValidationCodeToken.setMaxAge(0);
+		}
+		/* 2.服务端先产生好token很存放好对应的validationStr */
+		// 客户端与服务端确认code的令牌
+		MySession session = new MySession(UUIDUtil.genUUID());
+		String token = UUIDUtil.genUUID();
+		String validationKey = ValidationConst.SESSION_PREFIX + "_" + token;
+		LOGGER.debug("***************** token in new session to be generated: "+validationKey);
+		SessionControl.getInstance().addSession(validationKey, session);
+		session.setAttribute(SessionConst.VALIDATION_CODE, validationCodeStr);
+		/* 3.服务端把token传回给客户端，存入客户端cookie */
+		Cookie newCookie = new Cookie(CookieConst.VALIDATION_CODE_TOKEN,
+				URLEncoder.encode(validationKey));//这里存validationKey加上前缀不仅仅是token那个uuid
+		newCookie.setPath(CookieConst.PATH);
+		// 默认cookie 30min后失效
+		int maxAge = 60 * 30;
+		newCookie.setMaxAge(maxAge);
+		newCookie.setPath(CookieConst.PATH);
+		LOGGER.debug("***************** token in new cookie to be setted: "+newCookie.getValue());
+		response.addCookie(newCookie);
+		LOGGER.debug("***************** validationcode in new session to be generated: "+validationCodeStr);
+		/* 4.把图片的流输出到response的流当中使其生成图片 */
+		try {
+			// 输出到response的流当中使其生成图片
+			ServletOutputStream out = response.getOutputStream();
+			output.writeTo(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	/** 游客注册的时候验证输入的验证码 */
+	public String checkValidationCode(String inputValidationCode,
+			HttpServletRequest request, HttpServletResponse response){
+		LOGGER.debug("*****************debug in checkValidationCode section: ");
+		Result result = new Result();
+		Cookie[] cookies = request.getCookies();
+		Cookie tokenCookie = null;
+		for (Cookie cookie : cookies) {
+			if(cookie.getName().equals(CookieConst.VALIDATION_CODE_TOKEN)){
+				tokenCookie=cookie;
+				break;
+			}
+		}
+		if(tokenCookie==null){
+			LOGGER.debug("*****************cookie token error: ");
+			result.setMessage(Message.VALIDATION_CODE_TOKEN_ERROR);
+			result.setStatus(StatusCode.VALIDATION_CODE_TOKEN_ERROR);
+			return JSON.toJSONString(result);
+		}
+		/*1.从客户cookie取出对应要验证码的token*/
+		String token = tokenCookie.getValue();
+		/*2.根据token从服务端session中取出validationCode*/
+		MySession sessionOfValidationCode=SessionControl.getInstance().getSession(token);
+		if(sessionOfValidationCode==null){
+			LOGGER.debug("*****************session token error: ");
+			result.setMessage(Message.VALIDATION_CODE_TOKEN_ERROR);
+			result.setStatus(StatusCode.VALIDATION_CODE_TOKEN_ERROR);
+			return JSON.toJSONString(result);
+		}
+		String validationCode = sessionOfValidationCode.getAttribute(SessionConst.VALIDATION_CODE).toString();
+		if(!validationCode.equalsIgnoreCase(inputValidationCode)){
+			LOGGER.debug("*****************invalid inputValidationCode: ");
+			result.setMessage(Message.INVALID_VALIDATION_CODE);
+			result.setStatus(StatusCode.INVALID_VALIDATION_CODE);
+			return JSON.toJSONString(result);
+		}
+		/*输入的inputValidationCode是对的删除原来的cookie*/
+		tokenCookie.setMaxAge(0);
+		SessionControl.getInstance().rmSession(token);
+		return JSON.toJSONString(result);
+	}
+	
+	@Override
 	public String login(LoginInfo loginInfo, HttpServletRequest request,
 			HttpServletResponse response) {
 		Result result = new Result();
 		/**
 		 * 未添加功能： 验证码
 		 * */
-		if(loginInfo==null || loginInfo.getUsername()==null || loginInfo.getPassword()==null){
+		if (loginInfo == null || loginInfo.getUsername() == null
+				|| loginInfo.getPassword() == null) {
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
@@ -153,11 +277,11 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			user.setLastVisit(new Date());
 			/** 标志是否记住密码 */
 			boolean flag = false;
-			//2018/7/12 wyhong
-			//id;username;password
+			// 2018/7/12 wyhong
+			// id;username;password
 			Cookie newCookie = new Cookie(CookieConst.USER,
-					URLEncoder.encode(user.getId()+";"
-							+loginInfo.getUsername() + ";"
+					URLEncoder.encode(user.getId() + ";"
+							+ loginInfo.getUsername() + ";"
 							+ loginInfo.getPassword()));
 			newCookie.setPath(CookieConst.PATH);
 			// 默认cookie 30min后失效
@@ -170,55 +294,57 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			newCookie.setPath(CookieConst.PATH);
 			response.addCookie(newCookie);
 			// get 跨域session
-			//2018/7/12 wyhong
+			// 2018/7/12 wyhong
 			MySession session = new MySession(UUIDUtil.genUUID());
 			SessionControl.getInstance().addSession(user.getId(), session);
 			session.setAttribute(SessionConst.USER, user);
-			LOGGER.debug("*****************sessionId in login section:"+session.getId()+";userId:"+user.getId());
-			//test getting a session
-			LOGGER.debug("session num:"+SessionControl.getInstance().getNumOnline());
-			LOGGER.debug("get session:"+SessionControl.getInstance().getSession(user.getId()).getId());
+			LOGGER.debug("*****************sessionId in login section:"
+					+ session.getId() + ";userId:" + user.getId());
+			// test getting a session
+			LOGGER.debug("session num:"
+					+ SessionControl.getInstance().getNumOnline());
+			LOGGER.debug("get session:"
+					+ SessionControl.getInstance().getSession(user.getId())
+							.getId());
 			return JSON.toJSONString(result);
 		}
 	}
 
 	/**
-	 * 这里假定索引库与数据库是能保持一致的
-	 * 这里若page<=0 或者 page>totalPage LuceneUtil会抛出异常
-	 * 捕获后返回invalid params异常
-	 * 注意：
-	 * 这里传入的keyword可能有中文
+	 * 这里假定索引库与数据库是能保持一致的 这里若page<=0 或者 page>totalPage LuceneUtil会抛出异常
+	 * 捕获后返回invalid params异常 注意： 这里传入的keyword可能有中文
 	 * */
 	@Override
 	public String search(String keyword, String type, int page) {
 		// 每个页的搜索栏，根据关键字搜索问题
 		Result result = new Result();
-		if(keyword!=null && type!=null){
+		if (keyword != null && type != null) {
 			try {
-				//keyword转成utf-8 type转成utf-8
-				keyword = new String(keyword.getBytes("iso8859-1"),"UTF-8");
-				type = new String(type.getBytes("iso8859-1"),"UTF-8");
-				List<TaxQuestion> questionLuceneList = LuceneUtil.search(keyword, type,
-						page, PageConst.NUM_PER_PAGE);
+				// keyword转成utf-8 type转成utf-8
+				keyword = new String(keyword.getBytes("iso8859-1"), "UTF-8");
+				type = new String(type.getBytes("iso8859-1"), "UTF-8");
+				List<TaxQuestion> questionLuceneList = LuceneUtil.search(
+						keyword, type, page, PageConst.NUM_PER_PAGE);
 				List<TaxQuestion> questionList = new ArrayList<TaxQuestion>();
-				for(TaxQuestion questionLucene:questionLuceneList){
+				for (TaxQuestion questionLucene : questionLuceneList) {
 					TaxQuestionKey questionKey = new TaxQuestionKey();
-					TaxQuestion question = mapperFactory.getTaxQuestionMapper().selectByPrimaryKey(questionKey);
+					TaxQuestion question = mapperFactory.getTaxQuestionMapper()
+							.selectByPrimaryKey(questionKey);
 					questionList.add(question);
 				}
 				List<QuestionBrief> questionBriefList = getQuestionBriefList(questionLuceneList);
-				//设置PageInfo
+				// 设置PageInfo
 				PageInfo pageInfo = new PageInfo();
 				pageInfo.setCurrentPage(page);
 				pageInfo.setCurrentCount(questionBriefList.size());
 				// 要计算一下
 				TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
-				long totalCount = mapperFactory.getTaxQuestionMapper().countByExample(
-						exampleOfQuestion);
+				long totalCount = mapperFactory.getTaxQuestionMapper()
+						.countByExample(exampleOfQuestion);
 				long totalPage = totalCount / PageConst.NUM_PER_PAGE
 						+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
-				/**若totalCount==0 结果返回*/
-				if(totalCount==0){
+				/** 若totalCount==0 结果返回 */
+				if (totalCount == 0) {
 					result.setMessage(Message.Empty_Query_Result);
 					result.setStatus(StatusCode.Empty_Query_Result);
 					return JSON.toJSONString(result);
@@ -244,7 +370,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 	@Override
 	public String getByCondition(String type, int page) {
 		Result result = new Result();
-		if(type==null || page<=0){
+		if (type == null || page <= 0) {
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
@@ -258,7 +384,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		} else if (type.equalsIgnoreCase("hot")) {
 			exampleOfQuestion.setOrderByClause("click DESC");
 		} else if (type.equalsIgnoreCase("reward")) {
-			/**若是悬赏只筛选出prize>0的问题*/
+			/** 若是悬赏只筛选出prize>0的问题 */
 			exampleOfQuestion.createCriteria().andPrizeGreaterThan(0);
 			exampleOfQuestion.setOrderByClause("prize DESC");
 		} else {
@@ -277,8 +403,8 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setTotalCount(totalCount);
-		/**若totalCount==0 结果返回*/
-		if(totalCount==0){
+		/** 若totalCount==0 结果返回 */
+		if (totalCount == 0) {
 			result.setMessage(Message.Empty_Query_Result);
 			result.setStatus(StatusCode.Empty_Query_Result);
 			return JSON.toJSONString(result);
@@ -294,9 +420,9 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
-		}
-		else if((page==totalPage) && (totalCount%PageConst.NUM_PER_PAGE!=0)){
-			pageInfo.setCurrentCount((long) totalCount%PageConst.NUM_PER_PAGE);
+		} else if ((page == totalPage)
+				&& (totalCount % PageConst.NUM_PER_PAGE != 0)) {
+			pageInfo.setCurrentCount((long) totalCount % PageConst.NUM_PER_PAGE);
 		}
 		// 设置查询sql的limitClause
 		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
@@ -322,8 +448,9 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		// 答题专区用户动态
 		Result result = new Result();
 		TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
-		//由新到旧排序 再按点击排序 再按照收藏排序
-		exampleOfQuestion.setOrderByClause("publish_date DESC, click DESC, favourite DESC");
+		// 由新到旧排序 再按点击排序 再按照收藏排序
+		exampleOfQuestion
+				.setOrderByClause("publish_date DESC, click DESC, favourite DESC");
 		// 封装PageBean
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setCurrentPage((long) page);
@@ -335,8 +462,8 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setTotalCount(totalCount);
-		/**若totalCount==0 结果返回*/
-		if(totalCount==0){
+		/** 若totalCount==0 结果返回 */
+		if (totalCount == 0) {
 			result.setMessage(Message.Empty_Query_Result);
 			result.setStatus(StatusCode.Empty_Query_Result);
 			return JSON.toJSONString(result);
@@ -346,9 +473,9 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
-		}
-		else if((page==totalPage) && (totalCount%PageConst.NUM_PER_PAGE!=0)){
-			pageInfo.setCurrentCount((long) totalCount%PageConst.NUM_PER_PAGE);
+		} else if ((page == totalPage)
+				&& (totalCount % PageConst.NUM_PER_PAGE != 0)) {
+			pageInfo.setCurrentCount((long) totalCount % PageConst.NUM_PER_PAGE);
 		}
 		// 设置查询sql的limitClause
 		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
@@ -383,8 +510,8 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setTotalCount(totalCount);
-		/**若totalCount==0 结果返回*/
-		if(totalCount==0){
+		/** 若totalCount==0 结果返回 */
+		if (totalCount == 0) {
 			result.setMessage(Message.Empty_Query_Result);
 			result.setStatus(StatusCode.Empty_Query_Result);
 			return JSON.toJSONString(result);
@@ -394,13 +521,14 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
-		}
-		else if((page==totalPage) && (totalCount%PageConst.NUM_PER_PAGE!=0)){
-			pageInfo.setCurrentCount((long) totalCount%PageConst.NUM_PER_PAGE);
+		} else if ((page == totalPage)
+				&& (totalCount % PageConst.NUM_PER_PAGE != 0)) {
+			pageInfo.setCurrentCount((long) totalCount % PageConst.NUM_PER_PAGE);
 		}
 		// 根据分页信息获取经验分享列表(默认 先按照点击降序 再按照收藏降序 再按照时间)
 		List<TaxShare> shareList = null;
-		exampleOfShare.setOrderByClause("click DESC, favourite DESC, publish_date DESC");
+		exampleOfShare
+				.setOrderByClause("click DESC, favourite DESC, publish_date DESC");
 		// 设置查询sql的limitClause
 		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
 		Long limit = pageInfo.getCurrentCount();
@@ -424,9 +552,10 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			shareExpertDetail.setTitle(share.getTitle());
 			shareExpertDetail.setClick(share.getClick());
 			shareExpertDetail.setFavourite(share.getFavourite());
-			//格式化日期
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String publishDateStr = formatter.format(share.getPublishDate()); 
+			// 格式化日期
+			SimpleDateFormat formatter = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+			String publishDateStr = formatter.format(share.getPublishDate());
 			shareExpertDetail.setPublishDateStr(publishDateStr);
 			// 加入队列
 			shareExpertDetailList.add(shareExpertDetail);
@@ -454,8 +583,8 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 				+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setTotalCount(totalCount);
-		/**若totalCount==0 结果返回*/
-		if(totalCount==0){
+		/** 若totalCount==0 结果返回 */
+		if (totalCount == 0) {
 			result.setMessage(Message.Empty_Query_Result);
 			result.setStatus(StatusCode.Empty_Query_Result);
 			return JSON.toJSONString(result);
@@ -465,13 +594,14 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
-		}
-		else if((page==totalPage) && (totalCount%PageConst.NUM_PER_PAGE!=0)){
-			pageInfo.setCurrentCount((long) totalCount%PageConst.NUM_PER_PAGE);
+		} else if ((page == totalPage)
+				&& (totalCount % PageConst.NUM_PER_PAGE != 0)) {
+			pageInfo.setCurrentCount((long) totalCount % PageConst.NUM_PER_PAGE);
 		}
 		// 根据分页信息获取专家经验分享列表(默认 先按照点击降序 再按照收藏降序)
 		List<TaxExpert> expertList = null;
-		exampleOfExpert.setOrderByClause("click DESC, favourite DESC, publish_date DESC");
+		exampleOfExpert
+				.setOrderByClause("click DESC, favourite DESC, publish_date DESC");
 		// 设置查询sql的limitClause
 		Long offset = (pageInfo.getCurrentPage() - 1) * PageConst.NUM_PER_PAGE;
 		Long limit = pageInfo.getCurrentCount();
@@ -495,9 +625,10 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			shareExpertDetail.setTitle(expert.getTitle());
 			shareExpertDetail.setClick(expert.getClick());
 			shareExpertDetail.setFavourite(expert.getFavourite());
-			//格式化日期
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String publishDateStr = formatter.format(expert.getPublishDate()); 
+			// 格式化日期
+			SimpleDateFormat formatter = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+			String publishDateStr = formatter.format(expert.getPublishDate());
 			shareExpertDetail.setPublishDateStr(publishDateStr);
 			// 加入队列
 			shareExpertDetailList.add(shareExpertDetail);
@@ -518,8 +649,8 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			qb.setTitle(question.getTitle());// 标题
 			qb.setClick(question.getClick());// 浏览
 			qb.setFavourite(question.getFavourite());// 收藏
-			qb.setPrize(question.getPrize());//悬赏分数
-			//分类名称
+			qb.setPrize(question.getPrize());// 悬赏分数
+			// 分类名称
 			String[] questionTypeNameList = getQuestionTypeNameList(question
 					.getType());
 			StringBuilder questionBriefTypeSB = new StringBuilder();
@@ -531,8 +662,9 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 							SeperatorConst.QUESTION_BRIEF_TYPE_SEPERATOR);
 			}
 			qb.setType(questionBriefTypeSB.toString());// 种类
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String publishDateStr = formatter.format(question.getPublishDate()); 
+			SimpleDateFormat formatter = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+			String publishDateStr = formatter.format(question.getPublishDate());
 			qb.setPublishDateStr(publishDateStr);// 发布日期
 			/** 从answer表中查询时该qid的总数 */
 			TaxAnswerExample exampleOfAnswer = new TaxAnswerExample();
@@ -540,7 +672,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 					question.getId());
 			Long totalAnswerNumOfQuestion = mapperFactory.getTaxAnswerMapper()
 					.countByExample(exampleOfAnswer);
-			qb.setTotalAnswerNum(totalAnswerNumOfQuestion);//设置总回答数
+			qb.setTotalAnswerNum(totalAnswerNumOfQuestion);// 设置总回答数
 			// 加入队列
 			questionBriefList.add(qb);
 		}

@@ -3,22 +3,35 @@
 
 
 
-
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>安徽省国家税务局税企互助交流平台</title>
-	<link rel="shortcut icon" href="http://localhost:8080/Tax/resources/image/project.ico" type="image/x-icon" />
-	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/registerExt.css">
-	<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="http://localhost:8080/Tax/resources/easyui/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/register.css">
+	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
 </head>
 <script type="text/javascript">
 	$(function(){
 		$("#messages").remove();
 	})
 </script>
-<body>
+<style type="text/css">
+.liuan_footers{
+		bottom:0;
+		position:relative;
+	}
+	body{
+		display:flex;
+		flex-flow:column;
+	}
+	.content{
+		/* min-height:110vh; */
+		flex:1;
+	}
+</style>
+<body style="display: flex;flex-flow: column;min-height: 100vh;">
 	<!-- header start -->
 	
 
@@ -52,7 +65,7 @@ body {
 .header .logo {
 	width: 614px;
 	height: 42px;
-	background: url(http://localhost:8080/Tax/resources/image/home/logo.png) no-repeat;
+	background: url(/resources/image/home/logo.png) no-repeat;
 	position: relative;
 	background-size: 100% 100%;
 	margin: 30px 30px;
@@ -246,8 +259,8 @@ body {
 </head>
 <body>
 	<div class="header" style="display:flex;justify-content:space-around;">
-		<div class="logo"></div>
-		<div class="nav">
+		<div class="logo"><img src="http://localhost:8080/Tax/resources/image/home/logo.png"></div>
+		<div class="nav"> 
 			<ul id="tabs_nav" style="display:flex;justify-content:space-around;">
 				<li id="oneplus"><a href="http://localhost:8080/Tax/index" id="one">首页</a><span class="underline"></span></li>
 				<li id="twoplus"><a href="http://localhost:8080/Tax/questions" id="two">咨询</a></li>
@@ -337,89 +350,16 @@ body {
 	<!--header end-->
 	<!--content start-->
 	<div class="content">
-		<div class="path_nav">
-			<span class="touch">当前位置：<a href="javascript:history.go(-1);"
-				class="nav_style">注册</a></span> <span class="touch">&nbsp;&gt;&nbsp;</span>
-			<span class="touch"><a href="" class="nav_style">个人注册</a></span>
-		</div>
 		<div class="content_main">
-			<div class="content_top">
-				<div class="personal_left">个人资料</div>
-			</div>
 			<div class="content_middle">
-				<div class="content_middle_m">
-					<!-- form表单提交注册信息 form start enctype="multipart/form-data" -->
-					<form id="addUser" action="http://localhost:8080/Tax/register?status=0" enctype="multipart/form-data" method="post" onsubmit="return checkUser();">
-						<input type="hidden" name="type" value="0">
-						<table style="margin: 0 auto;">
-							<tr>
-								<td style="width:25%;">用户名</td>
-								<td style="width:75%;">	   
-									<input id="userName" type="text" name="userName" placeholder="请输入用户名" value=""/>
-								</td>
-								<td>
-									<span id="userName1" class="yanzheng"></span>
-								</td>
-							</tr>
-							<tr>
-								<td style="width:25%;">邮箱</td>
-								<td style="width:75%;">
-									<input id="mail" type="text" name="mail" placeholder="请输入邮箱" value="">
-								</td>
-								<td>
-									<span id="mail1" class="yanzheng"></span>
-								</td>
-							</tr>
-							<tr>
-								<td style="width:25%;">电话</td>
-								<td style="width:75%;">
-									<input id="userTelephone" type="text" name="userTelephone" placeholder="请输入电话" value="">
-								</td>
-								<td>
-									<span id="userTelephone1" class="yanzheng"></span>
-								</td>
-							</tr>
-							<tr>
-								<td style="width:25%;">密码</td>
-								<td style="width:75%;">
-									<input id="pwd" type="password" name="userPassword" placeholder="请输入密码" value="">
-								</td>
-								<td>
-									<span id="pwd1" class="yanzheng"></span>
-								</td>
-							</tr>
-							<tr>
-								<td style="width:25%;">确认密码</td>
-								<td style="width:75%;">
-									<input id="confirmPwd" type="password" name="pwd" placeholder="请确认密码" value="">
-								</td>
-								<td>
-									<span id="confirmPwd1" class="yanzheng"></span>
-								</td>
-							</tr>
-							<tr>
-								<td style="width:25%;">验证码</td>
-								<td style="width:75%;">
-									<input data-ok="0" id="verifyCode" type="text" style="width:235px" placeholder="验证码">
-									<a><img onclick="updateVerifyCode();" class="Img"src="http://localhost:8080/Tax/verifyCode" alt=""></a>
-								</td>
-								<td>
-									<span id="code1" class="yanzheng"></span>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<div class="content_middle_btn">
-										<button class="save_btn" type="submit">注册</button>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</form>
-					<!-- form表单提交注册信息 form end -->
+				<div class="content_middle_btn">
+					<!-- 修改个人注册的链接 -->
+					<a href="http://localhost:8080/Tax/test/testRegisterStatus=0.html" class="save_btn">个人注册</a>
+					<a href="http://localhost:8080/Tax/register?status=1" class="save_btn">专家注册</a>
+					<a href="http://localhost:8080/Tax/register?status=2" class="save_btn">机构注册</a>
 				</div>
 			</div>
-		</div>	
+		</div>
 	</div>
 	<!-- footer start -->		
 	
@@ -521,184 +461,6 @@ body {
 	</div>
 </body>
 </html>
-	<!-- footer end -->
-	<script>
-	
-	
-		$("#userName").blur(function() {
-			var userName = $("#userName").val();
-			if (userName.length != 0 && userName !="") {
-				$.post('http://localhost:8080/Tax/register/volidationUser', {
-					userName : $("#userName").val()
-				}, function(data) {
-					console.log(data);
-					if (data.userName == 100) {
-					} else {
-						$("#userName1").html('用户名已存在!');
-					}
-				});
-			}
-		});
-		$("#userTelephone").blur(function(){
-			var userTelephone = $("#userTelephone").val();
-			if (userTelephone.length != 0 && userTelephone != "") {
-				$.post('http://localhost:8080/Tax/register/volidationUser', {
-					userTelephone : $("#userTelephone").val()
-				}, function(data) {
-					console.log(data);
-					if (data.userTelephone == 300) {
-					} else {
-						$("#userTelephone1").html('手机号已存在!');
-					}
-				});
-			}
-		});
-		
-		$('#userName').bind('input propertychange', function() {
-			var userName = $("#userName").val();
-
-			console.log("document--", userName);
-			if (userName.length === 0) {
-				$("#userName1").html('用户名不能为空!');
-				return;
-			} else {
-				$("#userName1").html('');
-			}
-		});
-		$('#mail').bind('input propertychange', function() {
-			var mail = $("#mail").val();
-
-			console.log("document--", mail);
-			if (mail.length === 0) {
-				$("#mail1").html('邮箱不能为空!');
-				return;
-			} else {
-				$("#mail1").html('');
-			}
-		});
-		$('#userTelephone').bind('input propertychange', function() {
-			var userTelephone = $("#userTelephone").val();
-
-			console.log("document--", userTelephone);
-			if (userTelephone.length === 0) {
-				$("#userTelephone1").html('电话号不能为空!');
-				return;
-			} else {
-				$("#userTelephone1").html('');
-			}
-		});
-		$('#pwd').bind('input propertychange', function() {
-			var pwd = $("#pwd").val();
-
-			console.log("document--", pwd);
-			if (pwd.length === 0) {
-				$("#pwd1").html('密码不能为空!');
-				return;
-			} else {
-				$("#pwd1").html('');
-			}
-		});
-		$('#confirmPwd').bind('input propertychange', function() {
-			var confirmPwd = $("#confirmPwd").val();
-
-			console.log("document--", confirmPwd);
-			if (confirmPwd.length === 0) {
-				$("#confirmPwd1").html('密码不能为空!');
-				return;
-			} else {
-				$("#confirmPwd1").html('');
-			}
-		});
-		$('#verifyCode').bind('input propertychange', function() {
-			var confirmPwd = $("#verifyCode").val();
-
-			console.log("document--", confirmPwd);
-			if (verifyCode.length === 0) {
-				$("#code1").html('验证码不能为空!');
-				return;
-			} else {
-				$("#code1").html('');
-			}
-		});
-		function updateVerifyCode() {
-			event.target.src = event.target.src + "?t=" + Date.now();
-		}
-
-		function checkUser() {
-			var userName = $("#userName").val();
-			var mail = $("#mail").val();
-			var userTelephone = $("#userTelephone").val();
-			var pwd = $("#pwd").val();
-			var confirmPwd = $("#confirmPwd").val();
-			var verifyCode = $("#verifyCode").val();
-
-			if (userName.length == 0) {
-				$("#userName1").html('用户名不能为空!');
-				return false;
-			}
-
-			if (mail.length == 0) {
-				$("#mail1").html('邮箱不能为空!');
-				return false;
-			}
-			var re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-			if (!re.test(mail)) {
-				$("#mail1").html('邮箱格式错误!');
-				return false;
-			}
-			if (userTelephone.length == 0) {
-				$("#userTelephone1").html('电话号不能为空!');
-				return false;
-			}
-			var req = /^(?:13\d|14\d|15\d|17\d|18\d)-?\d{5}(\d{3}|\*{3})$/;
-			if (!req.test(userTelephone)) {
-				$("#userTelephone1").html('您输入的电话号码格式错误!');
-				return false;
-			}
-			if (pwd.length == 0) {
-				$("#pwd1").html('密码不能为空!');
-				return false;
-			}
-			if (pwd.length > 15 || pwd.length < 6) {
-				$("#pwd1").html('请输入6-15位密码!');
-				return false;
-			}
-			if (confirmPwd.length == 0) {
-				$("#confirmPwd1").html('密码不能为空!');
-				return false;
-			}
-			if (pwd != confirmPwd) {
-				$("#confirmPwd1").html('两次密码输入不一致!');
-				return false;
-			}
-			if (verifyCode.length == 0) {
-				$("#code1").html('验证码不能为空!');
-				return false;
-			}
-			if ($("#verifyCode").data('ok') == '1') {
-				return true;
-			}
-			if (verifyCode != null) {
-				$.post('http://localhost:8080/Tax/verifyCode', {
-					verifyCode : $('#verifyCode').val()
-				}, function(data) {
-					console.log(data);
-
-					if (data.code == 200) {
-						alert("注册成功！请登录！");
-						$("#verifyCode").data('ok', '1');
-						$('#addUser').submit();
-					} else {
-						//alert(1);
-						$("#code1").html('验证码错误!');
-					}
-				});
-			}
-			return false;
-		}
-	</script>
-
-	
+	<!-- footer end -->		
 </body>
 </html>
-					

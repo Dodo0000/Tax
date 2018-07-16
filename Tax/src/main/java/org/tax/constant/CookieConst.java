@@ -5,4 +5,5 @@ public interface CookieConst {
 	//domain name-->dns-->ip address
 	public static final String DOMAIN = "localhost";
 	public static final String PATH = "/";
+	public static final String VALIDATION_CODE_TOKEN = "validation_code_token";
 }

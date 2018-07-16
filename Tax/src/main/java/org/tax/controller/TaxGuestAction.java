@@ -28,7 +28,7 @@ import org.tax.session.SessionControl;
 @Controller
 @RequestMapping("/api/v1/guest")
 public class TaxGuestAction {
-	
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TaxGuestAction.class);
 	final String JSON = MediaType.JSON;
@@ -40,6 +40,29 @@ public class TaxGuestAction {
 	@ResponseBody
 	public String register(TaxUser user) {
 		return taxGuestService.register(user);
+	}
+
+	/** 游客登陆注册的时候的ajax看 用户名 是否存在 */
+	@RequestMapping(value = "/register/checkUsername", method = RequestMethod.POST, produces = JSON)
+	@ResponseBody
+	public String checkUsername(TaxUser user) {
+		return taxGuestService.checkUsername(user);
+	}
+
+	/** 游客注册的时候请求产生随机的验证码 */
+	@RequestMapping(value = "/generateValidationCode", method = RequestMethod.GET)
+	@ResponseBody
+	public void generateValidationCode(HttpServletRequest request,
+			HttpServletResponse response) {
+		taxGuestService.generateValidationCode(request, response);
+	}
+	
+	/** 游客注册提交表单时候检验提交过来的验证码 */
+	@RequestMapping(value = "/checkValidationCode", method = RequestMethod.POST, produces = JSON)
+	@ResponseBody
+	public String checkValidationCode(String inputValidationCode, HttpServletRequest request,
+			HttpServletResponse response) {
+		return taxGuestService.checkValidationCode(inputValidationCode, request, response);
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = JSON)

@@ -14,4 +14,6 @@ public class StatusCode {
 	public static final String UPDATE_FALIUER = "400";
 	public static final String PASSWORD_INVALID_FORMAT = "400";
 	public static final String Empty_Query_Result = "200";
+	public static final String VALIDATION_CODE_TOKEN_ERROR = "400";
+	public static final String INVALID_VALIDATION_CODE = "400";
 }

@@ -12,24 +12,36 @@ import org.tax.model.TaxUser;
  */
 /**
  * 少了接口getQuestionDetail(String questionId)进入question详情页面的 还有应该加上page分页信息
- * 少了接口search(String keyword, String type, int page) 
+ * 少了接口search(String keyword, String type, int page)
  * 
  * */
 public interface TaxGuestService {
 
 	String register(TaxUser user);
-	
-	String login(LoginInfo loginInfo, HttpServletRequest request, HttpServletResponse response);
-	
+
+	/** 游客登陆注册的时候的ajax看 用户名 是否存在 */
+	String checkUsername(TaxUser user);
+
+	/** 游客注册的时候请求产生随机的验证码 */
+	void generateValidationCode(HttpServletRequest request,
+			HttpServletResponse response);
+
+	/** 游客注册的时候验证输入的验证码 */
+	String checkValidationCode(String inputValidationCode,
+			HttpServletRequest request, HttpServletResponse response);
+
+	String login(LoginInfo loginInfo, HttpServletRequest request,
+			HttpServletResponse response);
+
 	String search(String keyword, String proId, int page);
-	
-	String getByCondition(String type, int page);//type=latest|hot|reward
-	
-	/**动态专区*/
+
+	String getByCondition(String type, int page);// type=latest|hot|reward
+
+	/** 动态专区 */
 	String getQuestions(int page);
-	
+
 	String getShares(int page);
-	
+
 	String getArticlesOfExperts(int page);
-	
+
 }
