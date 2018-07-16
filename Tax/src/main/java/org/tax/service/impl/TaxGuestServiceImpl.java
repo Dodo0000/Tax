@@ -258,6 +258,8 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		} else if (type.equalsIgnoreCase("hot")) {
 			exampleOfQuestion.setOrderByClause("click DESC");
 		} else if (type.equalsIgnoreCase("reward")) {
+			/**若是悬赏只筛选出prize>0的问题*/
+			exampleOfQuestion.createCriteria().andPrizeGreaterThan(0);
 			exampleOfQuestion.setOrderByClause("prize DESC");
 		} else {
 			result.setMessage(Message.INVALID_PARAMS);
@@ -516,6 +518,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			qb.setTitle(question.getTitle());// 标题
 			qb.setClick(question.getClick());// 浏览
 			qb.setFavourite(question.getFavourite());// 收藏
+			qb.setPrize(question.getPrize());//悬赏分数
 			//分类名称
 			String[] questionTypeNameList = getQuestionTypeNameList(question
 					.getType());
@@ -533,12 +536,11 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			qb.setPublishDateStr(publishDateStr);// 发布日期
 			/** 从answer表中查询时该qid的总数 */
 			TaxAnswerExample exampleOfAnswer = new TaxAnswerExample();
-			/** question id 有点小问题应该为Integer */
 			exampleOfAnswer.createCriteria().andQuestionIdEqualTo(
 					question.getId());
 			Long totalAnswerNumOfQuestion = mapperFactory.getTaxAnswerMapper()
 					.countByExample(exampleOfAnswer);
-			qb.setTotalAnswerNum(totalAnswerNumOfQuestion);
+			qb.setTotalAnswerNum(totalAnswerNumOfQuestion);//设置总回答数
 			// 加入队列
 			questionBriefList.add(qb);
 		}

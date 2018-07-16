@@ -553,16 +553,15 @@ body {
 			<div class="searchchoose_down"></div>
 		</div>
 	</div>
+	<!-- 选择类型结束 -->
+
 	<div class="liuan_center_tab">
 		<!-- 分页 start -->
 		<div class="tab_a" id="tab_b" style="height: 1100px;">
 			<ul class="tabOne tabOneys" id="tabOne">
 
-
-
-
 				<!-- 通过写js控制下面 在点击这些超链接的时候添加上 type的参数在url上-->
-				<li><a class="active" style="font-size:20px;"
+				<li><a class="active" style="font-size:16px;"
 					href="javascript:showLatestQuestions()">最新咨询</a></li>
 				<li><a style="font-size:16px;"
 					href="javascript:showHotQuestions()">热门咨询</a></li>
@@ -580,7 +579,7 @@ body {
 			<!-- latest hot reward填充的模板 -->
 			<div class="tab_con">
 				<!-- 如果搜索结果为空打印这个  针对emptyQueryResult情况-->
-				<p class="emptyQueryResult" hidden="hidden"></p>
+				<p class="emptyQueryResult" hidden="hidden"><b></b></p>
 				<!-- latest start -->
 				<div id="latestQuesContainer" hidden="hidden">
 					<div>
@@ -597,27 +596,35 @@ body {
 						<!-- 填充问题项的模板 -->
 						<ul style="border-bottom:1px dashed #ccc;height: 70px;"
 							hidden="hidden">
-							<!-- 填充title -->
+							<!-- 填充title li_0-->
 							<li><a
 								href="http://localhost:8080/Tax/questions/ques_1513737987706/details">
 							</a>
 							</li>
-							<!-- 填充publishDateStr -->
+							<!-- 填充publishDateStr li_1-->
 							<li><span></span>
 							</li>
-							<!-- 填充click -->
+							
+							<!-- 填充悬赏积分  li_2-->
+							<li hidden="hidden">
+								<span>悬赏：</span> <span></span>
+							</li>
+							
+							<!-- 填充click li_3-->
 							<li><span>浏览：</span> <span></span>
 							</li>
-							<!-- 填充totalAnswerNum -->
+							<!-- 填充totalAnswerNum li_4-->
 							<li><span>回答：</span> <span></span>
 							</li>
-							<!-- 填充favourite -->
+							<!-- 填充favourite li_5 -->
 							<li style="width:110px;"><span>收藏：</span> <span
 								class="starCount"></span>
 							</li>
-							<!-- 填充type -->
+							<!-- 填充type li_6 -->
 							<li><span>分类：</span> <span></span>
 							</li>
+							
+							<!-- li_7 -->
 							<li data-target-id="ques_1513737987706" data-target="question"
 								onclick="starQuestion();"
 								style="width:73px;float:right;cursor:pointer;"><span>收藏</span>
@@ -772,89 +779,72 @@ body {
 <!-- 按latest hot reward查询问题  然后加入paging-->
 <script type="text/javascript">
 	//初始的时候
-	
+
 	$(document).ready(function() {
-		alert('ready');
+		//alert('ready');
 		initQuestions();
 	});
 	//默认以latest为优先 加载当中的第一页
 	function initQuestions() {
 		//根据location设置种子
-		alert("initQuestions");
-		alert(location);
-		var ajaxUrl="../api/v1/guest/question";
-		var typeVal=getUrlParam("type");
-		if(typeVal==null)
-			typeVal="latest";
-		ajaxUrl=ajaxUrl+"/"+typeVal;
-		var pageVal=getUrlParam("page");
-		if(pageVal==null)
-			pageVal="1";
-		ajaxUrl=ajaxUrl+"/"+pageVal;
-		alert("initQuestions ajaxUrl: "+ajaxUrl);
+		//alert('initQuestions');
+		//alert(location);
+		/**在不同页面要修改*/
+		var ajaxUrl = '../api/v1/guest/question';
+		var typeVal = getUrlParam('type');
+		if (typeVal == null)
+			typeVal = 'latest';
+		ajaxUrl = ajaxUrl + '/' + typeVal;
+		var pageVal = getUrlParam('page');
+		if (pageVal == null)
+			pageVal = '1';
+		ajaxUrl = ajaxUrl + '/' + pageVal;
+		//alert('initQuestions ajaxUrl: '+ajaxUrl);
 		/**填充购物车*/
 		$
 				.ajax({
 					//这里是测试的html要回到父目录
 					url : ajaxUrl,
 					success : function(data) {
-						alert('ajax success');
+						//alert('ajax success');
 						console.log(data);
 						var jsonarray = eval(data);
-						if (jsonarray["message"] == "success") {
-							alert("data access successful");
+						if (jsonarray['message'] == 'success') {
+							//alert('data access successful');
 							//先把原来问题那个模板清空然后再从list中添加
-							fillQuestionBriefList(jsonarray);
+							fillQuestionBriefList(jsonarray, typeVal);
 							//设置paging
 							//分页
 							/* 最新咨询 */
-							var currentCount = parseInt(jsonarray["result"]["currentCount"]);
-							console.log('currentCount = ' + currentCount);
-							var rows = parseInt(jsonarray["result"]["currentCount"]);
-							console.log('rows = ' + rows);
+							var currentCount = parseInt(jsonarray['result']['currentCount']);
+							//console.log('currentCount = ' + currentCount);
+							var rows = parseInt(jsonarray['result']['currentCount']);
+							//console.log('rows = ' + rows);
 							$('#quesPaging')
 									.paging(
 											{
-												initPageNo : parseInt(jsonarray["result"]["currentPage"]), // 初始页码
-												totalPages : parseInt(jsonarray["result"]["totalPage"]), // 总页数
+												initPageNo : parseInt(jsonarray['result']['currentPage']), // 初始页码
+												totalPages : parseInt(jsonarray['result']['totalPage']), // 总页数
 												totalCount : '合计 '
-														+ jsonarray["result"]["totalCount"]
+														+ jsonarray['result']['totalCount']
 														+ '条数据', // 条目总数
 												slideSpeed : 600, // 缓动速度。单位毫秒
 												jump : true, // 是否支持跳转
 												initLoad : false,
 												/**可以通过更改这个回调函数来获取分页信息*/
 												callback : function(page) { // 回调函数
-													alert("paging callback");
-													alert("current location: "+location);
-													alert("current location.href: "+location.href);//http://localhost:8080/Tax/test/testGetQuestions.html
-													var callbackTypeVal=getUrlParam("type");//默认查询种类type
-													var callbackDefaultTypeVal='latest';
-													var callbackAjaxUrl="../api/v1/guest/question";
-													alert("old ajaxUrl"+callbackAjaxUrl);
-													if(callbackTypeVal==null){
-														//若url中没有type字段默认跳转到latest的page页
-														callbackAjaxUrl=callbackAjaxUrl+"/"+callbackDefaultTypeVal;
-													}
-													else{
-														//若url中含有type字段不一定latest hot reward 3个字段 则拼接新的url去查询
-														callbackAjaxUrl=callbackAjaxUrl+"/"+callbackTypeVal;
-													}
-													//拼接上页数
-													callbackAjaxUrl=callbackAjaxUrl+"/"+page;
-													alert("new ajaxUrl: "+callbackAjaxUrl);
-													/**另外写一个函数根据这个ajaxUrl进行请求数据并进行了分页即可*/
-													/**设计新的location.href*/
-													alert("new location.href"+location.href);
-													/**这样会越拼越长*/
-													/**window.location 越来越长*/
-													if(callbackTypeVal==null)
-														callbackTypeVal=callbackDefaultTypeVal;
-													if(page==null)
-														page=1;
-													window.location.href="http://localhost:8080/Tax/test/testGetQuestions.html"+"?type="+callbackTypeVal+"&page="+page;/**这句话没有起作用？*/
-													//alert("callback wanted modified window.location.href:"+window.location.href);
-													//然后去拼接
+													//alert('paging callback');
+													//alert('current location: '+location);
+													//alert('current location.href: '+location.href);//http://localhost:8080/Tax/test/testGetQuestions.html
+													var callbackTypeVal = getUrlParam('type');//默认查询种类type
+													var callbackDefaultTypeVal = 'latest';
+													var callbackAjaxUrl = '../api/v1/guest/question';
+													if (callbackTypeVal == null)
+														callbackTypeVal = callbackDefaultTypeVal;
+													if (page == null)
+														page = 1;
+													/**在不同页面要修改*/
+													window.location.href='http://localhost:8080/Tax/test/testGetQuestions.html'+'?type='+callbackTypeVal+'&page='+page;
 													/*
 													$("#quesForm").children(":input[name='page']").val(page);
 													$("#quesForm").submit();
@@ -866,7 +856,7 @@ body {
 							$('.searchchoose_up').click(
 									function() {
 										$('.search_choose').animate({
-											height : "180px"
+											height : '180px'
 										});
 										$('.searchchoose_down').css('display',
 												'block');
@@ -875,18 +865,22 @@ body {
 									});
 							$('.searchchoose_down').click(function() {
 								$('.search_choose').animate({
-									height : "40px"
+									height : '40px'
 								});
 								$('.searchchoose_up').css('display', 'block');
 								$('.searchchoose_down').css('display', 'none');
 							});
-						} else if (jsonarray["message"] == "empty query result") {
-							alert("搜索的数据集为空");
+						} else if (jsonarray['message'] == 'empty query result') {
+							//alert('没有相应数据');
 							//清空非hidden的div,然后把p标签填充上 不存在数据条
-						} else if (jsonarray["message"] == "invalid params") {
-							alert("脏数据");
+							var emptyQuestionContainer=$('.tab_con:first').children('p:eq(0)');
+							//alert(emptyQuestionContainer);
+							emptyQuestionContainer.children('b:eq(0)').text('-----没有相应数据-----');
+							emptyQuestionContainer.removeAttr('hidden');
+						} else if (jsonarray['message'] == 'invalid params') {
+							alert('脏数据');
 						} else {
-							alert("未处理的返回信息");
+							alert('未处理的返回信息');
 						}
 					},
 					error : function() {
@@ -896,55 +890,94 @@ body {
 	};
 
 	//根据返回的jsonarray填充questionBriefList
-	function fillQuestionBriefList(data) {
-		alert("fillQuestionBriefList");
+	function fillQuestionBriefList(data, typeVal) {
+		//alert('fillQuestionBriefList');
 		var jsonarray = eval(data);//这里要多eval一次
 		var questionContainer = $('.tab_con:first').children('div:eq(0)');
 		questionContainer.removeAttr('hidden');
 		var questionTitle = questionContainer.children('div:eq(0)').children(
 				'p:eq(0)').children('b:eq(0)');
-		questionTitle.text('最新资讯');
-		var questionList = jsonarray["result"]["list"];
+		if (typeVal == 'latest')
+			questionTitle.text('最新咨询');
+		else if(typeVal == 'hot')
+			questionTitle.text('热门咨询');
+		else if(typeVal == 'reward')
+			questionTitle.text('悬赏咨询');
+		var questionList = jsonarray['result']['list'];
 		//alert(questionList);
 		//先清空之前填写的question_template_clone
-		$("ul").remove(".question_template_clone");
+		$('ul').remove('.question_template_clone');
 		var template_parent = questionContainer.children('div:eq(1)');
 		for ( var i in questionList) {
 			//alert(questionList[i]["title"]);
 			var template = template_parent.children('ul:eq(0)').clone(true);
-			template.addClass("question_template_clone");
+			template.addClass('question_template_clone');
 			template.removeAttr('hidden');
-			//设置title
+			//设置title 并且设置title这个a标配的href
 			var title = template.children('li:eq(0)').children('a:eq(0)');
-			title.text(questionList[i]["title"]);
+			title.text(questionList[i]['title']);
+			/**这里换了页面链接要修改一下*/
+			title.attr('href', 'http://localhost:8080/Tax/test/testQuestionDetail.html'+'?questionId='+questionList[i]['id']); 
 			//设置publishDateStr
 			var publishDateStr = template.children('li:eq(1)').children(
 					'span:eq(0)');
-			publishDateStr.text(questionList[i]["publishDateStr"]);
+			publishDateStr.text(questionList[i]['publishDateStr']);
+			//若是悬赏查询那么要显示悬赏
+			if(typeVal=='reward'){
+				//alert(typeVal);
+				//设置悬赏
+				var prize_parent=template.children('li:eq(2)');
+				var prize = prize_parent.children('span:eq(1)');
+				prize_parent.removeAttr('hidden');
+				prize.text(questionList[i]['prize']);
+				//alert('reward prize: '+questionList[i]['prize']);
+			}
 			//设置click
-			var click = template.children('li:eq(2)').children('span:eq(1)');
-			click.text(questionList[i]["click"]);
+			var click = template.children('li:eq(3)').children('span:eq(1)');
+			click.text(questionList[i]['click']);
 			//设置totalAnswerNum
-			var totalAnswerNum = template.children('li:eq(3)').children(
+			var totalAnswerNum = template.children('li:eq(4)').children(
 					'span:eq(1)');
-			totalAnswerNum.text(questionList[i]["totalAnswerNum"]);
+			totalAnswerNum.text(questionList[i]['totalAnswerNum']);
 			//设置favourite
-			var favourite = template.children('li:eq(4)')
+			var favourite = template.children('li:eq(5)')
 					.children('span:eq(1)');
-			favourite.text(questionList[i]["favourite"]);
+			favourite.text(questionList[i]['favourite']);
 			//设置type
-			var type = template.children('li:eq(5)').children('span:eq(1)');
-			type.text(questionList[i]["type"]);
+			var type = template.children('li:eq(6)').children('span:eq(1)');
+			type.text(questionList[i]['type']);
+			//添加模板
 			template_parent.children('ul').last().after(template);
 		}
 	};
-	
+
 	//获取url中的参数
-    function getUrlParam(name) {
-      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-      var r = window.location.search.substr(1).match(reg); //匹配目标参数
-      if (r != null) return unescape(r[2]); return null; //返回参数值
-    }
+	function getUrlParam(name) {
+		var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)'); //构造一个含有目标参数的正则表达式对象
+		var r = window.location.search.substr(1).match(reg); //匹配目标参数
+		if (r != null)
+			return unescape(r[2]);
+		return null; //返回参数值
+	}
+
+	//点击最新咨询
+	function showLatestQuestions() {
+		/**在不同页面要修改*/
+		window.location.href = 'http://localhost:8080/Tax/test/testGetQuestions.html'
+				+ '?type=' + 'latest' + '&page=' + '1';
+	}
+	//点击热门咨询
+	function showHotQuestions() {
+		/**在不同页面要修改*/
+		window.location.href = 'http://localhost:8080/Tax/test/testGetQuestions.html'
+				+ '?type=' + 'hot' + '&page=' + '1';
+	}
+	//点击悬赏咨询
+	function showRewardQuestions() {
+		/**在不同页面要修改*/
+		window.location.href = 'http://localhost:8080/Tax/test/testGetQuestions.html'
+				+ '?type=' + 'reward' + '&page=' + '1';
+	}
 </script>
 
 

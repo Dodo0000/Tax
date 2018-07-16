@@ -13,4 +13,5 @@ public class QuestionBrief {
 	private Long totalAnswerNum;//总回答数
 	private String type;//种类字符串
 	private String publishDateStr;
+	private Integer prize=0;
 }
