@@ -1,0 +1,205 @@
+body {
+	background:#eee;
+}
+.header {
+	width: 100%;
+	height: 100px;
+	display: -webkit-box;
+	position: relative;
+	min-width: 1200px;
+	background:rgba(255,255,255,255);
+}
+
+.header .logo {
+	width: 614px;
+	height: 42px;
+	background: url(http://localhost:8080/Tax/resources/image/home/logo.png) no-repeat;
+	position: relative;
+	background-size: 100% 100%;
+	margin: 30px 30px;
+}
+
+.header .nav {
+	-webkit-box-flex: 1;
+	width: 750px;
+	margin-right:70px;
+}
+
+.header .nav ul {
+	display: -webkit-box;
+	list-style: none;
+}
+
+.header .nav ul li {
+	-webkit-box-flex: 1;
+	line-height: 100px;
+	font-size: 16px;
+	text-align: center;
+	height: 85px;
+	width:85px;
+}
+
+.header .nav ul li a {
+	text-decoration: none;
+	font-size: 19px;
+	 color:#2057a6;
+}
+
+.header .but {
+	width: 185px;
+	height: 100px;
+	position: relative;
+	overflow: hidden;
+	box-sizing: content-box;
+}
+
+.but_content {
+    width:150px;
+	height: 100px;
+	position: absolute;
+	bottom: 0;
+}
+
+.but_content div {
+	float: left;
+	height: 20px;
+	line-height: 83px;
+	color: #1B55A9;
+	cursor: pointer;
+	font-size: 15px;
+	text-align: right;
+}
+
+.but_content div a {
+	color: #1B55A9;
+	font-size: 15px;
+	text-decoration: none;
+}
+
+.message {
+	width: 14px;
+	cursor: pointer;
+}
+
+.your_meaasge span {
+	color: #1B55A9;
+}
+
+.your_meaasge {
+    height: 23px;
+    position: absolute;
+    margin-top: 55px;
+    z-index:999;
+    margin-left:15px;
+    
+}
+.newss {
+	color: #1B55A9;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+
+/*	µ¼º½À¸ËÑË÷	*/
+/*new*/
+.s_wrap{
+    width: 145px; 
+	height:30px;
+	border:1px solid #1B55A9;
+	line-height:100px;
+	margin-top: 33px;
+	border-radius:7px;
+    margin-left: 10px;
+}
+.magnifying{
+	width: 18px;
+    height: 18px;
+    float: left;
+    margin: 6px 10px;
+    cursor: pointer;
+}
+.ssearch{
+	float: right;
+    width: 76px;
+    height: 30px;
+    border: none;
+    border-left:1px solid #1B55A9;
+    box-sizing: border-box;
+    margin:0px 28px 0 0;
+    padding-left: 8px;
+    color:#1B55A9;
+    resize:none;
+    outline:none;
+    background:none;
+}
+.person{
+	width:35px;
+	height:35px;
+	margin-top: 22px;
+}
+@media screen and (max-width: 1440px) {
+	.header .logo {
+		width: 720px;
+		height: 34px;
+		background: url(http://localhost:8080/Tax/resources/image/header/520.png) no-repeat;
+		position: relative;
+		background-size: 100% 100%;
+		margin: 35px 30px;
+	}
+	.header .nav ul li a {
+		text-decoration: none;
+		color: #1B55A9;
+		font-size: 19px;
+	}
+}
+
+@media screen and (max-width: 1366px) {
+	.header .logo {
+	   width: 720px;
+		height: 34px;
+		background: url(http://localhost:8080/Tax/resources/image/header/520.png) no-repeat;
+		position: relative;
+		background-size: 100% 100%;
+		margin: 35px 30px;
+	}
+	.header .nav ul li a {
+		text-decoration: none;
+		color: #1B55A9;
+		font-size: 18px;
+	}
+}
+
+@media screen and (max-width: 1280px) {
+	.header .logo {
+		width: 640px;
+		height: 32px;
+		background: url(http://localhost:8080/Tax/resources/image/header/490.png) no-repeat;
+		position: relative;
+		background-size: 100% 100%;
+		margin: 35px 30px;
+	}
+	.header .nav ul li a {
+		text-decoration: none;
+		color: #1B55A9;
+		font-size: 17px;
+	}
+}
+
+@media screen and (max-width: 1024px) {
+	.header .logo {
+		width: 480px;
+		height: 24px;
+		background: url(http://localhost:8080/Tax/resources/image/header/380.png) no-repeat;
+		position: relative;
+		background-size: 100% 100%;
+		margin: 40px 35px;
+	}
+	.header .nav ul li a {
+		text-decoration: none;
+		color: #1B55A9;
+		font-size: 15px;
+	}
+}
+ /* .logo,.nav,.but{
+	border:1px solid;
+}  */

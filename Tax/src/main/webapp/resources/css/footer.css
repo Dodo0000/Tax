@@ -1,0 +1,64 @@
+
+	 /* µ×²¿ */
+	.liuan_footers{
+		width:100%;
+		height:110px;
+		background:#1B55A9;
+		overflow:hidden;
+		min-width:1200px;
+	}
+	.liuan_footers_content{
+		width:1200px;
+		height:150px;
+		text-align:center;			
+		margin:-2px auto;
+	}
+	.liuan_footers_content ul{
+		margin:25px 0;
+		color:#fff;
+		font-size:14px;
+	}
+	.liuan_footers_content ul li{
+		height:20px;
+		line-height:20px;
+	}
+	.liuan_footers_content ul li a{
+		color:#fff;
+		text-decoration: none;
+	}
+	.liuan_footers_content ul:nth-child(1){
+		height:50px;
+		width:450px;
+		margin:0 auto;
+		text-align:center;
+	}
+	.liuan_footers_content ul:nth-child(2){
+		width:505px;
+		margin:0 auto;
+		text-align:center;
+	}
+	.liuan_footers_content ul:nth-child(1) li{
+		width:130px;
+		height:50px;
+		text-align:right;
+		margin:0 10px;
+		line-height:50px;
+	}
+	.liuan_footers_content ul:nth-child(1) li:nth-child(1){
+		float:left;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_notice.png) left 30px center  no-repeat;
+		background-size: 25% 61%;
+	}
+	.liuan_footers_content ul:nth-child(1) li:nth-child(2){
+		float:left;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_proposal.png) left 28px center no-repeat;
+		background-size: 25% 61%;
+	}
+	.liuan_footers_content ul:nth-child(1) li:nth-child(3){
+		float:left;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_contact.png) left 28px center  no-repeat;
+		background-size: 25% 61%;
+	}
+	.luan_use{
+		display:flex;
+	}
