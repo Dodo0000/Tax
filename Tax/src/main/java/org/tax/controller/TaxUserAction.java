@@ -24,7 +24,8 @@ import org.tax.service.TaxUserService;
  */
 @Component
 @Controller
-@RequestMapping("/api/v1/user")
+//@RequestMapping("/api/v1/user")
+@RequestMapping("/user")
 public class TaxUserAction {
 
 	final String JSON = MediaType.JSON;

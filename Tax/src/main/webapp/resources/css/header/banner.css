@@ -100,7 +100,7 @@
 
 html,
 body {
-	height: 100%;
+	height: 80%;
 	/*相对的最外层容器的高度要为100%*/
 	margin: 0;
 	padding: 0;

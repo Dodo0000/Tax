@@ -109,17 +109,13 @@
                 handles(pageIndex);
             })
             
-            /**回调函数 可以在这里加ajax信息*/
             function callbackHandle(pageIndex) {
-            		//若that已经load那么用之前加载即可
             		if(that.options.initLoad) {
             			that.options.callback(pageIndex);
             		}
-            		//设置之that已经load
             		that.options.initLoad = true;
             }
-            
-            /**根据请求页码设置分页那些按钮*/
+
             function handles(pageIndex) {
                 lis.removeClass('sel-page').eq(pageIndex - 1).addClass('sel-page');
                 if (totalPages <= 5) {

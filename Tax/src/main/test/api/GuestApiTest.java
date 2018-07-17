@@ -70,7 +70,7 @@ public class GuestApiTest {
 			// LuceneUtil.initIndexLib();
 			Response response = Jsoup
 					.connect(
-							"http://localhost:8080/Tax/api/v1/guest/search/Ω≠‘Û√Ò/3/1")
+							"http://localhost:8080/Tax/api/v1/guest/search/ccc/2/1")
 					.method(Method.GET).ignoreContentType(true).execute();
 			System.out.println(response.body());
 		} catch (IOException e) {

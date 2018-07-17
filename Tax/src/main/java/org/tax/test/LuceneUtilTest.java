@@ -7,6 +7,12 @@ import org.tax.model.TaxQuestion;
 import org.tax.util.LuceneUtil;
 
 public class LuceneUtilTest {
+	
+	@Test
+	public void testInitIndexLib(){
+		LuceneUtil.initIndexLib();
+	}
+	
 	@Test
 	public void testCreateIndex() {
 		// 构造测试的question对象

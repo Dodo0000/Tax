@@ -49,6 +49,7 @@ public class TaxUserServiceImpl implements TaxUserService {
 	/**用户登出*/
 	@Override
 	public String logout(HttpServletRequest request, HttpServletResponse response){
+		LOGGER.debug("**********debug in logout section: ");
 		Result result = new Result();
 		Cookie[] cookies=request.getCookies();
 		Cookie userCookie = null;
@@ -58,17 +59,23 @@ public class TaxUserServiceImpl implements TaxUserService {
 				break;
 			}
 		}
+		/**测试cookie中是什么*/
+		LOGGER.debug("**********encoded: userCookieVal: "+userCookie.getValue());
+		//根据userCookie中的信息 uid;username;password
+		String decodeUserCookieVal = URLDecoder.decode(userCookie.getValue());
+		LOGGER.debug("**********decoded: userCookieVal: "+decodeUserCookieVal);
 		//默认userCookie中存 uid;username;password三个信息
-		if(userCookie==null || userCookie.getValue().split(";").length!=3){
+		if(userCookie==null || decodeUserCookieVal.split(";").length!=3){
+			LOGGER.debug("**********1111");
 			result.setMessage(Message.LOGOUT_COOKIE_EXCEPTION);
 			result.setStatus(StatusCode.LOGOUT_COOKIE_EXCEPTION);
 			return JSON.toJSONString(result);
 		}
-		//根据userCookie中的信息 uid;username;password
-		String uid=userCookie.getValue().split(";")[0];
-		String username=userCookie.getValue().split(";")[1];
-		String password=userCookie.getValue().split(";")[2];
+		String uid=decodeUserCookieVal.split(";")[0];
+		String username=decodeUserCookieVal.split(";")[1];
+		String password=decodeUserCookieVal.split(";")[2];
 		if(uid==null || username==null || password==null){
+			LOGGER.debug("**********2222");
 			result.setMessage(Message.LOGOUT_COOKIE_EXCEPTION);
 			result.setStatus(StatusCode.LOGOUT_COOKIE_EXCEPTION);
 			return JSON.toJSONString(result);
@@ -78,13 +85,18 @@ public class TaxUserServiceImpl implements TaxUserService {
 		exampleOfUser.createCriteria().andUsernameEqualTo(username).andPasswordEqualTo(password);
 		List<TaxUser> userList=mapperFactory.getTaxUserMapper().selectByExample(exampleOfUser);
 		if(userList.size()<=0 || !userList.get(0).getId().equals(uid)){
+			LOGGER.debug("**********33333");
 			result.setMessage(Message.LOGOUT_COOKIE_EXCEPTION);
 			result.setStatus(StatusCode.LOGOUT_COOKIE_EXCEPTION);
 			return JSON.toJSONString(result);
 		}
+		LOGGER.debug("**********4444");
 		//若果cookie中的用户信息合法, 根据uid删除掉相应的session, 删除相应的cookie
 		SessionControl.getInstance().rmSession(uid);
+		/**删完要加回去*/
 		userCookie.setMaxAge(0);
+		userCookie.setPath(CookieConst.PATH);
+		response.addCookie(userCookie);
 		return JSON.toJSONString(result);
 	}
 	

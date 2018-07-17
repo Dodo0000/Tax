@@ -16,7 +16,10 @@ import org.tax.model.TaxUser;
  * 
  * */
 public interface TaxGuestService {
-
+	
+	/**decode utf-8*/
+	String decode(String str);
+	
 	String register(TaxUser user);
 
 	/** 游客登陆注册的时候的ajax看 用户名 是否存在 */

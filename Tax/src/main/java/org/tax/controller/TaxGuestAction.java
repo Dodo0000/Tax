@@ -1,5 +1,7 @@
 package org.tax.controller;
 
+import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,7 +28,8 @@ import org.tax.session.SessionControl;
  */
 @Component
 @Controller
-@RequestMapping("/api/v1/guest")
+//@RequestMapping("/api/v1/guest")
+@RequestMapping("/guest")
 public class TaxGuestAction {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -35,7 +38,19 @@ public class TaxGuestAction {
 
 	@Autowired
 	TaxGuestService taxGuestService;
-
+	
+	/**
+	 * 若用户登陆展示用户名时候要decode
+	 * 将utf8解码成字符
+	 * @param str
+	 * @return
+	 */
+	@RequestMapping(value="/decode",method=RequestMethod.GET,produces=JSON)
+	@ResponseBody
+	public String decode(@RequestParam("str") String str) {
+		return taxGuestService.decode(str);
+	}
+	
 	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = JSON)
 	@ResponseBody
 	public String register(TaxUser user) {

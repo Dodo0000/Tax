@@ -2,6 +2,7 @@ package org.tax.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,6 +69,16 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 
 	@Autowired
 	private MapperFactory mapperFactory;
+	
+	@Override
+	public String decode(String str){
+		LOGGER.debug("********debug in decode section:");
+		LOGGER.debug("********origin str: "+str);
+		LOGGER.debug("********decoded str: "+URLDecoder.decode(str));
+		Result result=new Result();
+		result.setResult(URLDecoder.decode(str));
+		return JSON.toJSONString(result);
+	}
 	
 	/**注册没有包装上表单上的数据user*/
 	@Override
@@ -317,33 +328,46 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 	 * */
 	@Override
 	public String search(String keyword, String type, int page) {
+		LOGGER.debug("**********debug in search section: ");
 		// 每个页的搜索栏，根据关键字搜索问题
 		Result result = new Result();
-		if (keyword != null && type != null) {
+		if (keyword != null || type != null) {
 			try {
 				// keyword转成utf-8 type转成utf-8
 				keyword = new String(keyword.getBytes("iso8859-1"), "UTF-8");
 				type = new String(type.getBytes("iso8859-1"), "UTF-8");
+				/**
+				 * 测试强行把keyword置为null 因为这里我的action中要有keyword和page才有
+				 * 进到这里
+				 * 
+				 *  */
+				//keyword=null;//这里只是一个简陋偷懒测试
+				LOGGER.debug("**********debug in search keyword: "+keyword);
+				LOGGER.debug("**********debug in search type: "+type);
 				List<TaxQuestion> questionLuceneList = LuceneUtil.search(
 						keyword, type, page, PageConst.NUM_PER_PAGE);
 				List<TaxQuestion> questionList = new ArrayList<TaxQuestion>();
 				for (TaxQuestion questionLucene : questionLuceneList) {
 					TaxQuestionKey questionKey = new TaxQuestionKey();
+					//这里忘记设置了
+					questionKey.setId(questionLucene.getId());
 					TaxQuestion question = mapperFactory.getTaxQuestionMapper()
 							.selectByPrimaryKey(questionKey);
 					questionList.add(question);
+					LOGGER.debug("**********debug in search question: "+question);
 				}
-				List<QuestionBrief> questionBriefList = getQuestionBriefList(questionLuceneList);
+				List<QuestionBrief> questionBriefList = getQuestionBriefList(questionList);
 				// 设置PageInfo
 				PageInfo pageInfo = new PageInfo();
 				pageInfo.setCurrentPage(page);
 				pageInfo.setCurrentCount(questionBriefList.size());
 				// 要计算一下
-				TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
-				long totalCount = mapperFactory.getTaxQuestionMapper()
-						.countByExample(exampleOfQuestion);
+				//这里应该是设置为从索引库查找出来的size
+				long totalCount = questionLuceneList.size();
 				long totalPage = totalCount / PageConst.NUM_PER_PAGE
 						+ ((totalCount % PageConst.NUM_PER_PAGE == 0) ? 0 : 1);
+				pageInfo.setTotalCount(totalCount);
+				pageInfo.setTotalPage(totalPage);
 				/** 若totalCount==0 结果返回 */
 				if (totalCount == 0) {
 					result.setMessage(Message.Empty_Query_Result);
