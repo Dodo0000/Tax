@@ -16,6 +16,9 @@
 	href="http://localhost:8080/Tax/resources/css/registerExt.css">
 <script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<!-- 引入js form插件 -->
+<script src="http://localhost:8080/Tax/resources/js/jquery.form.js"
+	type="text/javascript" charset="utf-8"></script>
 </head>
 <script type="text/javascript">
 	$(function() {
@@ -297,10 +300,7 @@ body {
 		</div>
 		<!--   用户登录     -->
 		<div class="but">
-
 			<div class="but_content">
-
-
 				<!--  未登录状态 -->
 				<a href="http://localhost:8080/Tax/login" style="padding: 0 50px;">
 					<img
@@ -315,8 +315,6 @@ body {
 						<a href="http://localhost:8080/Tax/register">注册</a>
 					</div>
 				</div>
-
-
 
 			</div>
 		</div>
@@ -381,8 +379,8 @@ body {
 				<!-- 要把form表单中的字段的name修改成TaxUser对应的-->
 				<!-- 尝试去掉 enctype="multipart/form-data" -->
 				<!-- 密码字段还是需要传md5以后加一个md5插件 -->
-				<form id="addUser" action="http://localhost:8080/Tax/api/v1/guest/register" method="post"
-					 onsubmit="return checkUser();">
+				<!-- onsubmit去掉 onsubmit="return checkUser();"-->
+				<form id="addUser" action="http://localhost:8080/Tax/api/v1/guest/register" method="post">
 					<input type="hidden" name="type" value="0">
 					<table style="margin: 0 auto;">
 						<tr>
@@ -431,7 +429,7 @@ body {
 							<td colspan="2">
 								<div class="content_middle_btn">
 									<!-- 为注册按钮添加id -->
-									<button id="register-submit" class="save_btn" type="submit">注册</button>
+									<button id="register-submit" class="save_btn" type="button" onclick="checkUser()">注册</button>
 								</div></td>
 						</tr>
 					</table>
@@ -550,7 +548,7 @@ body {
 	}
 	//检查用户要提交的表单各个字段若都通过直接提交
 	function checkUser() {
-		alert("in checkUser");
+		//alert("in checkUser");
 		var userName = $("#userName").val();
 		var mail = $("#mail").val();
 		var userTelephone = $("#userTelephone").val();
@@ -604,37 +602,60 @@ body {
 		if ($("#verifyCode").data('ok') == '1') {
 			return true;
 		}
-		alert("*");
+		//alert("*");
 		/**通过这里post请求验证验证码*/
 		if (verifyCode != null) {
-			alert("**");
+			//alert("**");
 			$.post('http://localhost:8080/Tax/api/v1/guest/checkValidationCode', {
 				inputValidationCode : $('#verifyCode').val()
 			}, function(data) {
 				console.log(data);
 				dataJson = eval(data);
 				console.log(dataJson);
-				alert(data);
+				//alert(data);
 				/**其实这里返回success仅仅是表单数据是对的*/
 				if (dataJson['message'] == 'success') {
-					alert("注册成功！请登录！");/**这句话打印的不对不太对*/
+					alert("表单校验正确");
 					$("#verifyCode").data('ok', '1');
-					$('#addUser').submit();
+					//$('#addUser').submit();
+					$('#addUser').ajaxSubmit({
+						url:'http://localhost:8080/Tax/api/v1/guest/register',
+						type:'post',
+						success:function(data){
+							if(data['message']=='success'){
+								alert("注册成功");
+								window.location.href='http://localhost:8080/Tax/test/testLogin.html';
+								return true;
+							}
+							else{
+								alert("注册失败，重新注册");
+								window.location.reload();
+								return false;
+							}			
+						},
+						error:function(data) {
+	       					alert('服务器忙！');
+	       					console.log(data);
+	       					return false;
+	       				}
+					});
 				} 
 				else if(dataJson['message'] == 'invalid validation code') {
 					//alert('1');
 					$("#code1").html('验证码错误!');
+					return false;
 				}
 				else if(dataJson['message'] == 'validation_code_token_error'){
 					alert("token error !!!");
+					return false;
 				}
 				else{
 					alert("未处理错误信息");
+					return false;
 				}
 			});
 		}
-		return false;
-	}
+	};
 </script>
 
 

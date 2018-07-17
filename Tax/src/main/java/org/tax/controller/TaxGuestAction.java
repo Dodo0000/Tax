@@ -56,15 +56,17 @@ public class TaxGuestAction {
 			HttpServletResponse response) {
 		taxGuestService.generateValidationCode(request, response);
 	}
-	
+
 	/** 游客注册提交表单时候检验提交过来的验证码 */
 	@RequestMapping(value = "/checkValidationCode", method = RequestMethod.POST, produces = JSON)
 	@ResponseBody
-	public String checkValidationCode(String inputValidationCode, HttpServletRequest request,
-			HttpServletResponse response) {
-		return taxGuestService.checkValidationCode(inputValidationCode, request, response);
+	public String checkValidationCode(String inputValidationCode,
+			HttpServletRequest request, HttpServletResponse response) {
+		return taxGuestService.checkValidationCode(inputValidationCode,
+				request, response);
 	}
-
+	
+	/**游客登陆*/
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = JSON)
 	@ResponseBody
 	public String login(LoginInfo loginInfo, HttpServletRequest request,

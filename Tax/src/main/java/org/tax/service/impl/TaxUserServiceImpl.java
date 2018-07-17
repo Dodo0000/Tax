@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,48 @@ public class TaxUserServiceImpl implements TaxUserService {
 
 	@Autowired
 	private MapperFactory mapperFactory;
+	
+	/**用户登出*/
+	@Override
+	public String logout(HttpServletRequest request, HttpServletResponse response){
+		Result result = new Result();
+		Cookie[] cookies=request.getCookies();
+		Cookie userCookie = null;
+		for (Cookie cookie : cookies) {
+			if(cookie.getName().equals(CookieConst.USER)){
+				userCookie=cookie;
+				break;
+			}
+		}
+		//默认userCookie中存 uid;username;password三个信息
+		if(userCookie==null || userCookie.getValue().split(";").length!=3){
+			result.setMessage(Message.LOGOUT_COOKIE_EXCEPTION);
+			result.setStatus(StatusCode.LOGOUT_COOKIE_EXCEPTION);
+			return JSON.toJSONString(result);
+		}
+		//根据userCookie中的信息 uid;username;password
+		String uid=userCookie.getValue().split(";")[0];
+		String username=userCookie.getValue().split(";")[1];
+		String password=userCookie.getValue().split(";")[2];
+		if(uid==null || username==null || password==null){
+			result.setMessage(Message.LOGOUT_COOKIE_EXCEPTION);
+			result.setStatus(StatusCode.LOGOUT_COOKIE_EXCEPTION);
+			return JSON.toJSONString(result);
+		}
+		//若username password都合法那么就删除uid对应的session，否则不删除，放置伪造cookie登出
+		TaxUserExample exampleOfUser = new TaxUserExample();
+		exampleOfUser.createCriteria().andUsernameEqualTo(username).andPasswordEqualTo(password);
+		List<TaxUser> userList=mapperFactory.getTaxUserMapper().selectByExample(exampleOfUser);
+		if(userList.size()<=0 || !userList.get(0).getId().equals(uid)){
+			result.setMessage(Message.LOGOUT_COOKIE_EXCEPTION);
+			result.setStatus(StatusCode.LOGOUT_COOKIE_EXCEPTION);
+			return JSON.toJSONString(result);
+		}
+		//若果cookie中的用户信息合法, 根据uid删除掉相应的session, 删除相应的cookie
+		SessionControl.getInstance().rmSession(uid);
+		userCookie.setMaxAge(0);
+		return JSON.toJSONString(result);
+	}
 	
 	@Override
 	public String updateInfo(TaxUser user, HttpServletRequest request) {

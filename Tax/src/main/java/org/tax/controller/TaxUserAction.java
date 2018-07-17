@@ -1,6 +1,7 @@
 package org.tax.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,14 @@ public class TaxUserAction {
 	
 	@Autowired
 	TaxUserService taxUserService;
+	
+	/**用户退出 logout应该用post*/
+	@RequestMapping(value = "/logout", method = RequestMethod.POST, produces = JSON)
+	@ResponseBody
+	public String logout(HttpServletRequest request,
+			HttpServletResponse response) {
+		return taxUserService.logout(request, response);
+	}
 	
 	@RequestMapping(value="/update",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody

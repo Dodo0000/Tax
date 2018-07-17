@@ -245,6 +245,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		return JSON.toJSONString(result);
 	}
 	
+	/**用户登陆*/
 	@Override
 	public String login(LoginInfo loginInfo, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -309,7 +310,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			return JSON.toJSONString(result);
 		}
 	}
-
+	
 	/**
 	 * 这里假定索引库与数据库是能保持一致的 这里若page<=0 或者 page>totalPage LuceneUtil会抛出异常
 	 * 捕获后返回invalid params异常 注意： 这里传入的keyword可能有中文

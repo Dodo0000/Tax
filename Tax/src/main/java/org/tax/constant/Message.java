@@ -16,4 +16,5 @@ public interface Message {
 	public static final String Empty_Query_Result = "empty query result";
 	public static final String VALIDATION_CODE_TOKEN_ERROR = "validation_code_token_error";
 	public static final String INVALID_VALIDATION_CODE = "invalid validation code";
+	public static final String LOGOUT_COOKIE_EXCEPTION = "logout cookie exception";
 }

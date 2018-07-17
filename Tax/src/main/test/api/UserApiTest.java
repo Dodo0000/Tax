@@ -19,6 +19,67 @@ import org.tax.constant.CookieConst;
  */
 public class UserApiTest {
 	
+	@Test 
+	public void testLogout(){
+		/*1.å…ˆå°è¯•ç™»é™†*/
+		Map<String, String> loginInfo = new HashMap<String, String>();
+		loginInfo.put("username", "wyhong");
+		loginInfo.put("password", DigestUtils.md5DigestAsHex("456".getBytes()));
+		//loginInfo.put("password", "password");
+		Response loginResponse = null;
+		try {
+			loginResponse = Jsoup.connect("http://localhost:8080/Tax/api/v1/guest/login")
+				.data(loginInfo)
+				.method(Method.POST)
+				.ignoreContentType(true)
+				.execute();
+			Thread.sleep(1000);
+			System.out.println(loginResponse.body());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		/*2.æµ‹è¯•å‘å¸–*/
+		Map<String, String> questionData = new HashMap<String, String>();
+		questionData.put("type", "1;2");
+		questionData.put("title", "test_pre_logout");
+		questionData.put("content", "test4");
+		try {
+			Response response = Jsoup.connect("http://localhost:8080/Tax/api/v1/user/question")
+				.data(questionData)
+				.method(Method.POST)
+				.ignoreContentType(true)
+				.cookie(CookieConst.USER, loginResponse.cookie(CookieConst.USER))
+				.execute();
+			//System.out.println(response.body());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		/*3.æµ‹è¯•é€€å‡º*/
+		try {
+			Response response = Jsoup.connect("http://localhost:8080/Tax/api/v1/user/logout")
+				.method(Method.POST)
+				.ignoreContentType(true)
+				.cookie(CookieConst.USER, loginResponse.cookie(CookieConst.USER))
+				.execute();
+			//System.out.println(response.body());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		/*4.æµ‹è¯•ä¸€ä¸‹èƒ½ä¸èƒ½åœ¨æ¨å‡ºåè®¿é—®useræ¥å£*/
+		try {
+			Response response = Jsoup.connect("http://localhost:8080/Tax/api/v1/confirm/confirmSolution/99377bd858e04f5ba82bf5d69a5b3c8b")
+				.method(Method.POST)
+				.ignoreContentType(true)
+				//.cookie(CookieConst.USER, loginResponse.cookie(CookieConst.USER))
+				.execute();
+			//System.out.println(response.body());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Test
 	public void testPublishQuestion(){
 		Map<String, String> loginInfo = new HashMap<String, String>();
@@ -169,7 +230,7 @@ public class UserApiTest {
 		}
 		Map<String, String> data = new HashMap<String, String>();
 		try {
-			//ÕâÀï¾Í²»ÄÜÈ·ÈÏ²»ÊÇ×Ô¼ºµÄÎÊÌâÁË
+			//ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½È·ï¿½Ï²ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			Response response = Jsoup.connect("http://localhost:8080/Tax/api/v1/user/confirm/6")
 				.method(Method.POST)
 				.ignoreContentType(true)
@@ -199,7 +260,7 @@ public class UserApiTest {
 		} catch (InterruptedException e) {
 		}
 		try {
-			//ÕâÀï¾Í²»ÄÜÈ·ÈÏ²»ÊÇ×Ô¼ºµÄÎÊÌâÁË
+			//ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½È·ï¿½Ï²ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			Response response = Jsoup.connect("http://localhost:8080/Tax/api/v1/user/collect/1")
 				.method(Method.POST)
 				.ignoreContentType(true)

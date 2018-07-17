@@ -21,6 +21,8 @@ import org.tax.model.TaxUser;
  * */
 public interface TaxUserService {
 	
+	String logout(HttpServletRequest request, HttpServletResponse response);
+	
 	String updateInfo(TaxUser user, HttpServletRequest request);
 	
 	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可

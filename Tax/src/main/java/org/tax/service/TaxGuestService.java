@@ -29,10 +29,11 @@ public interface TaxGuestService {
 	/** 游客注册的时候验证输入的验证码 */
 	String checkValidationCode(String inputValidationCode,
 			HttpServletRequest request, HttpServletResponse response);
-
+	
+	/**游客登陆*/
 	String login(LoginInfo loginInfo, HttpServletRequest request,
 			HttpServletResponse response);
-
+	
 	String search(String keyword, String proId, int page);
 
 	String getByCondition(String type, int page);// type=latest|hot|reward
