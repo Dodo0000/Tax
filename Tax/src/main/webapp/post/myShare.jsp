@@ -9,13 +9,13 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/myShare.css">
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/header/header.css"/>	
-	    <link rel="stylesheet" type="text/css" href="/lagsms/resources/css/footer.css"/>
-		<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-	  	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
-	  	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-	  	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/myShare.css">
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/header/header.css"/>	
+	    <link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/footer.css"/>
+		<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	  	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+	  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+	  	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
 	</head>
 	<body>
 		<!-- 头部标题start -->
@@ -179,7 +179,7 @@
 	            slideSpeed: 600, 							// 缓动速度。单位毫秒
 	            jump: true,									// 是否支持跳转
 	            callback: function(pageOne) { 				// 回调函数
-	                $.get("/lagsms/users/myShares", {
+	                $.get("http://localhost:8080/Tax/users/myShares", {
 		                	page: pageOne,
 		                	rows: 10,
 	                }, function(data) {
@@ -194,9 +194,9 @@
 			                	}
 			                	var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
 	            				}
 		                		return '<ul style="border-bottom:1px dashed rgb(238,238,238);height: 130px;">' +
 		                					'<li>' + userAvatar + '<span>&nbsp;标题：' + value.title + '</span></li>' +
@@ -206,7 +206,7 @@
 												/* '<span class="quesContent_spanTwo" id="del">删除</span>'+
 												'<span class="quesContent_spanOne" onclick="report();" id="report">修改</span>'+ */
 											'</li>' +
-											'<li><span><a style="color:black;" href="/lagsms/posts/'+value.id+'">'+value.content+'</a></span></li>' +
+											'<li><span><a style="color:black;" href="http://localhost:8080/Tax/posts/'+value.id+'">'+value.content+'</a></span></li>' +
 											'<li><span>浏览：</span><span>' + value.browseCount + '</span></li>' +
 											'<li><span>收藏：</span><span>' + value.starCount + '</span></li>' +
 										'</ul>'
@@ -225,7 +225,7 @@
 	            slideSpeed: 600, 							// 缓动速度。单位毫秒
 	            jump: true,									// 是否支持跳转
 	            callback: function(pageTwo) { 				// 回调函数
-	                $.get("/lagsms/users/myShares",{
+	                $.get("http://localhost:8080/Tax/users/myShares",{
 	                	page: pageTwo,
 	                	rows: 10,
 	                	status: 0,
@@ -233,9 +233,9 @@
 		                	var dataHTML = data.map(function(value, index, array) {
 		                		var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				}
 		                		return '<ul style="border-bottom:1px dashed rgb(238,238,238);height: 130px;">' +
 		                					'<li>' + userAvatar + '<span>&nbsp;标题：' + value.title + '</span></li>' +
@@ -245,7 +245,7 @@
 												/* '<span class="quesContent_spanTwo" id="del">删除</span>'+
 												'<span class="quesContent_spanOne" onclick="report();" id="report">修改</span>'+ */
 											'</li>' +
-											'<li><span><a style="color:black;" href="/lagsms/posts/'+value.id+'">'+value.content+'</a></span></li>' +
+											'<li><span><a style="color:black;" href="http://localhost:8080/Tax/posts/'+value.id+'">'+value.content+'</a></span></li>' +
 											'<li><span>浏览：</span><span>' + value.browseCount + '</span></li>' +
 											'<li><span>收藏：</span><span>' + value.starCount + '</span></li>' +
 										'</ul>'
@@ -264,7 +264,7 @@
 	            slideSpeed: 600, 										// 缓动速度。单位毫秒
 	            jump: true,												// 是否支持跳转
 	            callback: function(pageThree) { 							// 回调函数
-	                $.get("/lagsms/users/myShares",{
+	                $.get("http://localhost:8080/Tax/users/myShares",{
 		                	page: pageThree,
 		                	rows: 10,
 		                	status: 1,
@@ -272,9 +272,9 @@
 		                	var dataHTML = data.map(function(value, index, array){
 		                		var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				}
 		                		return '<ul style="border-bottom:1px dashed rgb(238,238,238);height: 130px;">' +
 		                					'<li>' + userAvatar + '<span>&nbsp;标题：' + value.title + '</span></li>' +
@@ -284,7 +284,7 @@
 												/* '<span class="quesContent_spanTwo" id="del">删除</span>'+
 												'<span class="quesContent_spanOne" onclick="report();" id="report">修改</span>'+ */
 											'</li>' +
-											'<li><span><a style="color:black;" href="/lagsms/posts/'+value.id+'">'+value.content+'</a></span></li>' +
+											'<li><span><a style="color:black;" href="http://localhost:8080/Tax/posts/'+value.id+'">'+value.content+'</a></span></li>' +
 											'<li><span>浏览：</span><span>' + value.browseCount + '</span></li>' +
 											'<li><span>收藏：</span><span>' + value.starCount + '</span></li>' +
 										'</ul>'
@@ -303,7 +303,7 @@
 	            slideSpeed: 600, 									// 缓动速度。单位毫秒
 	            jump: true,											// 是否支持跳转
 	            callback: function(pageFour) { 						// 回调函数
-	                $.get("/lagsms/users/myShares",{
+	                $.get("http://localhost:8080/Tax/users/myShares",{
 		                	page: pageFour,
 		                	rows: 10,
 		                	status: -1,
@@ -311,9 +311,9 @@
 		                	var dataHTML = data.map(function(value, index, array){
 		                		var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;height:54px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				}
 		                		return '<ul style="border-bottom:1px dashed rgb(238,238,238);height: 130px;">' +
 											'<li>' + userAvatar + '<span>&nbsp;标题：' + value.title + '</span></li>' +
@@ -323,7 +323,7 @@
 												/* '<span class="quesContent_spanTwo" id="del">删除</span>'+
 												'<span class="quesContent_spanOne" onclick="report();" id="report">修改</span>'+ */
 											'</li>' +
-											'<li><span><a style="color:black;" href="/lagsms/posts/'+value.id+'">'+value.content+'</a></span></li>' +
+											'<li><span><a style="color:black;" href="http://localhost:8080/Tax/posts/'+value.id+'">'+value.content+'</a></span></li>' +
 											'<li><span>浏览：</span><span>' + value.browseCount + '</span></li>' +
 											'<li><span>收藏：</span><span>' + value.starCount + '</span></li>' +
 										'</ul>'

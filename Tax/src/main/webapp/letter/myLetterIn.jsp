@@ -11,11 +11,11 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/receiveMessage.css">
-		<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-	  	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
-	  	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-	  	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/receiveMessage.css">
+		<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	  	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+	  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+	  	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
 	</head>
 	<body>
 	<div class="liuan_main">
@@ -133,7 +133,7 @@
 	            slideSpeed: 600, 								// 缓动速度。单位毫秒
 	            jump: true,										// 是否支持跳转
 	            callback: function(pageOne) { 					// 回调函数
-	                $.get("/lagsms/users/myReceiveMessages",{
+	                $.get("http://localhost:8080/Tax/users/myReceiveMessages",{
 	                	page: pageOne,
 	                	rows: 10,
 	                }, function(data) {
@@ -146,15 +146,15 @@
 		                		}
 		                		var userAvatar;
 	            				if(value.fromUser && value.fromUser.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.fromUser.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;height:55px;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.fromUser.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;height:55px;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;height:55px;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;height:55px;">';
 	            				}
 		                		return '<ul style="border-bottom:1px dashed #ccc;height: 130px;">' + 
-	                						'<li><a href="/lagsms/users/' + value.fromUser.userId + '/zone">' + userAvatar + '<span>&nbsp;' + value.fromUser.userName + '</span></a></li>' +
+	                						'<li><a href="http://localhost:8080/Tax/users/' + value.fromUser.userId + '/zone">' + userAvatar + '<span>&nbsp;' + value.fromUser.userName + '</span></a></li>' +
 										'<li><span>' + type + '</span></li>' + 
 										'<li><span>' + value.createdTime + '</span></li>' + 
-										'<li><a href="/lagsms/letter/' + value.id + '/details"><span>' + value.content + '</span></a></li>' + 
+										'<li><a href="http://localhost:8080/Tax/letter/' + value.id + '/details"><span>' + value.content + '</span></a></li>' + 
 									'</ul>'
 		            		});
 		            		$("#allmyLetterPut>.quesContent").html(dataHTML.join(""));
@@ -171,7 +171,7 @@
 	            slideSpeed: 600, 								// 缓动速度。单位毫秒
 	            jump: true,										// 是否支持跳转
 	            callback: function(pageTwo) { 					// 回调函数
-	                $.get("/lagsms/users/myReceiveMessages",{
+	                $.get("http://localhost:8080/Tax/users/myReceiveMessages",{
 		                	page: pageTwo,
 		                	rows: 10,
 		                	fromType: 0,
@@ -179,12 +179,12 @@
 		                	var dataHTML = data.map(function(value, index, array) {
 		                		var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				}
 		                		return '<ul style="border-bottom:1px dashed #ccc;height: 130px;">' + 
-	                						'<li><a href="/lagsms/users/' + value.fromUser.userId + '/zone">' + userAvatar + '<span>&nbsp;' + value.fromUser.userName + '</span></a></li>' + 
+	                						'<li><a href="http://localhost:8080/Tax/users/' + value.fromUser.userId + '/zone">' + userAvatar + '<span>&nbsp;' + value.fromUser.userName + '</span></a></li>' + 
 										'<li><span>' + value.createdTime + '</span></li>' + 
 										'<li><span>用户</span></li>' + 
 										'<li><span>' + value.content + '</span></li>' + 
@@ -204,7 +204,7 @@
 	            slideSpeed: 600, 								// 缓动速度。单位毫秒
 	            jump: true,										// 是否支持跳转
 	            callback: function(pageThree) { 				// 回调函数
-	                $.get("/lagsms/users/myReceiveMessages",{
+	                $.get("http://localhost:8080/Tax/users/myReceiveMessages",{
 		                	page: pageThree,
 		                	rows: 10,
 		                	fromType: 1,
@@ -212,12 +212,12 @@
 		                	var dataHTML = data.map(function(value, index, array) {
 		                		var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				}
 		                		return '<ul style="border-bottom:1px dashed #ccc;height: 130px;">' + 
-										'<li><a href="/lagsms/users/' + value.fromUser.userId + '/zone">' + userAvatar + '<span>&nbsp;' + value.fromUser.userName + '</span></a></li>' +
+										'<li><a href="http://localhost:8080/Tax/users/' + value.fromUser.userId + '/zone">' + userAvatar + '<span>&nbsp;' + value.fromUser.userName + '</span></a></li>' +
 										'<li><span>' + value.createdTime + '</span></li>' + 
 										'<li><span>系统</span></li>' + 
 										'<li><span>' + value.content + '</span></li>' + 

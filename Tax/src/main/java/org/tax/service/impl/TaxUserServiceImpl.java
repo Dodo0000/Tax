@@ -2,6 +2,7 @@ package org.tax.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartRequest;
 import org.tax.VO.PasswordModification;
+import org.tax.VO.PublishQuestionInfo;
 import org.tax.constant.CookieConst;
 import org.tax.constant.Message;
 import org.tax.constant.SessionConst;
@@ -22,15 +24,19 @@ import org.tax.constant.StatusCode;
 import org.tax.factory.MapperFactory;
 import org.tax.model.TaxAnswer;
 import org.tax.model.TaxFavourite;
+import org.tax.model.TaxInvitation;
 import org.tax.model.TaxQuestion;
 import org.tax.model.TaxQuestionExample;
 import org.tax.model.TaxUser;
 import org.tax.model.TaxUserExample;
+import org.tax.model.TaxUserPro;
 import org.tax.result.Result;
 import org.tax.service.TaxUserService;
 import org.tax.session.MySession;
 import org.tax.session.SessionControl;
 import org.tax.util.FormatUtil;
+import org.tax.model.TaxUserProExample;
+import org.tax.VO.Candidate;
 
 import com.alibaba.fastjson.JSON;
 
@@ -45,6 +51,82 @@ public class TaxUserServiceImpl implements TaxUserService {
 
 	@Autowired
 	private MapperFactory mapperFactory;
+	
+	/**从cookie中获取uid username password查询并返回信息给前端*/
+	@Override
+	public String getUser(HttpServletRequest request, HttpServletResponse response){
+		Result result = new Result();
+		TaxUser user = getUserFromRequest(request);
+		if(user==null){
+			result.setMessage(Message.INVALID_PARAMS);
+			result.setStatus(StatusCode.INVALID_PARAMS);
+		}
+		else{
+			result.setResult(user);
+		}
+		return JSON.toJSONString(result);
+//		Result result = new Result();
+//		//找出cookie
+//		Cookie[] cookies = request.getCookies();
+//		Cookie userCookie = null;
+//		for (Cookie cookie : cookies) {
+//			if(cookie.getName().equals(CookieConst.USER)){
+//				userCookie = cookie;
+//			}
+//		}
+//		/**其实以后这里可以省略，在拦截器加上*/
+//		if(userCookie!=null){
+//			//先decodedUserCookieVal 默认格式 uid;username;password
+//			String decodedUserCookieVal = URLDecoder.decode(userCookie.getValue());
+//			if(decodedUserCookieVal.split(";").length==3){
+//				String uid = decodedUserCookieVal.split(";")[0];
+//				String username = decodedUserCookieVal.split(";")[1];
+//				String password = decodedUserCookieVal.split(";")[2];
+//				TaxUserExample exampleOfUser = new TaxUserExample();
+//				exampleOfUser.createCriteria().andIdEqualTo(uid).andUsernameEqualTo(username).andPasswordEqualTo(password);
+//				List<TaxUser> userList = mapperFactory.getTaxUserMapper().selectByExample(exampleOfUser);
+//				//用户cookie正确
+//				if(userList.size()>0){
+//					TaxUser user = userList.get(0);
+//					result.setResult(user);
+//					return JSON.toJSONString(result);
+//				}	
+//			}
+//		}
+//		//不合法的cookie
+//		result.setMessage(Message.INVALID_PARAMS);
+//		result.setStatus(StatusCode.INVALID_PARAMS);
+//		return JSON.toJSONString(result);
+	}
+	
+	/**根据用户输入的type形式为 1;2;3;5 返回score最高的3个最多*/
+	@Override
+	public String getRelaventUsers(String questionTypes){
+		Result result = new Result();
+		TaxUserProExample exampleOfUserPro = new TaxUserProExample();
+		exampleOfUserPro.setDistinct(true);
+		String[] questionTypesArr = questionTypes.split(";");
+		List<Integer> proIdList = new ArrayList<Integer>();
+		for(String typeStr : questionTypesArr){
+			try{
+				Integer typeInt = Integer.parseInt(typeStr);
+				proIdList.add(typeInt);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		exampleOfUserPro.createCriteria().andProIdIn(proIdList);
+		List<Candidate> candidates = mapperFactory.getTaxUserProMapper().selectByExample(exampleOfUserPro);
+		if(candidates==null || candidates.size()==0){
+			result.setMessage(Message.Empty_Query_Result);
+			result.setStatus(StatusCode.Empty_Query_Result);
+			return JSON.toJSONString(result);
+		}
+		candidates.subList(0, Math.min(candidates.size(), 3));
+		result.setResult(candidates);
+		return JSON.toJSONString(result);
+	}
 	
 	/**用户登出*/
 	@Override
@@ -100,13 +182,19 @@ public class TaxUserServiceImpl implements TaxUserService {
 		return JSON.toJSONString(result);
 	}
 	
+	/**这里假定用户名不能修改*/
 	@Override
 	public String updateInfo(TaxUser user, HttpServletRequest request) {
 		Result result = new Result();
 		//检查是否用户在登陆状态(由拦截器搞)
 		TaxUser originalUser = getUserFromRequest(request);
 		//根据包装跟新数据的user更新originalUser
-		if(user.getEmail()==null || user.getTelephone()==null){
+		if(!originalUser.getId().equals(user.getId()) || user.getEmail()==null || user.getTelephone()==null){
+			result.setMessage(Message.INVALID_PARAMS);
+			result.setStatus(StatusCode.INVALID_PARAMS);
+			return JSON.toJSONString(result);
+		}
+		else if(user.getEmail().equals("") || user.getEmail().equals("\\s+") || user.getTelephone().equals("") || user.getTelephone().equals("\\s+")){
 			result.setMessage(Message.INVALID_PARAMS);
 			result.setStatus(StatusCode.INVALID_PARAMS);
 			return JSON.toJSONString(result);
@@ -114,7 +202,9 @@ public class TaxUserServiceImpl implements TaxUserService {
 		//更新三个字段email telephone proList
 		originalUser.setEmail(user.getEmail());
 		originalUser.setTelephone(user.getTelephone());
-		originalUser.setProList(user.getProList());
+		/**若用户没有填写proList那么不修改*/
+		if(user.getProList()!=null && !user.getProList().equals(""))
+			originalUser.setProList(user.getProList());
 		//检查用户名 密码是否正确
 		TaxUserExample exampleOfUser = new TaxUserExample();
 		exampleOfUser.createCriteria().andUsernameEqualTo(originalUser.getUsername()).andPasswordEqualTo(originalUser.getPassword());
@@ -130,6 +220,20 @@ public class TaxUserServiceImpl implements TaxUserService {
 			result.setMessage(Message.UPDATE_FALIUER);
 			result.setStatus(StatusCode.UPDATE_FALIUER);
 			return JSON.toJSONString(result);
+		}
+		//根据用户的proList更新tax_user_pro表
+		TaxUserProExample exampleOfUserPro = new TaxUserProExample();
+		exampleOfUserPro.createCriteria().andUserIdEqualTo(originalUser.getId());
+		mapperFactory.getTaxUserProMapper().deleteByExample(exampleOfUserPro);
+		if(originalUser.getProList()!=null && !originalUser.getProList().equals("\\s+")){
+			String[] proStrs = originalUser.getProList().split(";");
+			for(String proStr:proStrs){
+				TaxUserPro up = new TaxUserPro();
+				up.setUserId(originalUser.getId());
+				Integer proIdInt = Integer.parseInt(proStr);
+				up.setProId(proIdInt);
+				mapperFactory.getTaxUserProMapper().insert(up);
+			}
 		}
 		return JSON.toJSONString(result);
 	}
@@ -184,20 +288,41 @@ public class TaxUserServiceImpl implements TaxUserService {
 	 * 细化检验各个字段
 	 * */
 	@Override
-	public String publishQuestion(TaxQuestion question, HttpServletRequest request) {
+	public String publishQuestion(PublishQuestionInfo info, HttpServletRequest request) {
 		Result result = new Result();
 		//Question id 自增那么不需要管直接插入即可
 		//设置问题的authorId
 		//2018/7/12:wyhong
+		if(info.getTitle()==null || info.getTitle().equals("") || info.getTitle().split("\\s+").length == 0){
+			result.setMessage(Message.PUBLISH_QUESTION_EMPTY_TITLE);
+			result.setStatus(StatusCode.PUBLISH_QUESTION_EMPTY_TITLE);
+			return JSON.toJSONString(result);
+		}
+		else if(info.getContent()==null || info.getContent().equals("") || info.getContent().split("\\s+").length == 0){
+			result.setMessage(Message.PUBLISH_QUESTION_EMPTY_CONTENT);
+			result.setStatus(StatusCode.PUBLISH_QUESTION_EMPTY_CONTENT);
+			return JSON.toJSONString(result);
+		}
+		/**设置问题*/
+		TaxQuestion question = new TaxQuestion();
+		//设置问题作者id
 		TaxUser author = getUserFromRequest(request);
 		question.setAuthorId(author.getId());
+		//设置问题标题
+		question.setTitle(info.getTitle());
+		//设置问题内容
+		question.setContent(info.getContent());
+		//设置问题种类列表
+		question.setType(info.getType());
 		//设置问题的publishDate
 		question.setPublishDate(new Date());
-		//存放问题
-		int flag = mapperFactory.getTaxQuestionMapper().insert(question);
-		if(flag<=0){
-			result.setMessage(Message.INVALID_PARAMS);
-			result.setStatus(StatusCode.INVALID_PARAMS);
+		/**select last insert id*/
+		/**设置邀请表*/
+		if(info.getInvitedUserIdArr()!=null && info.getInvitedUserIdArr().length!=0){
+			for(String invitedUserId : info.getInvitedUserIdArr()){
+				TaxInvitation invitation = new TaxInvitation();
+				
+			}
 		}
 		return JSON.toJSONString(result);
 	}

@@ -33,6 +33,20 @@ public class TaxUserAction {
 	@Autowired
 	TaxUserService taxUserService;
 	
+	/**从cookie中获取uid username password查询并返回信息给前端*/
+	@RequestMapping(value = "/getUser", method = RequestMethod.POST, produces = JSON)
+	@ResponseBody
+	public String getUser(HttpServletRequest request, HttpServletResponse response){
+		return taxUserService.getUser(request, response);
+	}
+	
+	/**根据用户输入的type形式为 1;2;3;5 返回score最高的3个最多*/
+	@RequestMapping(value = "/getRelaventUsers", method = RequestMethod.POST, produces = JSON)
+	@ResponseBody
+	public String getRelaventUsers(String questionTypes){
+		return taxUserService.getRelaventUsers(questionTypes);
+	}
+	
 	/**用户退出 logout应该用post*/
 	@RequestMapping(value = "/logout", method = RequestMethod.POST, produces = JSON)
 	@ResponseBody
@@ -41,7 +55,7 @@ public class TaxUserAction {
 		return taxUserService.logout(request, response);
 	}
 	
-	@RequestMapping(value="/update",method=RequestMethod.POST,produces=JSON)
+	@RequestMapping(value="/updateUserInfo",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody
 	public String updateInfo(TaxUser user, HttpServletRequest request) {
 		return taxUserService.updateInfo(user, request);

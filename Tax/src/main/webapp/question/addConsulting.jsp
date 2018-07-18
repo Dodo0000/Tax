@@ -12,11 +12,11 @@
 <meta http-equiv="description" content="Simple">
 <!--  360浏览器专用 -->
 <meta name="renderer" content="ie-stand" />
-<link rel="shortcut icon" href="/lagsms/resources/image/project.ico" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/consultingShare.css">
-<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript" src="/lagsms/resources/ckeditor/ckeditor.js"></script>
-	<script type="text/javascript" src="/lagsms/resources/ckeditor/config.js"></script>
+<link rel="shortcut icon" href="http://localhost:8080/Tax/resources/image/project.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/consultingShare.css">
+<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="http://localhost:8080/Tax/resources/ckeditor/ckeditor.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/Tax/resources/ckeditor/config.js"></script>
 </head>
 <body>
 	<!-- 头部标题start -->
@@ -29,7 +29,7 @@
 				<div class="pink"></div>
 			</div>
 			<div class="content_middle">
-				<form id="consultingShareForm" method="post" onsubmit="return save();" action="/lagsms/question/addConsulting">
+				<form id="consultingShareForm" method="post" onsubmit="return save();" action="http://localhost:8080/Tax/question/addConsulting">
 					<div>
 						<div>
 							<input type="text" name="userId" id="userId" hidden="true">
@@ -139,8 +139,9 @@
 						</div>
 						<div class="add_content clearfix">
 							<div class="text_area">
-								<!-- <textarea name="content" id="content" class="fl" style="height:180px;"></textarea> -->
-								<textarea name="content" id="editor" class="fl"  cols="30" rows="10"></textarea>
+								<textarea name="content" id="content" class="fl" style="height:180px;"></textarea>
+								<!-- <textarea name="content" id="editor" class="fl"  cols="30" rows="10"></textarea> -->
+								<script type="text/javascript">CKEDITOR.replace('editor');</script>
 							</div>
 						</div>
 						<div class="sub">
@@ -184,7 +185,7 @@
 			m = encodeURI(m);
 			m = encodeURI(m);
 			if(selectedMajors.size > 0 ) {
-				$.get("/lagsms/users/search", { major: m }, function(data) {
+				$.get("http://localhost:8080/Tax/users/search", { major: m }, function(data) {
 					console.log(data);
 					var ordinaryHtml = "";
 	              	var expertHtml = "";
@@ -290,9 +291,6 @@
 			}
 			return true;
        }
- 
-
-    	 CKEDITOR.replace('editor');
 	</script>
 </body>
 </html>

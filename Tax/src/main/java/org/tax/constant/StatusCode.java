@@ -17,4 +17,6 @@ public class StatusCode {
 	public static final String VALIDATION_CODE_TOKEN_ERROR = "400";
 	public static final String INVALID_VALIDATION_CODE = "400";
 	public static final String LOGOUT_COOKIE_EXCEPTION = "400";
+	public static final String PUBLISH_QUESTION_EMPTY_TITLE = "400";
+	public static final String PUBLISH_QUESTION_EMPTY_CONTENT = "400";
 }

@@ -10,13 +10,13 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
-	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/sendMessage.css">
-	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/header/header.css"/>	
-	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/footer.css"/>
-	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
+	<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/sendMessage.css">
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/header/header.css"/>	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/footer.css"/>
+	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
 </head>
 
 <body>
@@ -77,7 +77,7 @@
 	            slideSpeed: 600, 								// 缓动速度。单位毫秒
 	            jump: true,										// 是否支持跳转
 	            callback: function(pageOne) { 					// 回调函数
-	                $.get("/lagsms/users/mySendMessages",{
+	                $.get("http://localhost:8080/Tax/users/mySendMessages",{
 		                	page: pageOne,
 		                	rows: 10,
 	                }, function(data) {
@@ -85,17 +85,17 @@
 		                	var dataHTML = data.map(function(value, index, array){
 		                		var userAvatar;
 	            				if(value.toUser && value.toUser.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.toUser.avatar +'" alt="Avatar" >';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.toUser.avatar +'" alt="Avatar" >';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar">';
 	            				}
 		                		return '<ul style="border-bottom:1px dashed #ccc;" class="clearfix">' + 
 										'<li>' +
 											'<div style="width:100px;float:left">'+ userAvatar +'</div>' +
-											'<a href="/lagsms/users/' + value.toUser.userId + '/zone">' + '<span>接收人:</span> '+value.toUser.userName + '</a>' +
+											'<a href="http://localhost:8080/Tax/users/' + value.toUser.userId + '/zone">' + '<span>接收人:</span> '+value.toUser.userName + '</a>' +
 										'</li>' +
 										'<li><span class="fl">' + value.createdTime + '</span></li>' +
-										'<li><a href="/lagsms/letter/' + value.id + '/details"><span>' + value.content + '</span></a></li>' + 
+										'<li><a href="http://localhost:8080/Tax/letter/' + value.id + '/details"><span>' + value.content + '</span></a></li>' + 
 										
 									'</ul>'
 		            		});

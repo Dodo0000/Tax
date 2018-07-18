@@ -10,17 +10,17 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript" src="/lagsms/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
-	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
-	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-    <link rel="stylesheet" type="text/css" href="/lagsms/resources/css/header/header.css"/>	
-	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/footer.css"/>
-	<link rel="stylesheet" href="/lagsms/resources/css/questionDetails.css">
-	<link rel="stylesheet" href="/lagsms/resources/zeroModal/zeroModal.css">
-	<script type="text/javascript" src="/lagsms/resources/ckeditor/ckeditor.js"></script>
-	<script type="text/javascript" src="/lagsms/resources/ckeditor/config.js"></script>
+	<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="http://localhost:8080/Tax/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
+	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
+	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/header/header.css"/>	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/footer.css"/>
+	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/questionDetails.css">
+	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/zeroModal/zeroModal.css">
+	<script type="text/javascript" src="http://localhost:8080/Tax/resources/ckeditor/ckeditor.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/Tax/resources/ckeditor/config.js"></script>
 	<style>
 		#two {
 			border-bottom: 1px solid #fff;
@@ -44,17 +44,17 @@
 		<!-- path -->
 		<div class="path_nav">
 			
-			<span class="fl">当前位置：<a style="color:black;" href="/lagsms/questions" class="nav_style">咨询</a></span>
+			<span class="fl">当前位置：<a style="color:black;" href="http://localhost:8080/Tax/questions" class="nav_style">咨询</a></span>
 			<span class="fl">&nbsp;&gt;&nbsp;</span>
 			<span class="fl" style="width:300px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-			   <a href="/lagsms/questions/ques_1513737987706/details" class="nav_style"> 想了解个人所得税流程 </a>
+			   <a href="http://localhost:8080/Tax/questions/ques_1513737987706/details" class="nav_style"> 想了解个人所得税流程 </a>
 			</span>
 		</div>
 		<div class="liuan_content">
 			<div class="notsolved">
 				<!-- 头部 start -->
 				<div class="mark">
-					<img src="/lagsms/resources/image/questionmark.png">
+					<img src="http://localhost:8080/Tax/resources/image/questionmark.png">
 					<span>未解决</span>
 				</div>
 				<div class="mark_content">
@@ -107,7 +107,7 @@
 			<p class="liuan_content_three_p">我要回答</p>
 			
 				
-					<form action="/lagsms/questions/ques_1513737987706/answers" method="post"> 
+					<form action="http://localhost:8080/Tax/questions/ques_1513737987706/answers" method="post"> 
 						<div class="liuan_content_four">
 							<div class="liuan_content_four_main">
 								<div class="liuan_content_four_content">
@@ -191,7 +191,7 @@
 	
 		$('#sunmitTable').submit(function() {
 	        $.ajax({
-		        	url: "/lagsms/report",
+		        	url: "http://localhost:8080/Tax/report",
 		        type: "post",
 		        dataType: "json",
 		        data: $('#sunmitTable').serialize(),
@@ -230,7 +230,7 @@
 					var $likeCount = $target.children('.like-answer-num');
 					var answerId = $target.data("answerId");
 					
-					$.post("/lagsms/like", {
+					$.post("http://localhost:8080/Tax/like", {
 						questionId: questionId,
 						answerId: answerId,
 					}, function(data) {
@@ -260,7 +260,7 @@
 					var answerId = $target.data("answer-id");
 					/* var questionId = $target.data("question-id"); */
 					
-				 	$.post("/lagsms/updateAnswerId", {
+				 	$.post("http://localhost:8080/Tax/updateAnswerId", {
 						answerId: answerId,
 						id: questionId
 				    }, function(data) {
@@ -283,7 +283,7 @@
 				
 				// 检查登录用户是否点赞答案
 				function checkLikeAnswers(answerIds) {
-				   	$.get('/lagsms/likes/check', {
+				   	$.get('http://localhost:8080/Tax/likes/check', {
 						 questionId: 'ques_1513737987706',
 						 a: answerIds
 					 }, function(data) {
@@ -306,7 +306,7 @@
 				
 				// 检查登录用户是否收藏答案
 				function checkStarAnswers(answerIds) {
-				   	$.get('/lagsms/star/check', {
+				   	$.get('http://localhost:8080/Tax/star/check', {
 						 target: 'answer',
 						 userId: userId,
 						 t: answerIds
@@ -341,7 +341,7 @@
 					}
 					var $starCount = $target.children('.star-answer-num');
 					var targetId = $target.data("target-id");
-					$.post("/lagsms/star", {
+					$.post("http://localhost:8080/Tax/star", {
 						target: "answer",
 						targetId: targetId
 					}, function(data) {
@@ -375,7 +375,7 @@
 					
 					var $target = $(event.target);
 					
-					$.post("/lagsms/star",{
+					$.post("http://localhost:8080/Tax/star",{
 						target: "question",
 						targetId: "ques_1513737987706"
 					},function(data) {
@@ -413,7 +413,7 @@
 	        slideSpeed: 600, 							//缓动速度。单位毫秒
 	        jump: true,									//是否支持跳转
 	        callback: function(page) {					//回调函数
-	        		$.get("/lagsms/questions/ques_1513737987706/answers", {
+	        		$.get("http://localhost:8080/Tax/questions/ques_1513737987706/answers", {
 		            	page: page,
 		            	rows: 10,
 	            }, function(data) {
@@ -421,8 +421,8 @@
 	            }); 
 	        }
 	    });
-		var imgUrl = '/lagsms/file/showPicFile?fileId=';
-		var defaultImgUrl = '/lagsms/resources/image/u2815.png';
+		var imgUrl = 'http://localhost:8080/Tax/file/showPicFile?fileId=';
+		var defaultImgUrl = 'http://localhost:8080/Tax/resources/image/u2815.png';
 		// 初始化答案 以及 check answers
 		function initAndCheckAnswers(data) {
 			var dataHTML = data.map(function(value, index, array) {
@@ -430,7 +430,7 @@
 	           	var userAvatar = value.user && value.user.avatar ? (imgUrl + value.user.avatar) : defaultImgUrl;
             		return '<ul data-answer-id="' + value.id + '" style="border-bottom:1px dashed #ccc;height:136px;">'+
 			        			'<li>' +
-			        				'<a href="/lagsms/users/' + value.user.userId + '/zone">' +
+			        				'<a href="http://localhost:8080/Tax/users/' + value.user.userId + '/zone">' +
 			        					'<img src="' + userAvatar + '" alt="Avatar">' +
 			        				'</a>' +
 			        			'</li>'+
@@ -492,7 +492,7 @@
 		  	$("#del").click(function() {
 				  zeroModal.confirm('是否删除？', function() {
 					  $.ajax({
-							 url: "/lagsms/questions/ques_1513737987706/del",
+							 url: "http://localhost:8080/Tax/questions/ques_1513737987706/del",
 							 type: 'POST',
 							 processData: false,
 							 contentType: false,
@@ -511,7 +511,7 @@
 	 		
  		function subEdit() {
  			$.ajax({
-				 url: "/lagsms/questions/update",
+				 url: "http://localhost:8080/Tax/questions/update",
 				 type: 'POST',
 				 dataType: "json",
 			     data: $('#editQuestion').serialize(),

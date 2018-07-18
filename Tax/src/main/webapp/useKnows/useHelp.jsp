@@ -8,12 +8,12 @@
 		<title>安徽省国家税务局税企互助交流平台</title>
 		<meta name="viewport" content="width=device-width"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script type="text/javascript" src="/lagsms/resources/easyui/jquery.min.js"></script>
-		<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/common.css"/>
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/fotter/useKnow.css"/>
-		<script type="text/javascript" src="/lagsms/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
-	  	<link rel="stylesheet" href="/lagsms/resources/zeroModal/zeroModal.css"/>
+		<script type="text/javascript" src="http://localhost:8080/Tax/resources/easyui/jquery.min.js"></script>
+		<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/fotter/useKnow.css"/>
+		<script type="text/javascript" src="http://localhost:8080/Tax/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
+	  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/zeroModal/zeroModal.css"/>
 	</head>
 	
 	<body>

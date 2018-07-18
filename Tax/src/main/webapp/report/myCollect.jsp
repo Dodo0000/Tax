@@ -9,11 +9,11 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/myCollect.css">
-		<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-	  	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
-	  	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-	  	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/myCollect.css">
+		<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	  	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+	  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+	  	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
 	</head>
 	<body>
 	<div class="liuan_main">
@@ -91,7 +91,7 @@
 	            slideSpeed: 600, 								// 缓动速度。单位毫秒
 	            jump: true,										// 是否支持跳转
 	            callback: function(pageOne) { 					// 回调函数
-	                $.get("/lagsms/users/myCollects",{
+	                $.get("http://localhost:8080/Tax/users/myCollects",{
 	                	page: pageOne,
 	                	rows: 10,
 	                }, function(data) {
@@ -114,16 +114,16 @@
 		                	}
 		                	var userAvatar;
             				if(value.user && value.user.avatar) {
-            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:100%;height:100%;vertical-align:middle;">';
+            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:100%;height:100%;vertical-align:middle;">';
             				} else {
-            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:100%;height:100%;vertical-align:middle;">';
+            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:100%;height:100%;vertical-align:middle;">';
             				}
 	                		return '<ul style="height: 170px;overflow：hidden;">' +
 	                					 /* '<span>&nbsp;' + value.user.userName + '</span> */
 	                					'<li style="width:66px;height:62px;margin-top:5px;">' + userAvatar +'</li>' + 
 										'<li id="latestQuesContainerOne_one"><span>' + value.createdTime + '</span></li>' + 
-										'<li id="latestQuesContainerOne_two">标题：<a style="color:black;" href="/lagsms/posts/'+targetId+'">' + targetTitle + '</a></li>' +
-										'<li id="">内容：<a style="color:black;" href="/lagsms/posts/'+targetId+'">' + targetcontent + '</a></li>' +
+										'<li id="latestQuesContainerOne_two">标题：<a style="color:black;" href="http://localhost:8080/Tax/posts/'+targetId+'">' + targetTitle + '</a></li>' +
+										'<li id="">内容：<a style="color:black;" href="http://localhost:8080/Tax/posts/'+targetId+'">' + targetcontent + '</a></li>' +
 									'</ul>'
 	            		});
 	            		$("#myAllCollect>.quesContent").html(dataHTML.join(""));

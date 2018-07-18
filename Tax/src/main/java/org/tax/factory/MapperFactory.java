@@ -12,6 +12,7 @@ import org.tax.dao.TaxProMapper;
 import org.tax.dao.TaxQuestionMapper;
 import org.tax.dao.TaxShareMapper;
 import org.tax.dao.TaxUserMapper;
+import org.tax.dao.TaxUserProMapper;
 import org.tax.model.TaxAnswer;
 
 @Data
@@ -31,6 +32,8 @@ public class MapperFactory {
 	private TaxAnswerMapper taxAnswerMapper;
 	@Autowired
 	private TaxFavouriteMapper taxFavouriteMapper;
+	@Autowired
+	private TaxUserProMapper taxUserProMapper;
 	
 //	public TaxUserMapper getTaxUserMapper() {
 //		return taxUserMapper;

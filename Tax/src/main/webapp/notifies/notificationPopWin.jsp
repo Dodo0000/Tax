@@ -8,11 +8,11 @@
 	<title>安徽省国家税务局税企互助交流平台</title>
 	<meta name="viewport" content="width=device-width"/>
   	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/query.css">
-  	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-  	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
-  	<script type="text/javascript" src="/lagsms/resources/easyui/jquery.min.js"></script>
-  	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+  	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/query.css">
+  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+  	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
+  	<script type="text/javascript" src="http://localhost:8080/Tax/resources/easyui/jquery.min.js"></script>
+  	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <style type="text/css">
 	.liuan_main {
@@ -98,7 +98,7 @@
          slideSpeed: 600, 							// 缓动速度。单位毫秒
          jump: true, 								// 是否支持跳转
          callback: function(page) { 				// 回调函数
-        	 $.get("/lagsms/notifies/all", {
+        	 $.get("http://localhost:8080/Tax/notifies/all", {
 	            	page:page,
 	            	rows:10,
 	            	pagingOrNot:'paging'
@@ -112,15 +112,15 @@
 	            			var state = readOrUnread == 0 ?"未读":"已读";
 	            			if(type=='answer'){
 	            				contents = value.titleAndId.title;
-	            				hrefs = "href='/lagsms/questions/"+value.titleAndId.id+"/details'";
+	            				hrefs = "href='http://localhost:8080/Tax/questions/"+value.titleAndId.id+"/details'";
 	            			}
 	            			if(type=='invitationAnswer'){
 	            				contents = value.titleAndId.title;
-	            				hrefs = "href='/lagsms/questions/"+value.titleAndId.id+"/details'";
+	            				hrefs = "href='http://localhost:8080/Tax/questions/"+value.titleAndId.id+"/details'";
 	            			}
 	            			if(type=='letter'){
 	            				contents = value.titleAndId.content;
-	            				hrefs = "href='/lagsms/letter/"+value.titleAndId.id+"/details'";
+	            				hrefs = "href='http://localhost:8080/Tax/letter/"+value.titleAndId.id+"/details'";
 	            			}
 	            			var id = value.id;
 	            			return '<ul class="clearfix expert_ul">' +
@@ -138,7 +138,7 @@
      });
 	//改变状态
 	function changeState(id){
-		var url = "/lagsms/notifies/updateState";
+		var url = "http://localhost:8080/Tax/notifies/updateState";
 		var notificationId = id.getAttribute("userId");
 		var param = {
 			id : notificationId
@@ -149,7 +149,7 @@
 	}
 	//清空
 	function empty(){
-		var url = "/lagsms/notifies/clear";
+		var url = "http://localhost:8080/Tax/notifies/clear";
 		$.post(url,function(result){
 			console.log(result);
 			history.go(0);

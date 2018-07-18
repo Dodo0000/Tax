@@ -12,13 +12,13 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/myAnswer.css">
-		<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-	  	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
-	  	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-	  	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
-	  	<script type="text/javascript" src="/lagsms/resources/ckeditor/ckeditor.js"></script>
-		<script type="text/javascript" src="/lagsms/resources/ckeditor/config.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/myAnswer.css">
+		<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	  	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+	  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+	  	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
+	  	<script type="text/javascript" src="http://localhost:8080/Tax/resources/ckeditor/ckeditor.js"></script>
+		<script type="text/javascript" src="http://localhost:8080/Tax/resources/ckeditor/config.js"></script>
 	</head>
 	<body>
 	<div class="liuan_main">
@@ -189,7 +189,7 @@
 	            slideSpeed: 600, 							// 缓动速度。单位毫秒
 	            jump: true,									// 是否支持跳转
 	            callback: function(answerPageOne) { 		// 回调函数
-	                $.get("/lagsms/users/answers",{
+	                $.get("http://localhost:8080/Tax/users/answers",{
 		                	page: answerPageOne,
 		                	rows: 10,
 	                }, function(data) {
@@ -205,7 +205,7 @@
 		                		return '<ul style="height:auto;">' +
 		                					'<li>'+
 		                						'<div>' +
-		                							'<a href="/lagsms/questions/' + value.questionId + '/details" style="color:#000;">问题:<span>' + value.question.title + '</span></a>'+
+		                							'<a href="http://localhost:8080/Tax/questions/' + value.questionId + '/details" style="color:#000;">问题:<span>' + value.question.title + '</span></a>'+
 		                							'<span>' + value.createdTime + '</span>' +
 		                						'</div>' +
 	                						'</li>' +
@@ -238,7 +238,7 @@
 	            slideSpeed: 600, 							// 缓动速度。单位毫秒
 	            jump: true,									// 是否支持跳转
 	            callback: function(answerPageTwo) { 		// 回调函数
-	                $.get("/lagsms/users/answers",{
+	                $.get("http://localhost:8080/Tax/users/answers",{
 		                	page: answerPageTwo,
 		                	rows: 10,
 		                	status: 0,
@@ -247,7 +247,7 @@
 		        				return '<ul style="height:auto;">' +
 					    					'<li>'+
 					    						'<div>' +
-					    							'<a href="/lagsms/questions/' + value.questionId + '/details" style="color:#000;">问题:<span>' + value.question.title + '</span></a>'+
+					    							'<a href="http://localhost:8080/Tax/questions/' + value.questionId + '/details" style="color:#000;">问题:<span>' + value.question.title + '</span></a>'+
 					    							'<span>' + value.createdTime + '</span>' +
 					    						'</div>' +
 											'</li>' +
@@ -279,7 +279,7 @@
 	            slideSpeed: 600, 							// 缓动速度。单位毫秒
 	            jump: true,									// 是否支持跳转
 	            callback: function(answerPageThree) { 		// 回调函数
-	                $.get("/lagsms/users/answers",{
+	                $.get("http://localhost:8080/Tax/users/answers",{
 		                	page: answerPageThree,
 		                	rows: 10,
 		                	status: 1,
@@ -288,7 +288,7 @@
 		                		return '<ul style="height:auto;">' +
 					    					'<li>'+
 					    						'<div>' +
-					    							'<a href="/lagsms/questions/' + value.questionId + '/details" style="color:#000;">问题:<span>' + value.question.title + '</span></a>'+
+					    							'<a href="http://localhost:8080/Tax/questions/' + value.questionId + '/details" style="color:#000;">问题:<span>' + value.question.title + '</span></a>'+
 					    							'<span>' + value.createdTime + '</span>' +
 					    						'</div>' +
 										'</li>' +
@@ -317,7 +317,7 @@
 	            slideSpeed: 600, 							// 缓动速度。单位毫秒
 	            jump: true,									// 是否支持跳转
 	            callback: function(answerPageFour) { 		// 回调函数
-	                $.get("/lagsms/users/answers",{
+	                $.get("http://localhost:8080/Tax/users/answers",{
 		                	page: answerPageFour,
 		                	rows: 10,
 		                	status: -1,
@@ -326,7 +326,7 @@
 		                		return '<ul style="height:auto;">' +
 					    					'<li>'+
 					    						'<div>' +
-					    							'<a href="/lagsms/questions/' + value.questionId + '/details" style="color:#000;">问题:<span>' + value.question.title + '</span></a>'+
+					    							'<a href="http://localhost:8080/Tax/questions/' + value.questionId + '/details" style="color:#000;">问题:<span>' + value.question.title + '</span></a>'+
 					    							'<span>' + value.createdTime + '</span>' +
 					    						'</div>' +
 											'</li>' +
@@ -386,7 +386,7 @@
 	 			var formData = new FormData(updateAnswerForm);
 	 			formData.set("content", editor.getData());
 	 			
-	    		$.ajax("/lagsms/answer/update", {
+	    		$.ajax("http://localhost:8080/Tax/answer/update", {
 	    			type: 'POST',
     			  	data: formData,  
     	            dataType: 'JSON',  
@@ -410,7 +410,7 @@
 	 			var answerId = event.target.dataset.answerId;
 	 			var $target = $(event.target);
 	 			zeroModal.confirm("是否删除？", function() {
-					$.post("/lagsms/answer/" + answerId + "/del", function() {
+					$.post("http://localhost:8080/Tax/answer/" + answerId + "/del", function() {
 						$target.parent('div').parent('li').parent('ul').remove();
 					})
 					zeroModal.alert("删除成功！")

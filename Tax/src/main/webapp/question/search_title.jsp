@@ -9,16 +9,16 @@
 <head>
 	<title>安徽省国家税务局税企互助交流平台</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-  	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
-  	<script type="text/javascript" src="/lagsms/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
-  	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
-  	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-  	<link rel="stylesheet" href="/lagsms/resources/css/questions.css">
-	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/header/header.css"/>	
-	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/footer.css"/>
-  	<link rel="stylesheet" href="/lagsms/resources/css/query.css">
-  	<link rel="stylesheet" href="/lagsms/resources/zeroModal/zeroModal.css">
+	<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+  	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+  	<script type="text/javascript" src="http://localhost:8080/Tax/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
+  	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
+  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/questions.css">
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/header/header.css"/>	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/footer.css"/>
+  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/query.css">
+  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/zeroModal/zeroModal.css">
 </head>
 <body>
 	<!-- header start -->
@@ -35,7 +35,7 @@
 		</div>
 		<div class="liuan_main_headerContent">
 			<div class="liuan_main_search pr">
-				<form action="/lagsms/questions/search" id="quesSearchForm">
+				<form action="http://localhost:8080/Tax/questions/search" id="quesSearchForm">
 					<input name="title" placeholder="请输入您所需要的内容"
 						value="11" style="width: 912px;" /> <input
 						name="majorCategory" type="hidden"
@@ -193,7 +193,7 @@
 				var $starCount = $target.parent("ul").find('.starCount');
 				var target = $target.data("target");
 				var targetId = $target.data("target-id");
-				$.post("/lagsms/star",{
+				$.post("http://localhost:8080/Tax/star",{
 						target: target,
 						targetId: targetId
 					},function(data) {
@@ -246,7 +246,7 @@
 			var userId='user_1530497245745';
 			var questionIds = [];
 			var target = 'question';
-			 $.get('/lagsms/star/check',{
+			 $.get('http://localhost:8080/Tax/star/check',{
 				 target: target,
 				 userId: userId,
 				 t: questionIds
@@ -302,7 +302,7 @@
 			if(userId==='null'){
 				zeroModal.alert('请登陆用户!');
 			}else{
-				 window.location.href='/lagsms/question/addConsulting';
+				 window.location.href='http://localhost:8080/Tax/question/addConsulting';
 			}
 	  }
 	</script>

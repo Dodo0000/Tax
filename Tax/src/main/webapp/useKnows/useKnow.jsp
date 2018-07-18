@@ -8,12 +8,12 @@
 	<title>安徽省国家税务局税企互助交流平台</title>
 	<meta name="viewport" content="width=device-width"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="/lagsms/resources/easyui/jquery.min.js"></script>
-	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
-	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/common.css"/>
-	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/fotter/useKnow.css"/>
-	<script type="text/javascript" src="/lagsms/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
-  	<link rel="stylesheet" href="/lagsms/resources/zeroModal/zeroModal.css"/>
+	<script type="text/javascript" src="http://localhost:8080/Tax/resources/easyui/jquery.min.js"></script>
+	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/common.css"/>
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/fotter/useKnow.css"/>
+	<script type="text/javascript" src="http://localhost:8080/Tax/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
+  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/zeroModal/zeroModal.css"/>
 </head>
 <body>
 <!-- header start -->
@@ -28,8 +28,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="width=device-width" name="viewport">
 <script type="text/javascript"
-	src="/lagsms/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
-<link rel="stylesheet" href="/lagsms/resources/zeroModal/zeroModal.css">
+	src="http://localhost:8080/Tax/resources/zeroModal/zeroModal.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="http://localhost:8080/Tax/resources/zeroModal/zeroModal.css">
 <title>Insert title here</title>
 <style type="text/css">
 
@@ -49,7 +49,7 @@ body {
 .header .logo {
 	width: 614px;
 	height: 42px;
-	background: url(/lagsms/resources/image/home/logo.png) no-repeat;
+	background: url(http://localhost:8080/Tax/resources/image/home/logo.png) no-repeat;
 	position: relative;
 	background-size: 100% 100%;
 	margin: 30px 30px;
@@ -177,7 +177,7 @@ body {
 	.header .logo {
 		width: 720px;
 		height: 34px;
-		background: url(/lagsms/resources/image/header/520.png) no-repeat;
+		background: url(http://localhost:8080/Tax/resources/image/header/520.png) no-repeat;
 		position: relative;
 		background-size: 100% 100%;
 		margin: 35px 30px;
@@ -193,7 +193,7 @@ body {
 	.header .logo {
 	   width: 720px;
 		height: 34px;
-		background: url(/lagsms/resources/image/header/520.png) no-repeat;
+		background: url(http://localhost:8080/Tax/resources/image/header/520.png) no-repeat;
 		position: relative;
 		background-size: 100% 100%;
 		margin: 35px 30px;
@@ -209,7 +209,7 @@ body {
 	.header .logo {
 		width: 640px;
 		height: 32px;
-		background: url(/lagsms/resources/image/header/490.png) no-repeat;
+		background: url(http://localhost:8080/Tax/resources/image/header/490.png) no-repeat;
 		position: relative;
 		background-size: 100% 100%;
 		margin: 35px 30px;
@@ -225,7 +225,7 @@ body {
 	.header .logo {
 		width: 480px;
 		height: 24px;
-		background: url(/lagsms/resources/image/header/380.png) no-repeat;
+		background: url(http://localhost:8080/Tax/resources/image/header/380.png) no-repeat;
 		position: relative;
 		background-size: 100% 100%;
 		margin: 40px 35px;
@@ -246,16 +246,16 @@ body {
 		<div class="logo"></div>
 		<div class="nav">
 			<ul id="tabs_nav" style="display:flex;justify-content:space-around;">
-				<li id="oneplus"><a href="/lagsms/index" id="one">首页</a><span class="underline"></span></li>
-				<li id="twoplus"><a href="/lagsms/questions" id="two">咨询</a></li>
-				<li id="threeplus"><a href="/lagsms/posts?type=0" id="three">经验分享</a></li>
-				<li id="fourplus"><a href="/lagsms/posts?type=1" id="four">专业解读</a></li>
-				<li id="fiveplus"><a href="/lagsms/usersZone" id="five">用户专区</a></li>
-				<form action="/lagsms/question/search">
+				<li id="oneplus"><a href="http://localhost:8080/Tax/index" id="one">首页</a><span class="underline"></span></li>
+				<li id="twoplus"><a href="http://localhost:8080/Tax/questions" id="two">咨询</a></li>
+				<li id="threeplus"><a href="http://localhost:8080/Tax/posts?type=0" id="three">经验分享</a></li>
+				<li id="fourplus"><a href="http://localhost:8080/Tax/posts?type=1" id="four">专业解读</a></li>
+				<li id="fiveplus"><a href="http://localhost:8080/Tax/usersZone" id="five">用户专区</a></li>
+				<form action="http://localhost:8080/Tax/question/search">
 					<li class="herader_search">
 						<div class="s_wrap">
-						    <a href="/lagsms/questions/search">
-						   	 <img alt="" src="/lagsms/resources/image/icon/fdj.png" class="magnifying">
+						    <a href="http://localhost:8080/Tax/questions/search">
+						   	 <img alt="" src="http://localhost:8080/Tax/resources/image/icon/fdj.png" class="magnifying">
 						    </a>
 							<input type="text" id="head_srarch" name="title" class="ssearch" value="搜索问题…"/>
 						</div>
@@ -271,16 +271,16 @@ body {
 				
 					
 						<!--  未登录状态 -->
-						<a href="/lagsms/login" style="padding: 0 50px;">
-							<img src="/lagsms/resources/image/header/u198.png" class="person">
+						<a href="http://localhost:8080/Tax/login" style="padding: 0 50px;">
+							<img src="http://localhost:8080/Tax/resources/image/header/u198.png" class="person">
 						</a>
 						<div style="position: absolute; left: 20px; line-height: 0px;">
 							<div style="line-height: 13px;">
-								<a href="/lagsms/login">登录</a>
+								<a href="http://localhost:8080/Tax/login">登录</a>
 							</div>
 							<div style="line-height: 13px;">&nbsp;/&nbsp;</div>
 							<div style="text-align: left; line-height: 13px;">
-								<a href="/lagsms/register">注册</a>
+								<a href="http://localhost:8080/Tax/register">注册</a>
 							</div>
 						</div>
 					
@@ -445,17 +445,17 @@ body {
 	}
 	.liuan_footers_content ul:nth-child(1) li:nth-child(1){
 		float:left;
-		background:url(/lagsms/resources/image/home/footer_notice.png) left 30px center  no-repeat;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_notice.png) left 30px center  no-repeat;
 		background-size: 25% 61%;
 	}
 	.liuan_footers_content ul:nth-child(1) li:nth-child(2){
 		float:left;
-		background:url(/lagsms/resources/image/home/footer_proposal.png) left 28px center no-repeat;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_proposal.png) left 28px center no-repeat;
 		background-size: 25% 61%;
 	}
 	.liuan_footers_content ul:nth-child(1) li:nth-child(3){
 		float:left;
-		background:url(/lagsms/resources/image/home/footer_contact.png) left 28px center  no-repeat;
+		background:url(http://localhost:8080/Tax/resources/image/home/footer_contact.png) left 28px center  no-repeat;
 		background-size: 25% 61%;
 	}
 	.luan_use{
@@ -467,9 +467,9 @@ body {
 		<div class="liuan_footers_content">
 			<ul class="luan_use">
 				
-				<li><a href="/lagsms/useKnows/useKnow"  target="_blank">使用须知</a></li>
-				<li><a href="/lagsms/useKnows/useHelp" target="_blank">网站帮助</a></li>
-				<li><a href="/lagsms/login/contactUs" target="_blank">联系我们</a></li>
+				<li><a href="http://localhost:8080/Tax/useKnows/useKnow"  target="_blank">使用须知</a></li>
+				<li><a href="http://localhost:8080/Tax/useKnows/useHelp" target="_blank">网站帮助</a></li>
+				<li><a href="http://localhost:8080/Tax/login/contactUs" target="_blank">联系我们</a></li>
 			</ul>
 			<ul>
 				

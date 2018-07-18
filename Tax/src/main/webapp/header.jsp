@@ -52,46 +52,19 @@
 						<div style="position: absolute; left: 20px; line-height: 0px;">
 							<!-- 若js判断登陆 这里a内容改为 用户名字 href改为userzone -->
 							<div style="line-height: 13px;">
-								<a id='login_area' href="http://localhost:8080/Tax/login.jsp">登录</a>
+								<a id='login_area' href="http://localhost:8080/Tax/guest/login.jsp">登录</a>
 								<a href="#" id="welcome_area"></a>
 							</div>
 							<div style="line-height: 13px;">&nbsp;/&nbsp;</div>
 							<!-- 若js判断登陆 这里a内容改为 退出 href改为logut -->
 							<div style="text-align: left; line-height: 13px;">
-								<a id='register_area' href="http://localhost:8080/Tax/register.jsp">注册</a>
+								<a id='register_area' href="http://localhost:8080/Tax/guest/register.jsp">注册</a>
 								<a href="javascript:logout()" id="logout_area">退出</a>
 							</div>
 						</div>	
 			</div>
 		</div>
 	</div>
-		
-	<!--   用户已登录     
-		<div class="but">
-			 
-				<div class="your_meaasge" id="messages">
-					<a id="news"  href="http://localhost:8080/Tax/notifies/notificationPopWin" class="newss" title="新消息未读数量"></a>
-					  <a href="http://localhost:8080/Tax/notifies/notificationPopWin" >
-						<img src="http://localhost:8080/Tax/resources/image/new-message.png" title="新消息提醒" class="message">
-					</a> 
-				</div>
-			 
-			<div class="but_content">				
-						<a href="http://localhost:8080/Tax/users/user_1530497245745/zone" style="padding: 0 50px;">
-							<img src="http://localhost:8080/Tax/resources/image/header/u198.png" style="width: 35px; height: 33px; margin-top: 20px;">
-						</a>
-						<div class="all_user_messge" style="position:absolute;right:16%;">
-							<div style="color: white; line-height: 13px;" class="user_text">
-								<a href="http://localhost:8080/Tax/users/user_1530497245745/zone" style="font-size: 15px;"  class="user_id">Linbeii</a>
-							</div>
-							<div class="user_text_one" style="line-height: 13px;">/</div>
-							<div class="user_text_two" style="line-height: 13px;">
-								<a href="http://localhost:8080/Tax/logout">退出</a>
-							</div> 
-						</div>	
-			</div>
-		</div>
-		-->
 		
 		<!-- 用户登录  -->
 		<script>
@@ -107,7 +80,7 @@
 					type:'post'
 				});
 				alert("goodbye");
-				location.reload();
+				window.location.href='http://localhost:8080/Tax';
 			}
 			
 			/**在这里判断用户是否已经登陆了*/
@@ -123,7 +96,7 @@
 						hasLogin = true;
 						//alert("has login");
 						$.ajax({
-							url:'guest/decode',
+							url:'http://localhost:8080/Tax/guest/decode',
 							type:'get',
 							data:{
 								str:info[1].trim()
@@ -147,7 +120,7 @@
 					$('#welcome_area').show();
 					$('#logout_area').show();
 					//设置用户那个圆形头像的连接
-					$('.but_content').children('a:eq(0)').attr('href','http://localhost:8080/Tax/usersZone.jsp'); 
+					$('.but_content').children('a:eq(0)').attr('href','http://localhost:8080/Tax/user/personalCenter.jsp'); 
 				}
 				else {
 					$('#login_area').show();
@@ -155,7 +128,7 @@
 					$('#welcome_area').hide();
 					$('#logout_area').hide();
 					//设置用户那个圆形头像的连接
-					$('.but_content').children('a:eq(0)').attr('href','http://localhost:8080/Tax/login.jsp'); 
+					$('.but_content').children('a:eq(0)').attr('href','http://localhost:8080/Tax/guest/login.jsp'); 
 				}
 			}
 		</script>

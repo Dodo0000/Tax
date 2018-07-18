@@ -12,13 +12,13 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/sendInvite.css">
-		<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/header/header.css"/>	
-     	<link rel="stylesheet" type="text/css" href="/lagsms/resources/css/footer.css"/>
-		<script src="/lagsms/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
-	  	<script src="/lagsms/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
-	  	<link rel="stylesheet" href="/lagsms/resources/css/paging.css">
-	  	<link rel="icon" href="/lagsms/resources/image/home/favicon.gif" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/sendInvite.css">
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/header/header.css"/>	
+     	<link rel="stylesheet" type="text/css" href="http://localhost:8080/Tax/resources/css/footer.css"/>
+		<script src="http://localhost:8080/Tax/resources/js/jquery-3.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+	  	<script src="http://localhost:8080/Tax/resources/js/paging.js" type="text/javascript" charset="utf-8"></script>
+	  	<link rel="stylesheet" href="http://localhost:8080/Tax/resources/css/paging.css">
+	  	<link rel="icon" href="http://localhost:8080/Tax/resources/image/home/favicon.gif" type="image/x-icon" />
 	</head>
 	
 	<body>
@@ -138,7 +138,7 @@
 	            slideSpeed: 600, 							// 缓动速度。单位毫秒
 	            jump: true,									// 是否支持跳转
 	            callback: function(pageOne) { 				// 回调函数
-	                $.get("/lagsms/invitations",{
+	                $.get("http://localhost:8080/Tax/invitations",{
 		                	page: pageOne,
 		                	rows: 10,
 		                	type: 'out'
@@ -153,9 +153,9 @@
 			                	}
 			                	var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				}
 			                	return '<ul>' +
 			                				'<li>' + userAvatar + '<span>&nbsp;标题：' + value.questionPo.title + '</span></li>' +
@@ -165,7 +165,7 @@
 										'<li>' +
 											'<span>' + value.questionPo.createdTime + '</span>'+
 										'</li>' +
-										'<li><a href="/lagsms/questions/' + value.questionPo.id + '/details"><span>内容：</span><span>' + value.questionPo.content + '</span></a></li>' +
+										'<li><a href="http://localhost:8080/Tax/questions/' + value.questionPo.id + '/details"><span>内容：</span><span>' + value.questionPo.content + '</span></a></li>' +
 										'<li><span>被邀请人：' + value.invitedUser.userName + '</span></li>' +
 									'</ul>'
 		            		});
@@ -184,7 +184,7 @@
 	            slideSpeed: 600, 									// 缓动速度。单位毫秒
 	            jump: true,											// 是否支持跳转
 	            callback: function(pageTwo) { 						// 回调函数
-	                $.get("/lagsms/invitations", {
+	                $.get("http://localhost:8080/Tax/invitations", {
 		                	page: pageTwo,
 		                	rows: 10,
 		                	status: 0,
@@ -193,9 +193,9 @@
 		                	var dataHTML = data.map(function(value, index, array){
 		                		var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				}
 		                		return '<ul>' +
 		                					'<li>' + userAvatar + '<span>&nbsp;标题：' + value.questionPo.title + '</span></li>' +
@@ -205,7 +205,7 @@
 											'<li>' +
 												'<span>' + value.questionPo.createdTime + '</span>'+
 											'</li>' +
-											'<li><a href="/lagsms/invitation/' + value.questionId + '/details"><span>内容：</span><span>' + value.questionPo.content + '</span></a></li>' +
+											'<li><a href="http://localhost:8080/Tax/invitation/' + value.questionId + '/details"><span>内容：</span><span>' + value.questionPo.content + '</span></a></li>' +
 											'<li><span>被邀请人：' + value.invitedUser.userName + '</span></li>' +
 										'</ul>';
 		            		});
@@ -223,7 +223,7 @@
 	            slideSpeed: 600, 								// 缓动速度。单位毫秒
 	            jump: true,										// 是否支持跳转
 	            callback: function(pageThree) { 				// 回调函数
-	                $.get("/lagsms/invitations",{
+	                $.get("http://localhost:8080/Tax/invitations",{
 		                	page: pageThree,
 		                	rows: 10,
 		                	status: 1,
@@ -232,9 +232,9 @@
 		                	var dataHTML = data.map(function(value, index, array) {
 		                		var userAvatar;
 	            				if(value.user && value.user.avatar) {
-	            					userAvatar = '<img src="/lagsms/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/file/showPicFile?fileId='+ value.user.avatar +'" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				} else {
-	            					userAvatar = '<img src="/lagsms/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
+	            					userAvatar = '<img src="http://localhost:8080/Tax/resources/image/headport.png" alt="Avatar" style="width:55px;vertical-align:middle;">';
 	            				}
 		                		return '<ul>' +
 		                					'<li>' + userAvatar + '<span>&nbsp;标题：' + value.questionPo.title + '</span></li>' +
@@ -244,7 +244,7 @@
 											'<li>' +
 												'<span>' + value.questionPo.createdTime + '</span>'+
 											'</li>' +
-											'<li><a href="/lagsms/invitation/' + value.questionId + '/details"><span>内容：</span><span>' + value.questionPo.content + '</span></a></li>' +
+											'<li><a href="http://localhost:8080/Tax/invitation/' + value.questionId + '/details"><span>内容：</span><span>' + value.questionPo.content + '</span></a></li>' +
 											'<li><span>被邀请人：' + value.invitedUser.userName + '</span></li>' +
 										'</ul>'
 		            		});

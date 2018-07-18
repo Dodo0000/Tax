@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartRequest;
 import org.tax.VO.LoginInfo;
 import org.tax.VO.PasswordModification;
+import org.tax.VO.PublishQuestionInfo;
 import org.tax.model.TaxAnswer;
 import org.tax.model.TaxQuestion;
 import org.tax.model.TaxUser;
@@ -20,6 +21,11 @@ import org.tax.model.TaxUser;
  * 退出
  * */
 public interface TaxUserService {
+	/**从cookie中获取uid username password查询并返回信息给前端*/
+	String getUser(HttpServletRequest request, HttpServletResponse response);
+	
+	/**根据用户输入的type形式为 1;2;3;5 返回score最高的3个最多*/
+	String getRelaventUsers(String questionTypes);
 	
 	String logout(HttpServletRequest request, HttpServletResponse response);
 	
@@ -29,7 +35,7 @@ public interface TaxUserService {
 	String modifyPassword(PasswordModification info, HttpServletRequest request);
 	
 	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
-	String publishQuestion(TaxQuestion question, HttpServletRequest request);
+	String publishQuestion(PublishQuestionInfo info, HttpServletRequest request);
 	
 	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
 	String publishAnswer(int questionId, TaxAnswer answer, HttpServletRequest request);
