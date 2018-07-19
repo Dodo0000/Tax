@@ -35,7 +35,7 @@ public interface TaxUserService {
 	String modifyPassword(PasswordModification info, HttpServletRequest request);
 	
 	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
-	String publishQuestion(PublishQuestionInfo info, HttpServletRequest request);
+	String publishQuestion(TaxQuestion question, String[] invitedUserIdArr, HttpServletRequest request);
 	
 	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
 	String publishAnswer(int questionId, TaxAnswer answer, HttpServletRequest request);

@@ -464,7 +464,7 @@ body::-moz-scrollbar {
 				var title = template.children('li:eq(0)').children('a:eq(0)');
 				title.text(questionList[i]['title']);
 				/**这里换了页面链接要修改一下*/
-				title.attr('href', 'http://localhost:8080/Tax/questions.jsp'
+				title.attr('href', 'http://localhost:8080/Tax/question_details.jsp'
 						+ '?questionId=' + questionList[i]['id']);
 				//设置publishDateStr
 				var publishDateStr = template.children('li:eq(1)').children(

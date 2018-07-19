@@ -288,40 +288,53 @@ public class TaxUserServiceImpl implements TaxUserService {
 	 * 细化检验各个字段
 	 * */
 	@Override
-	public String publishQuestion(PublishQuestionInfo info, HttpServletRequest request) {
+	public synchronized String publishQuestion(TaxQuestion question, String[] invitedUserIdArr, HttpServletRequest request) {
+		LOGGER.debug("************debug in publishQuestion");
+		LOGGER.debug("************debug publishQuestionInfo title: "+question.getTitle());
+		LOGGER.debug("************debug publishQuestionInfo content: "+question.getContent());
+		LOGGER.debug("************debug publishQuestionInfo type: "+question.getType());
+		LOGGER.debug("************debug publishQuestionInfo prize: "+question.getPrize());
 		Result result = new Result();
 		//Question id 自增那么不需要管直接插入即可
 		//设置问题的authorId
 		//2018/7/12:wyhong
-		if(info.getTitle()==null || info.getTitle().equals("") || info.getTitle().split("\\s+").length == 0){
+		if(question.getTitle()==null || question.getTitle().equals("") || question.getTitle().split("\\s+").length == 0){
 			result.setMessage(Message.PUBLISH_QUESTION_EMPTY_TITLE);
 			result.setStatus(StatusCode.PUBLISH_QUESTION_EMPTY_TITLE);
 			return JSON.toJSONString(result);
 		}
-		else if(info.getContent()==null || info.getContent().equals("") || info.getContent().split("\\s+").length == 0){
+		else if(question.getContent()==null || question.getContent().equals("") || question.getContent().split("\\s+").length == 0){
 			result.setMessage(Message.PUBLISH_QUESTION_EMPTY_CONTENT);
 			result.setStatus(StatusCode.PUBLISH_QUESTION_EMPTY_CONTENT);
 			return JSON.toJSONString(result);
 		}
 		/**设置问题*/
-		TaxQuestion question = new TaxQuestion();
 		//设置问题作者id
 		TaxUser author = getUserFromRequest(request);
 		question.setAuthorId(author.getId());
-		//设置问题标题
-		question.setTitle(info.getTitle());
-		//设置问题内容
-		question.setContent(info.getContent());
-		//设置问题种类列表
-		question.setType(info.getType());
 		//设置问题的publishDate
 		question.setPublishDate(new Date());
+		/**先把问题插入，再取出最后一个插入的questionId
+		 * 这里修改了mapper的insertSelective
+		 * */
+		mapperFactory.getTaxQuestionMapper().insertSelective(question);
+		/**
+		 * 方案二直接用mapper中外加的 selectLastInsetId （感觉没那么安全）
+		 * */
+		
 		/**select last insert id*/
 		/**设置邀请表*/
-		if(info.getInvitedUserIdArr()!=null && info.getInvitedUserIdArr().length!=0){
-			for(String invitedUserId : info.getInvitedUserIdArr()){
+		if(invitedUserIdArr!=null && invitedUserIdArr.length!=0){
+			for(String invitedUserId : invitedUserIdArr){
 				TaxInvitation invitation = new TaxInvitation();
-				
+				//设置被被邀请回答的用户id
+				invitation.setUserId(invitedUserId);
+				LOGGER.debug("************debug publishQuestionInfo invitedUserId: "+invitedUserId);
+				//设置问题id
+				invitation.setQuestionId(question.getId());
+				LOGGER.debug("************debug publishQuestionInfo questionId: "+question.getId());
+				//把这个invitation插入
+				mapperFactory.getTaxInvitationMapper().insert(invitation);
 			}
 		}
 		return JSON.toJSONString(result);

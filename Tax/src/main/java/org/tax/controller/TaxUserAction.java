@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartRequest;
 import org.tax.VO.PasswordModification;
+import org.tax.VO.PublishQuestionInfo;
 import org.tax.constant.MediaType;
 import org.tax.model.TaxAnswer;
 import org.tax.model.TaxQuestion;
@@ -67,10 +69,11 @@ public class TaxUserAction {
 		return taxUserService.modifyPassword(info, request);
 	}
 	
-	@RequestMapping(value="/question",method=RequestMethod.POST,produces=JSON)
+	@RequestMapping(value="/publishQuestion",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody
-	public String publishQuestion(TaxQuestion question, HttpServletRequest request) {
-		return taxUserService.publishQuestion(question, request);
+	/**告诉springmvc 看console全名*/
+	public String publishQuestion(TaxQuestion question, @RequestParam("invitedUserIdArr[]") String[] invitedUserIdArr, HttpServletRequest request) {
+		return taxUserService.publishQuestion(question, invitedUserIdArr, request);
 	}
 	
 //	@RequestMapping(value="/answer",method=RequestMethod.POST,produces=JSON)

@@ -19,6 +19,11 @@
     <result column="favourite" jdbcType="INTEGER" property="favourite" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
+  <!-- 自己加 -->
+  <select id="selectLastInsertId"  resultType="java.lang.Integer">
+        SELECT LAST_INSERT_ID()
+   </select>
+  
   <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbg.generated
@@ -118,6 +123,9 @@
     <if test="limitClause != null">
       limit ${limitClause}
     </if>
+    
+    
+    
   </select>
   
   <!--  
@@ -225,6 +233,11 @@
         #{status,jdbcType=INTEGER},
       </if>
     </trim>
+    <!-- 自己加 -->
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+    
   </insert>
   <select id="countByExample" parameterType="org.tax.model.TaxQuestionExample" resultType="java.lang.Long">
     <!--

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.tax.dao.TaxAnswerMapper;
 import org.tax.dao.TaxExpertMapper;
 import org.tax.dao.TaxFavouriteMapper;
+import org.tax.dao.TaxInvitationMapper;
 import org.tax.dao.TaxProMapper;
 import org.tax.dao.TaxQuestionMapper;
 import org.tax.dao.TaxShareMapper;
@@ -34,6 +35,8 @@ public class MapperFactory {
 	private TaxFavouriteMapper taxFavouriteMapper;
 	@Autowired
 	private TaxUserProMapper taxUserProMapper;
+	@Autowired
+	private TaxInvitationMapper taxInvitationMapper;
 	
 //	public TaxUserMapper getTaxUserMapper() {
 //		return taxUserMapper;
