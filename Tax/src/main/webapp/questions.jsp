@@ -371,6 +371,7 @@ body::-moz-scrollbar {
 													initLoad : false,
 													/**可以通过更改这个回调函数来获取分页信息*/
 													callback : function(page) { // 回调函数
+														//alert("callback: "+page);
 														//alert('paging callback');
 														//alert('current location: '+location);
 														//alert('current location.href: '+location.href);//http://localhost:8080/Tax/questions.jsp

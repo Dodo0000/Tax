@@ -82,10 +82,10 @@ public class TaxUserAction {
 //		return taxUserService.publishAnswer(answer, request);
 //	}
 	/**这里修正了一下 确保问题的确认是真正登陆且问题发布者才能更改*/
-	@RequestMapping(value="/question/{questionId}/answer",method=RequestMethod.POST,produces=JSON)
+	@RequestMapping(value="/publishAnswer",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody
-	public String publishAnswer(@PathVariable("questionId") int questionId, TaxAnswer answer, HttpServletRequest request) {
-		return taxUserService.publishAnswer(questionId, answer, request);
+	public String publishAnswer(TaxAnswer answer, HttpServletRequest request) {
+		return taxUserService.publishAnswer(answer, request);
 	}
 	
 	@RequestMapping(value="/confirm/{questionId}",method=RequestMethod.POST,produces=JSON)

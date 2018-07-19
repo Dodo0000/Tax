@@ -19,4 +19,5 @@ public class StatusCode {
 	public static final String LOGOUT_COOKIE_EXCEPTION = "400";
 	public static final String PUBLISH_QUESTION_EMPTY_TITLE = "400";
 	public static final String PUBLISH_QUESTION_EMPTY_CONTENT = "400";
+	public static final String PUBLISH_ANSWER_EMPTY_CONTENT = "400";
 }

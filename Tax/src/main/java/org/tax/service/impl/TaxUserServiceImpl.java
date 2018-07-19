@@ -361,22 +361,31 @@ public class TaxUserServiceImpl implements TaxUserService {
 	}
 
 	/**以后修改为从鸿哥的Factory获取Session
-	 * 更改需要：
-	 * 细化检验各个字段
-	 * 还应该从url中传入一个questionId
+	 * 前端封装好了questionId title content字段 
+	 * 需要先检验 questionId是否合法 title content不为空
+	 * 还要设置publishDate
 	 * */
 	@Override
-	public String publishAnswer(int questionId, TaxAnswer answer, HttpServletRequest request) {
+	public String publishAnswer(TaxAnswer answer, HttpServletRequest request) {
+		LOGGER.debug("********debug in publishAnswer Section: ");
+		LOGGER.debug("********debug in publishAnswer answer"+answer.getQuestionId());
+		LOGGER.debug("********debug in publishAnswer content"+answer.getContent());
 		Result result = new Result();
-		//Question id 自增那么不需要管直接插入即可
-		//设置问题的authorId
-//		TaxUser author = (TaxUser) request.getSession().getAttribute(SessionConst.USER);
-		//2018/7/12:wyhong
+		/**检验封装过来的answer是否合法*/
+		if(answer.getContent()==null || answer.getContent().equals("") || answer.getContent().split("\\s+").length==0){
+			result.setMessage(Message.PUBLISH_ANSWER_EMPTY_CONTENT);
+			result.setStatus(StatusCode.PUBLISH_ANSWER_EMPTY_CONTENT);
+			return JSON.toJSONString(result);
+		}
 		TaxUser author = getUserFromRequest(request);
+		if(author==null){
+			result.setMessage(Message.PLEASE_LOGIN);
+			result.setStatus(StatusCode.PLEASE_LOGIN);
+			return JSON.toJSONString(result);
+		}
+		LOGGER.debug("********debug in publishAnswer authorId"+author.getId());
 		//设置答案作者id
 		answer.setAuthorId(author.getId());
-		//设置问题id
-		answer.setQuestionId(questionId);
 		//设置问题的publishDate
 		answer.setPublishDate(new Date());
 		//存放问题

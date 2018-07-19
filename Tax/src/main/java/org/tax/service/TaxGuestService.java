@@ -47,5 +47,10 @@ public interface TaxGuestService {
 	String getShares(int page);
 
 	String getArticlesOfExperts(int page);
-
+	
+	/**根据qid获取问题详情*/
+	String getQuestionDetail(int questionId);
+	
+	/**根据qid和page获取相应的answer分页信息*/
+	String getQuestionAnswers(int questionId, int page);
 }

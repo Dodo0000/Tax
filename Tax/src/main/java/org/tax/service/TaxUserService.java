@@ -38,7 +38,7 @@ public interface TaxUserService {
 	String publishQuestion(TaxQuestion question, String[] invitedUserIdArr, HttpServletRequest request);
 	
 	//加了个参数HttpServletRequest request 获取当前用户 以后用鸿哥SessionFactory获取即可
-	String publishAnswer(int questionId, TaxAnswer answer, HttpServletRequest request);
+	String publishAnswer(TaxAnswer answer, HttpServletRequest request);
 	
 	//这里要防止还要检验该问题id是否是正确的用户确认
 	String confirmSolution(int questionId, HttpServletRequest request);

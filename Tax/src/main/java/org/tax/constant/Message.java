@@ -19,4 +19,5 @@ public interface Message {
 	public static final String LOGOUT_COOKIE_EXCEPTION = "logout cookie exception";
 	public static final String PUBLISH_QUESTION_EMPTY_TITLE = "empty title";
 	public static final String PUBLISH_QUESTION_EMPTY_CONTENT = "empty content";
+	public static final String PUBLISH_ANSWER_EMPTY_CONTENT = "empty content";
 }

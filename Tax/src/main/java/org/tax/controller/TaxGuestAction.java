@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.tax.VO.LoginInfo;
 import org.tax.constant.MediaType;
+import org.tax.model.TaxAnswer;
 import org.tax.model.TaxUser;
 import org.tax.service.TaxGuestService;
 import org.tax.service.impl.TaxGuestServiceImpl;
@@ -88,7 +89,22 @@ public class TaxGuestAction {
 			HttpServletResponse response) {
 		return taxGuestService.login(loginInfo, request, response);
 	}
-
+	
+	/**根据qid获取question*/
+	@RequestMapping(value = "/getQuestionDetail", method = RequestMethod.POST, produces = JSON)
+	@ResponseBody
+	public String getQuestionDetail(int questionId) {
+		return taxGuestService.getQuestionDetail(questionId);
+	}
+	
+	/**发布回答，前端传qid content*/
+	@RequestMapping(value = "/getQuestionAnswers", method = RequestMethod.POST, produces = JSON)
+	@ResponseBody
+	public String publishAnswer(int questionId, int page) {
+		return taxGuestService.getQuestionAnswers(questionId, page);
+	}
+	
+	
 	@RequestMapping(value = "/search/{keyword}/{proId}/{page}", method = {
 			RequestMethod.GET, RequestMethod.POST }, produces = JSON)
 	@ResponseBody
