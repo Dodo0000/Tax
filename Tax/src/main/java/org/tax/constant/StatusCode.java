@@ -20,4 +20,5 @@ public class StatusCode {
 	public static final String PUBLISH_QUESTION_EMPTY_TITLE = "400";
 	public static final String PUBLISH_QUESTION_EMPTY_CONTENT = "400";
 	public static final String PUBLISH_ANSWER_EMPTY_CONTENT = "400";
+	public static final String DUPLICATE_COLLECT = "400";
 }

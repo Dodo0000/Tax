@@ -165,6 +165,11 @@
 	<!-- 底部内容end -->
 	<script type="text/javascript">
 		
+		/**ready函数*/
+		$(function(){
+			selectedMajor();
+		});
+		
 		/**提交问题*/
 		function submitQuestion(){
 			alert("submitQuestion");
@@ -209,9 +214,13 @@
         				alert("标题不能为空");
         				window.location.reload();
         			}
-        			else if(data['message']='empty content'){
+        			else if(data['message']=='empty content'){
         				alert("内容不能为空");
         				window.location.reload();
+        			}
+        			else if(data['message']=='permission denied'){
+        				alert("请先登陆");
+        				window.location.href='http://localhost:8080/Tax/guest/login.jsp';
         			}
         			else{
         				alert("未处理状态");
@@ -243,6 +252,7 @@
 		// 存放所有选中的mojor
 		var selectedMajors = new Set();
 		function selectedMajor() {
+			//alert("selectMajor");
 			// 为了兼容firefox
 			var e =  window.event || arguments.callee.caller.arguments[0];
 			if(e.target.checked) {
@@ -280,8 +290,17 @@
 								template_parent.children('label').last().after(template);
 							}
 						}
+						else if(data['message']=='permission denied'){
+							alert("请先登陆");
+							window.location.href='http://localhost:8080/Tax/guest/login.jsp';
+						}
+						else if(data['message']=='empty query result'){
+							//先清空之前填写的candidate-template-clone
+							//alert("empty query result");
+							$('label').remove('.candidate-template-clone');
+						}
 						else{
-							//不处理
+							alert("未处理问题");
 						}
 					},
 					error:function(data){
@@ -289,6 +308,10 @@
 						console.log(data);
 					},
 				});
+			}
+			else if(selectedMajors.size==0){
+				//先清空之前填写的candidate-template-clone
+				$('label').remove('.candidate-template-clone');
 			}
 		}
 	

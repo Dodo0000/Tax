@@ -419,8 +419,11 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		if (keyword != null || type != null) {
 			try {
 				// keyword转成utf-8 type转成utf-8
-				keyword = new String(keyword.getBytes("iso8859-1"), "UTF-8");
-				type = new String(type.getBytes("iso8859-1"), "UTF-8");
+				LOGGER.debug("**********debug in search origin keyword: " + keyword);
+				LOGGER.debug("**********debug in search origin type: " + type);
+				keyword = URLDecoder.decode(keyword, "UTF-8");
+				//keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
+				//type = new String(type.getBytes("ISO-8859-1"), "UTF-8");
 				/**
 				 * 测试强行把keyword置为null 因为这里我的action中要有keyword和page才有 进到这里
 				 * 

@@ -65,9 +65,14 @@
 					    <div class="avatar-view" title="Change the avatar">
 						    
 							    
-							    
-							        <img src="http://localhost:8080/Tax/resources/image/u2815.png" id="avatarImg" alt="Avatar">
-							    
+							    	<!-- 提交头像 -->
+							        <!-- <img src="http://localhost:8080/Tax/resources/image/u2815.png" id="avatarImg" alt="Avatar"> -->
+							    	<img  id="avatarImgEdit" alt="Avatar">
+							    	<form id="avatar-form" method="post" enctype="multipart/form-data">
+						   				<input id="inputAvatar" name="avatar" type="file"></input>
+						   				<button type="button" onclick="changeAvatar()">更换</button>
+						   			</form>
+						   			
 							
 					    </div>
 					    <!-- Cropping modal -->
@@ -309,7 +314,61 @@
 		//ready
 		$(function() {
 			checkLoginAndInitEditForm();
+			initAvatarEdit();
+			//getUserIdFromCookie();//检查一下而已
 		});
+		
+		function changeAvatar(){
+			alert("更改头像");
+			var userId = getUserIdFromCookie();
+			alert("userId="+userId);
+			if(userId==null){
+				alert("invalid cookie");
+				window.location.href='http://localhost:8080/Tax/guest/login.jsp';
+			}
+			else{
+				$('#avatar-form').ajaxSubmit({
+					url:'http://localhost:8080/Tax/user/avatar'+'/'+userId,
+					type:'post',
+					success:function(data){
+						if(data['message']=='success'){
+							//reload一下刷新头像
+							alert("success");
+							window.location.reload();
+						}
+						else{
+							alert("未处理");
+						}
+					},
+					error:function(data){
+						alert("服务器忙");
+						console.log(data);
+					}
+				});
+			}
+		}
+		
+		function getUserIdFromCookie(){
+			var cookies = document.cookie;
+			console.log("00000: "+cookies);
+			var cookieArr  = cookies.split(';');
+			for(var i in cookieArr){
+				//alert(cookieArr[i]);
+				var name = cookieArr[i].split('=')[0].trim();
+				console.log("name:"+name);
+				if(name=='_user'){
+					console.log("11111: "+cookieArr[i].split('=')[1].trim());
+					console.log("22222: "+cookieArr[i].split('=')[1].split('%3B')[0].trim());
+					return cookieArr[i].split('=')[1].split('%3B')[0].trim();
+				}
+			}
+			return null;
+		}
+		
+		/**根据用户设置头像*/
+		function initAvatarEdit(){
+			$('#avatarImgEdit').attr('src', 'http://localhost:8080/Tax/user/generateUserAvatar');
+		}
 		
 		/*
 		var boxObj = $('#selectMajor').find("input"); 

@@ -59,10 +59,13 @@ body::-moz-scrollbar {
 			<!-- 搜索 -->
 			<div class="liuan_main_search">
 				<form action="http://localhost:8080/Tax/questions/search">
-					<input name="title" placeholder="请输入您所需要的内容"
+					<input id="searchKeyword" name="title" placeholder="请输入您所需要的内容"
 						onfocus="if(this.value == this.defaultValue) this.value = ''"
 						onblur="if(this.value == '') this.value = this.defaultValue" />
-					<button type="submit" class="searchbtn"></button>
+					
+					<!-- 点击搜索的按钮 -->
+					<button id="searchButton" onclick="clickSearchButton()" type="button" class="searchbtn"></button>
+					
 				</form>
 				<!-- 点击我要咨询 -->
 				<button onclick="consult();" class="consultation">我要咨询</button>
@@ -74,125 +77,125 @@ body::-moz-scrollbar {
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040001">发票系统故障及操作指导</label>
+							onchange="selectQuesCategory();" value="1" name="majorCategory">发票系统故障及操作指导</label>
 					</li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040002">发票领购</label></li>
+							onchange="selectQuesCategory();" value="2" name="majorCategory">发票领购</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040003">发票代开</label></li>
+							onchange="selectQuesCategory();" value="3" name="majorCategory">发票代开</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040004">发票开具</label></li>
+							onchange="selectQuesCategory();" value="4" name="majorCategory">发票开具</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040005">红字增值税发票开具</label>
+							onchange="selectQuesCategory();" value="5" name="majorCategory">红字增值税发票开具</label>
 					</li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040006">申报有误能否作废</label>
+							onchange="selectQuesCategory();" value="6" name="majorCategory">申报有误能否作废</label>
 					</li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040007">一般纳税人资格</label></li>
+							onchange="selectQuesCategory();" value="7" name="majorCategory">一般纳税人资格</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040008">辅导期一般纳税人</label>
+							onchange="selectQuesCategory();" value="8" name="majorCategory">辅导期一般纳税人</label>
 					</li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040009">专用发票认证抵扣</label>
+							onchange="selectQuesCategory();" value="9" name="majorCategory">专用发票认证抵扣</label>
 					</li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040010">小规模纳税人增值税起征点是否有调整</label>
+							onchange="selectQuesCategory();" value="10" name="majorCategory">小规模纳税人增值税起征点是否有调整</label>
 					</li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040011">认定为一般纳税人之后是否可以转为小规模纳税人</label>
+							onchange="selectQuesCategory();" value="11" name="majorCategory">认定为一般纳税人之后是否可以转为小规模纳税人</label>
 					</li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040012">小规模纳税人自行开具的增值税专用发票如何填写申报表</label>
+							onchange="selectQuesCategory();" value="12" name="majorCategory">小规模纳税人自行开具的增值税专用发票如何填写申报表</label>
 					</li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040013">注销登记</label></li>
+							onchange="selectQuesCategory();" value="13" name="majorCategory">注销登记</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040014">发票检查</label></li>
+							onchange="selectQuesCategory();" value="14" name="majorCategory">发票检查</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040015">专用发票丢失</label></li>
+							onchange="selectQuesCategory();" value="15" name="majorCategory">专用发票丢失</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040016">征收率</label></li>
+							onchange="selectQuesCategory();" value="16" name="majorCategory">征收率</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040017">非国税业务</label></li>
+							onchange="selectQuesCategory();" value="17" name="majorCategory">非国税业务</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040018">信用等级</label></li>
+							onchange="selectQuesCategory();" value="18" name="majorCategory">信用等级</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040019">营改增</label></li>
+							onchange="selectQuesCategory();" value="19" name="majorCategory">营改增</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040020">金税管理</label></li>
+							onchange="selectQuesCategory();" value="20" name="majorCategory">金税管理</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040021">进出口税收</label></li>
+							onchange="selectQuesCategory();" value="21" name="majorCategory">进出口税收</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040022">征收管理</label></li>
+							onchange="selectQuesCategory();" value="22" name="majorCategory">征收管理</label></li>
 
 					<li
 						style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
 						<label><input type="checkbox" class="major_item"
-							onchange="selectQuesCategory();" value="040023">发票保管</label></li>
+							onchange="selectQuesCategory();" value="23" name="majorCategory">发票保管</label></li>
 
 				</ul>
 				<div class="searchchoose_up"></div>
@@ -267,7 +270,6 @@ body::-moz-scrollbar {
 
 								<!-- li_7 -->
 								<li data-target-id="ques_1513737987706" data-target="question"
-									onclick="starQuestion();"
 									style="width:73px;float:right;cursor:pointer;"><span>收藏</span>
 								</li>
 							</ul>
@@ -295,6 +297,53 @@ body::-moz-scrollbar {
 			//alert('ready');
 			initQuestions();
 		});
+		
+		/**点击收藏按钮*/
+		function collectQuestion(questionId){
+			alert("点击收藏 id为:"+questionId+"的问题");
+			$.ajax({
+				url:'http://localhost:8080/Tax/user/collectQuestion',
+				type:'post',
+				data:{
+					questionId:questionId,
+				},
+				success:function(data){
+					if(data['message']=='success'){
+						window.location.reload();
+					}
+					else if(data['message']=='permission denied'){
+						alert("请先登陆");
+						window.location.href='http://localhost:8080/Tax/guest/login.jsp';
+					}
+					else if(data['message']=='duplicate collect'){
+						alert("你已经收藏过了");
+					}
+					else{
+						alert("未处理信息");
+					}
+				},
+				error:function(data){
+					alert("服务器忙");
+					console.log(data);
+				}
+			});
+		}
+		
+		/**点击搜索按钮*/
+		function clickSearchButton(){
+			//alert("clickSearchButton");
+			var keyword = $('#searchKeyword').val();
+			//alert("keyword: "+keyword);
+			var type = '';
+			$("input[name='majorCategory']:checked").each(function(i){//把所有被选中的复选框的值存入数组
+            	//alert.log(i+"th typeId :"+$(this).val());
+            	type = type+$(this).val()+';';
+        	});
+        	//alert("type: "+type);
+        	window.location.href='http://localhost:8080/Tax/search_title.jsp'
+        						+'?keyword='+keyword
+        						+'&type='+type;
+		}
 		
 		/**根据cookie看用户是否登陆*/
 		function checkLogin(){
@@ -496,6 +545,8 @@ body::-moz-scrollbar {
 				//设置type
 				var type = template.children('li:eq(6)').children('span:eq(1)');
 				type.text(questionList[i]['type']);
+				/**设置点击收藏的方法*/
+				template.children('li:eq(7)').attr('onclick', 'collectQuestion('+questionList[i]['id']+')');
 				//添加模板
 				template_parent.children('ul').last().after(template);
 			}

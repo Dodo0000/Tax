@@ -56,7 +56,16 @@
 						    
 						    
 						    <a href="http://localhost:8080/Tax/users/edit">
-						        <img src="http://localhost:8080/Tax/resources/image/u2815.png" alt="Avatar">
+						        <img id="avatarImgPersonalCenter" src="http://localhost:8080/Tax/resources/image/u2815.png" alt="Avatar">
+						    	<script type="text/javascript">
+						   			$(function(){
+						   				initAvatarPersonnalCenter();
+						   			})
+						   			/**根据用户设置头像*/
+									function initAvatarPersonnalCenter(){
+										$('#avatarImgPersonalCenter').attr('src', 'http://localhost:8080/Tax/user/generateUserAvatar');
+									}
+						   		</script>
 						    </a>
 						    
 						

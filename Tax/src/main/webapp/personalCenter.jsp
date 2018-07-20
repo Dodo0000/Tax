@@ -55,13 +55,13 @@
                         
 						    
 						    
-						    <a href="/lagsms/users/edit">
-						        <img src="/lagsms/resources/image/u2815.png" alt="Avatar">
-						    </a>
+						   <img src="/lagsms/resources/image/u2815.png" alt="Avatar">
+						   
 						    
 						
                         <span></span>
                     </div>
+                    <!-- 这里要填写用户个人信息 -->
                     <div class="center_left_content_right">
                         <ul>
                             <li><span>邮箱：</span><span>944841236@qq.com </span></li>
@@ -75,6 +75,7 @@
                 </div>
             </div>
             <!-- 个人 right -->
+            <!-- 获取用户的数据 -->
             <div class="center_left">
                 <div class="center_left_header">
                     <div class="center_left_header_left">

@@ -104,13 +104,12 @@ public class TaxGuestAction {
 		return taxGuestService.getQuestionAnswers(questionId, page);
 	}
 	
-	
-	@RequestMapping(value = "/search/{keyword}/{proId}/{page}", method = {
+	/**关键词搜索*/
+	@RequestMapping(value = "/search", method = {
 			RequestMethod.GET, RequestMethod.POST }, produces = JSON)
 	@ResponseBody
-	public String search(@PathVariable("keyword") String keyword,
-			@PathVariable("proId") String proId, @PathVariable("page") int page) {
-		return taxGuestService.search(keyword, proId, page);
+	public String search(String keyword, String type, int page) {
+		return taxGuestService.search(keyword, type, page);
 	}
 
 	@RequestMapping(value = "/question/{type}/{page}", method = RequestMethod.GET, produces = JSON)

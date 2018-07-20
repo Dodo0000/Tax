@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.tax.VO.PasswordModification;
 import org.tax.VO.PublishQuestionInfo;
@@ -42,11 +43,18 @@ public class TaxUserAction {
 		return taxUserService.getUser(request, response);
 	}
 	
+	/**返回用户头像，若用户没有登陆采用default头像*/
+	@RequestMapping(value = "/generateUserAvatar", method = RequestMethod.GET)
+	@ResponseBody
+	public void generateUserAvatar(HttpServletRequest request, HttpServletResponse response) {
+		taxUserService.generateUserAvatar(request, response);
+	}
+	
 	/**根据用户输入的type形式为 1;2;3;5 返回score最高的3个最多*/
 	@RequestMapping(value = "/getRelaventUsers", method = RequestMethod.POST, produces = JSON)
 	@ResponseBody
-	public String getRelaventUsers(String questionTypes){
-		return taxUserService.getRelaventUsers(questionTypes);
+	public String getRelaventUsers(String questionTypes, HttpServletRequest request){
+		return taxUserService.getRelaventUsers(questionTypes, request);
 	}
 	
 	/**用户退出 logout应该用post*/
@@ -94,15 +102,16 @@ public class TaxUserAction {
 		return taxUserService.confirmSolution(questionId, request);
 	}
 	
-	@RequestMapping(value="/collect/{questionId}",method=RequestMethod.POST,produces=JSON)
+	@RequestMapping(value="/collectQuestion",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody
-	public String collect(@PathVariable("questionId") int questionId, HttpServletRequest request) {
-		return taxUserService.collect(questionId, request);
+	public String collect(int questionId, HttpServletRequest request) {
+		return taxUserService.collectQuestion(questionId, request);
 	}
 	
+	/**修改头像*/
 	@RequestMapping(value="/avatar/{userId}",method=RequestMethod.POST,produces=JSON)
 	@ResponseBody
-	public String modifyAvatar(@PathVariable("userId") String userId, MultipartRequest multipartRequest) {
-		return taxUserService.modifyAvatar(userId, multipartRequest);
+	public String modifyAvatar(@PathVariable("userId") String userId, @RequestParam("avatar") MultipartFile multipartFile) {
+		return taxUserService.modifyAvatar(userId, multipartFile);
 	}
 }

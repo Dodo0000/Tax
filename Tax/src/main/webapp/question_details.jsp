@@ -59,7 +59,7 @@
 		<!-- path -->
 		<div class="path_nav">
 			<span class="fl">当前位置：<a style="color:black;"
-				href="#" class="nav_style">咨询</a>
+				href="http://localhost:8080/Tax/questions.jsp" class="nav_style">咨询</a>
 			</span>
 				<!--  
 				<span class="fl">&nbsp;&gt;&nbsp;</span> 
@@ -111,8 +111,9 @@
 						<li data-target-id="ques_1513737987706" data-target="question"
 							onclick="report();"
 							style="cursor:pointer;float:right;cursor:pointer;" id="report">举报</li>
-						<li class="check_not_login" data-target-id="ques_1513737987706"
-							data-target="question" onclick="starQuestion();"
+						<!-- 这里要添加onclick函数 -->
+						<li id="collectQuestionId" class="check_not_login" data-target-id="ques_1513737987706"
+							data-target="question"
 							style="cursor: pointer;float:right;">收藏</li>
 					</ul>
 				</div>
@@ -203,6 +204,8 @@
 							alert("wrong url");
 							window.location.href='http://localhost:8080/Tax/questions.jsp';
 						}
+						/**设置收藏点击的函数*/
+						$('#collectQuestionId').attr('onclick', 'collectQuestion('+questionId+')')
 						/**根据questionId设置questionDetail*/
 						$.ajax({
 							url:'http://localhost:8080/Tax/guest/getQuestionDetail',
@@ -276,6 +279,37 @@
 							}
 						});
 					});
+					
+					/**点击收藏按钮*/
+					function collectQuestion(questionId){
+						alert("点击收藏 id为:"+questionId+"的问题");
+						$.ajax({
+							url:'http://localhost:8080/Tax/user/collectQuestion',
+							type:'post',
+							data:{
+								questionId:questionId,
+							},
+							success:function(data){
+								if(data['message']=='success'){
+									window.location.reload();
+								}
+								else if(data['message']=='permission denied'){
+									alert("请先登陆");
+									window.location.href='http://localhost:8080/Tax/guest/login.jsp';
+								}
+								else if(data['message']=='duplicate collect'){
+									alert("你已经收藏过了");
+								}
+								else{
+									alert("未处理信息");
+								}	
+							},
+							error:function(data){
+								alert("服务器忙");
+								console.log(data);
+							}
+						});
+					}
 					
 					/**填充问题信息*/
 					function fillQuestionDetail(question){

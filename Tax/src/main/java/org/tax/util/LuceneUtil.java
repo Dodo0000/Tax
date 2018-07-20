@@ -46,8 +46,8 @@ public class LuceneUtil {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(LuceneUtil.class);
 	// 存放索引库的位置
-	private static String INDEX_LIB_PATH = "D:\\temp\\tax\\lucene\\index";
-	// private static String INDEX_LIB_PATH = "E:\\temp\\tax\\lucene\\index";
+	private static String INDEX_LIB_PATH = "D:\\temp\\tax\\lucene\\index";//工程需要的
+	//private static String INDEX_LIB_PATH = "E:\\temp\\tax\\lucene\\index";
 	// private static String INDEX_LIB_PATH = "D:\\temp\\tax\\lucene\\index_db";
 	// 索引库关联的源数据的位置
 	private static String SEARCH_SRC_PATH = "D:\\temp\\tax\\lucene\\searchsource";
