@@ -53,4 +53,8 @@ public interface TaxGuestService {
 	
 	/**根据qid和page获取相应的answer分页信息*/
 	String getQuestionAnswers(int questionId, int page);
+	
+	/**点击函数*/
+	void clickQuestion(int questionId);
+
 }

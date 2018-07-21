@@ -669,7 +669,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			shareExpertDetail.setFavourite(share.getFavourite());
 			// 格式化日期
 			SimpleDateFormat formatter = new SimpleDateFormat(
-					"yyyy-MM-dd HH:mm:ss");
+					"yyyy-MM-dd");
 			String publishDateStr = formatter.format(share.getPublishDate());
 			shareExpertDetail.setPublishDateStr(publishDateStr);
 			// 加入队列
@@ -742,7 +742,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			shareExpertDetail.setFavourite(expert.getFavourite());
 			// 格式化日期
 			SimpleDateFormat formatter = new SimpleDateFormat(
-					"yyyy-MM-dd HH:mm:ss");
+					"yyyy-MM-dd");
 			String publishDateStr = formatter.format(expert.getPublishDate());
 			shareExpertDetail.setPublishDateStr(publishDateStr);
 			// 加入队列
@@ -778,7 +778,7 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 			}
 			qb.setType(questionBriefTypeSB.toString());// 种类
 			SimpleDateFormat formatter = new SimpleDateFormat(
-					"yyyy-MM-dd HH:mm:ss");
+					"yyyy-MM-dd");
 			String publishDateStr = formatter.format(question.getPublishDate());
 			qb.setPublishDateStr(publishDateStr);// 发布日期
 			/** 从answer表中查询时该qid的总数 */
@@ -835,5 +835,13 @@ public class TaxGuestServiceImpl extends BaseServiceImpl<TaxUser> implements
 		}
 		return questionLiveList;
 	}
-
+	
+	/**点击函数*/
+	public synchronized void clickQuestion(int questionId){
+		TaxQuestionKey questionKey = new TaxQuestionKey();
+		questionKey.setId(questionId);
+		TaxQuestion question = mapperFactory.getTaxQuestionMapper().selectByPrimaryKey(questionKey);
+		question.setClick(question.getClick()+1);
+		mapperFactory.getTaxQuestionMapper().updateByPrimaryKey(question);
+	}
 }

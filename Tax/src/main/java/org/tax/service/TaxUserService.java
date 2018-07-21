@@ -52,4 +52,11 @@ public interface TaxUserService {
 	
 	String modifyAvatar(String userId, MultipartFile multipartFile);
 	
+	/**用户专区查询*/
+	String getUserQuestions(HttpServletRequest request);
+	
+	String getUserAnswers(HttpServletRequest request);
+	
+	String getUserData(HttpServletRequest request);
+	
 }

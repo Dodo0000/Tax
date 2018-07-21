@@ -136,4 +136,10 @@ public class TaxGuestAction {
 	public String method(@PathVariable("page") int page) {
 		return taxGuestService.getArticlesOfExperts(page);
 	}
+	
+	@RequestMapping(value="/clickQuestion",method=RequestMethod.POST,produces=JSON)
+	@ResponseBody
+	public void collect(int questionId) {
+		taxGuestService.clickQuestion(questionId);
+	}
 }

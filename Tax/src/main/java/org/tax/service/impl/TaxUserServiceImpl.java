@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.tax.VO.PasswordModification;
+import org.tax.VO.PersonalCenterUserData;
 import org.tax.VO.PublishQuestionInfo;
 import org.tax.constant.CookieConst;
 import org.tax.constant.FilePathConst;
@@ -29,6 +30,7 @@ import org.tax.constant.SessionConst;
 import org.tax.constant.StatusCode;
 import org.tax.factory.MapperFactory;
 import org.tax.model.TaxAnswer;
+import org.tax.model.TaxAnswerExample;
 import org.tax.model.TaxFavourite;
 import org.tax.model.TaxFavouriteExample;
 import org.tax.model.TaxInvitation;
@@ -601,6 +603,42 @@ public class TaxUserServiceImpl implements TaxUserService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return JSON.toJSONString(result);
+	}
+	
+	/**用户专区查询*/
+	public String getUserQuestions(HttpServletRequest request){
+		LOGGER.debug("*****debug in getUserQuestions area:");
+		Result result = new Result();
+		TaxUser user = this.getUserFromRequest(request);
+		TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
+		exampleOfQuestion.createCriteria().andAuthorIdEqualTo(user.getId());
+		List<TaxQuestion> questionList = mapperFactory.getTaxQuestionMapper().selectByExample(exampleOfQuestion);
+		result.setResult(questionList);
+		return JSON.toJSONString(result);
+	}
+	
+	public String getUserAnswers(HttpServletRequest request){
+		return null;
+	}
+	
+	public String getUserData(HttpServletRequest request){
+		Result result = new Result();
+		PersonalCenterUserData pd=new PersonalCenterUserData(); 
+		TaxUser user = this.getUserFromRequest(request);
+		TaxQuestionExample exampleOfQuestion = new TaxQuestionExample();
+		exampleOfQuestion.createCriteria().andAuthorIdEqualTo(user.getId());
+		Long totalQuestionNum = mapperFactory.getTaxQuestionMapper().countByExample(exampleOfQuestion);
+		TaxAnswerExample exampleOfAnswer = new TaxAnswerExample();
+		exampleOfAnswer.createCriteria().andAuthorIdEqualTo(user.getId());
+		Long totalAnswerNum = mapperFactory.getTaxAnswerMapper().countByExample(exampleOfAnswer);
+		//设置pd
+		pd.setEmail(user.getEmail());
+		pd.setLastVist(user.getLastVisit());
+		pd.setTotalQuestionNum(totalQuestionNum);
+		pd.setTotalAnswerNum(totalAnswerNum);
+		//设置result
+		result.setResult(pd);
 		return JSON.toJSONString(result);
 	}
 

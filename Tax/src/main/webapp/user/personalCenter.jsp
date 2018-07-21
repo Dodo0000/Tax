@@ -73,12 +73,12 @@
                     </div>
                     <div class="center_left_content_right">
                         <ul>
-                            <li><span>邮箱：</span><span>944841236@qq.com </span></li>
-							<li><span>最近访问：</span><span>2018-07-16 09:05:07</span></li>
+                            <li><span>邮箱：</span><span id="userEmailArea"></span></li>
+							<li><span>最近访问：</span><span id="userlastVisitArea">2018-07-16 09:05:07</span></li>
 							
-							<li style="height:100px;overflow: auto;text-overflow:ellipsis;">
+							<!-- <li style="height:100px;overflow: auto;text-overflow:ellipsis;">
 								<span>专业：</span>														
-							</li>
+							</li> -->
                         </ul>
                     </div>
                 </div>
@@ -96,17 +96,48 @@
                             <span>总积分:</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;100</span>
                         </div>
                         <div>
-                            <span>提问数量:</span><span style="padding-right:30px">&nbsp;&nbsp;0</span>
+                            <span>提问数量:</span><span id="userTotalQuestionNumArea" style="padding-right:30px">&nbsp;&nbsp;0</span>
 						
                         </div>  
                         <div>
-                            <span>回答数量:</span><span style="padding-right:30px">&nbsp;&nbsp;0</span>
+                            <span>回答数量:</span><span id="userTotalAnswerNumArea" style="padding-right:30px">&nbsp;&nbsp;0</span>
 						
                         </div>  
                     </div>
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+			$(document).ready(function() {
+				//alert('ready');
+				initUserData();
+			});
+			
+			function initUserData(){
+				$.ajax({
+					url:'http://localhost:8080/Tax/user/getUserData',
+					type:'post',
+					success:function(data){
+						if(data['message']=='success'){
+							$('#userEmailArea').text(data['result']['email']);
+							$('#userlastVisitArea').text(data['result']['lastVisit']);
+							$('#userTotalQuestionNumArea').text(data['result']['totalQuestionNum']);
+							$('#userTotalAnswerNumArea').text(data['result']['totalAnswerNum']);
+						}
+						else{
+							alert("请登录");
+							console.log("*****"+data);
+							awindow.location.href='http://localhost:8080/Tax/guest/login.jsp';
+						}
+					},
+					error:function(data){
+						alert("服务器忙");
+						console.log(data);
+					}
+				});
+			}   
+        </script>
+        
         <!-- 个人 end -->
         
         <!-- tab切换list start -->
@@ -114,13 +145,13 @@
         <!-- 第一个表 start -->
 					<div class="tab_a">
 						<ul class="tabOneys" id="tabOne">
-							<li class="active" style="width:23%;">
+							<li onclick="showUserQuestions()" class="active" style="width:23%;">
 								<a>
 									我的提问
 								</a>
 							</li>
 							<!-- <span class="tab_a_span"></span> -->
-							<li style="width:23%;">
+							<li onclick="showUserAnswers()" style="width:23%;">
 								<a>
 									我的回答
 								</a>
@@ -134,14 +165,76 @@
 							<div class="blue"></div>
 						</div>
 						<div class="tab_conOne">
-							<div style="display: block;height:auto;overflow:hidden;" >
-								
+							<!-- 填写这个隐藏域查找问题 -->
+							<div id="userQuestions" style="display: block;height:auto;overflow:hidden;" >
+								<ul hidden="hidden" style="border-bottom: 1px dashed #ccc; height: 79px; padding-top: 10px;">
+									<li>
+										<a>
+											<span>标题：</span>
+											<span></span>
+										</a>
+										<span style="float:right"></span>
+									</li>
+								</ul>
 							</div>
-							<div>
+							<!-- 填写这个隐藏域查找回答 -->
+							<div id="userAnswers" style="display: block;height:auto;overflow:hidden;">
 								
 							</div>
 						</div>
 					</div>
+					
+					<script type="text/javascript">
+						function showUserQuestions(){
+							/**把answer区域隐藏起来*/
+							$('#userAnswers').hide();
+							/**把原来的question clone去掉*/
+							$('ul').remove('.user-question-template-clone');
+							/**通过ajax填充*/
+							$.ajax({
+								url:'http://localhost:8080/Tax/user/getUserQuestions',
+								type:'post',
+								success:function(data){
+									if(data['message']=='success'){
+										var questionList = data['result'];
+										var template_parent=$('#userQuestions');
+										for(var i in questionList){
+											template=template_parent.children('ul:eq(0)').clone(true);
+											template.addClass('user-question-template-clone');
+											template.removeAttr('hidden');
+											var title_area=template.children('li:eq(0)').children('a:eq(0)').children('span:eq(1)');
+											title_area.text(questionList[i]['title']);
+											var publishDate_area=template.children('li:eq(0)').children('span:eq(0)');
+											publishDate_area.text(getDate(questionList[i]['publishDate']));
+											var a_area=template.children('li:eq(0)').children('a:eq(0)');
+											a_href='http://localhost:8080/Tax/question_details.jsp?questionId='+questionList[i]['id'];
+											a_area.attr('href', a_href);
+											//添加模板
+											template_parent.children('ul').last().after(template);
+										}
+									}
+									else{
+										alert("请先登陆");
+										window.location.href='http://localhost:8080/Tax/guest/login.jsp';
+									}
+								},
+								error:function(data){
+									alert("服务器忙");
+								}								
+							});
+						}
+						
+						function showUserAnswers(){
+							
+						}
+						
+						/**转换时间戳*/
+						function getDate(value){
+				 			return new Date(parseInt(("/Date("+value+")/").substr(6, 13))).toLocaleDateString();  
+						}
+						
+					</script>
+					
 					<!-- 第一个表 end -->
 
 					<!-- 第二个表 start -->

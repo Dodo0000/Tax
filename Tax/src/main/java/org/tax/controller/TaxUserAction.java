@@ -114,4 +114,23 @@ public class TaxUserAction {
 	public String modifyAvatar(@PathVariable("userId") String userId, @RequestParam("avatar") MultipartFile multipartFile) {
 		return taxUserService.modifyAvatar(userId, multipartFile);
 	}
+	
+	/**用户专区功能*/
+	@RequestMapping(value="/getUserQuestions",method=RequestMethod.POST,produces=JSON)
+	@ResponseBody
+	public String getUserQuestions(HttpServletRequest request){
+		return taxUserService.getUserQuestions(request);
+	}
+	
+	@RequestMapping(value="/getUserAnswers",method=RequestMethod.POST,produces=JSON)
+	@ResponseBody
+	public String getUserAnswers(HttpServletRequest request){
+		return taxUserService.getUserAnswers(request);
+	}
+	
+	@RequestMapping(value="/getUserData",method=RequestMethod.POST,produces=JSON)
+	@ResponseBody
+	public String getUserData(HttpServletRequest request){
+		return taxUserService.getUserData(request);
+	}
 }

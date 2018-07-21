@@ -516,6 +516,8 @@ body::-moz-scrollbar {
 				/**这里换了页面链接要修改一下*/
 				title.attr('href', 'http://localhost:8080/Tax/question_details.jsp'
 						+ '?questionId=' + questionList[i]['id']);
+				/**设置一下点击标题进入详情页面调用click*/
+				title.attr('onclick', 'clickQuestion('+questionList[i]['id']+')');
 				//设置publishDateStr
 				var publishDateStr = template.children('li:eq(1)').children(
 						'span:eq(0)');
@@ -551,7 +553,18 @@ body::-moz-scrollbar {
 				template_parent.children('ul').last().after(template);
 			}
 		};
-
+		
+		/**点击问题调用*/
+		function clickQuestion(questionId){
+			$.ajax({
+				url:'http://localhost:8080/Tax/guest/clickQuestion',
+				type:'post',
+				data:{
+					questionId:questionId,
+				}
+			});
+		}
+		
 		//获取url中的参数
 		function getUrlParam(name) {
 			var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)'); //构造一个含有目标参数的正则表达式对象

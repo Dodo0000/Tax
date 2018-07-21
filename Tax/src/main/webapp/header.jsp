@@ -47,7 +47,7 @@
 						<!--  未登录状态 -->
 						<a id='' href="http://localhost:8080/Tax/login" style="padding: 0 50px;">
 							<!-- 若js判断登陆 要修改为用户uid对应头像 -->
-							<img id="avatarImgHeader" src="http://localhost:8080/Tax/resources/image/header/u198.png" class="person">
+							<img id="avatarImgHeader" class="person">
 							
 						</a>
 						<div style="position: absolute; left: 20px; line-height: 0px;">
@@ -132,6 +132,7 @@
 					$('#logout_area').hide();
 					//设置用户那个圆形头像的连接
 					$('.but_content').children('a:eq(0)').attr('href','http://localhost:8080/Tax/guest/login.jsp'); 
+					$('#avatarImgHeader').attr('src', 'http://localhost:8080/Tax/resources/image/header/u198.png');
 				}
 			}
 			
